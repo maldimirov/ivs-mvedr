@@ -1,0 +1,153 @@
+
+#include "main.h"
+
+#include "gsm.h"
+#include "bsp.h"
+#include "at.h"
+#include "gps.h"
+#include "msd.h"
+
+GSM_StatusTypedef GSM_Status = GSM_NOT_PRESENT;
+GSM_FlagsTypedef GSM_Flags;
+
+void GSM_Init(void)
+{
+  BSP_GSM_Init();         // Configure the MCU peripherals
+  
+  BSP_GSM_RST_LOW();      // Hold GSM in reset state
+  BSP_GSM_DTR_LOW();      // Clear DTR pin in order to select GSM
+  BSP_GSM_PWR_HIGH();     // Set power pin in order to make the power cycle
+  
+  osDelay(20);
+
+  BSP_GSM_RST_HIGH();     // Release GSM reset  
+
+  osDelay(20);  
+
+  BSP_GSM_PWR_LOW();      // Force a power-on holding PWR_ON signal low for at least 5ms
+
+  osDelay(10);
+
+  BSP_GSM_PWR_HIGH();     // Set power pin in order to make the power cycle
+
+  osDelay(10);
+
+  // Start UART reception: provide the initial buffer pointer the buffer size
+  HAL_UART_Receive_IT(&huart2, (uint8_t *)AtRxBuffer, 1);
+
+  osDelay(3000);      // not for here
+
+  AT_ClearBuffer();   // only for the older firmware version
+
+  GSM_Configure();
+}
+
+void GSM_Configure(void)
+{
+  unsigned char timeout = 0;
+
+  if (AT_Attention() == AT_CMD_OK) {
+    GSM_Status = GSM_PRESENT;
+    GSM_Flags.present = GSM_TRUE;     // GSM module available and it responded with OK
+  } else {
+    GSM_Status = GSM_NOT_PRESENT;
+    GSM_Flags.present = GSM_FALSE;
+    return ;
+  }
+
+  if (AT_DisableEcho() == AT_CMD_OK) {
+    GSM_Status = GSM_PRESENT;
+  } else {
+    GSM_Status = GSM_NOT_CONFIGURED;
+    return ;
+  }
+
+  if (AT_EnterPin() == AT_CMD_OK) {
+    GSM_Status = GSM_PIN_ENABLED;
+    GSM_Flags.sim = GSM_TRUE;
+  } else {
+    GSM_Status = GSM_PIN_NOT_ENABLED;
+    GSM_Flags.sim = GSM_FALSE;
+    return ;
+  }
+
+  AT_EnNetworkInd();
+
+  do {
+    osDelay(250);
+    if (AT_NetworkStatus() == AT_CMD_OK) {
+      if (GSM_Status == GSM_NETWORK_NOT_REGISTRED) {
+        GSM_Status = GSM_NOT_CONFIGURED;
+        //return;
+      }
+    } else {
+      GSM_Status = GSM_NOT_CONFIGURED;
+      return;
+    }
+
+    timeout++;
+  } while (GSM_Status != GSM_NETWORK_REGISTRED && timeout < 50);
+
+  if (AT_SetAudioPath() == AT_CMD_OK) {
+    GSM_Flags.audio = GSM_TRUE;
+  } else {
+    GSM_Flags.audio = GSM_FALSE;
+  }
+}
+
+void GSM_Handler(void)
+{
+  if (ctlCmd == 'h') {
+    AT_HangUp();
+    ctlCmd = 0;
+  }
+}
+
+char GSM_eCall(void)
+{
+  if (AT_NetworkStatus() == AT_CMD_OK) {
+    if (GSM_Status == GSM_NETWORK_NOT_REGISTRED) {
+      GSM_Status = GSM_NOT_CONFIGURED;
+      return ECALL_NOT_POSSIBLE;
+    }
+  }
+
+  if (AT_eCallType(eCall) != AT_CMD_OK) {
+    return ECALL_ERROR_SET_TYPE;
+  }
+
+  if (AT_InBandStat() != AT_CMD_OK) {
+    return ECALL_ERROR_STAT;
+  }
+
+  if (AT_InBandData(msdAscii) != AT_CMD_OK) {
+    return ECALL_ERROR_DATA;
+  }
+
+  if (AT_Dial() != AT_CMD_OK) {
+    return ECALL_ERROR_DIAL;
+  }
+
+
+  return ECALL_ERROR_OK;
+}
+
+/**
+  * @brief  Rx Transfer completed callback
+  * @param  huart: UART handle
+  * @retval None
+  */
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+  // Increment Index for buffer writing
+  rxBuffIdx++;
+  
+  // To avoid buffer overflow
+  if(rxBuffIdx == AT_RX_BUFFER_SIZE)
+  {
+    rxBuffIdx = 0;
+  }
+  
+  // Start another reception: provide the buffer pointer with offset and the buffer size
+  HAL_UART_Receive_IT(huart, (uint8_t *)(AtRxBuffer + rxBuffIdx), 1);
+}

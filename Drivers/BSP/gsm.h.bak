@@ -1,0 +1,45 @@
+
+#ifndef __GSM_H
+#define __GSM_H
+
+#define GSM_TRUE  0x01
+#define GSM_FALSE 0x00
+
+typedef enum {
+  GSM_NOT_PRESENT = 0,        // GSM not present Attention command timeout occurred
+  GSM_PRESENT,                // GSM present and answered Ok to attention command
+  GSM_CONFIGURED,
+  GSM_NOT_CONFIGURED,
+  GSM_SIM_PRESENT,            // SIM card present
+  GSM_SIM_NOT_PRESENT,        // SIM card not present
+  GSM_PIN_ENABLED,            // PIN on SIM card enabled
+  GSM_PIN_NOT_ENABLED,        // PIN on SIM card not enabled
+  GSM_NETWORK_REGISTRED,      // GSM network registred
+  GSM_NETWORK_NOT_REGISTRED,  // GSM network not registred
+} GSM_StatusTypedef;
+
+typedef enum {
+  ECALL_ERROR_OK = 0, 
+  ECALL_NOT_POSSIBLE,
+  ECALL_ERROR_SET_TYPE,
+  ECALL_ERROR_STAT,
+  ECALL_ERROR_DATA,
+  ECALL_ERROR_DIAL,
+} ECall_ErrorTypedef;
+
+typedef struct {
+  unsigned char present : 1;      // Set if available
+  unsigned char sim : 1;
+  unsigned char network : 1;
+  unsigned char audio : 1;
+  unsigned char config : 1;
+} GSM_FlagsTypedef;
+
+extern GSM_StatusTypedef GSM_Status;
+
+void      GSM_Init      (void);
+void      GSM_Configure (void);
+void      GSM_Handler   (void);
+char      GSM_eCall     (void);
+
+#endif
