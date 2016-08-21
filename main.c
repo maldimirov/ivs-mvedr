@@ -196,28 +196,6 @@ static void MainThread(void const *argument)
 		GSM_Handler();
 		USB_Handler();
 	}
-	//f_write(&nmeafile, &nmea, strlen(nmea), &bw);
-
-	/*while(!DetectPPS())
-        {
-		GSM_Handler();
-		GPS_Handler();
-		USB_Handler();
-	}
-
-	GpsStat.Req = true;
-	GpsStat.Rdy = false;
-	while(GpsStat.Rdy == false)
-	{
-		GSM_Handler();
-		GPS_Handler();
-		USB_Handler();
-	}
-	f_write(&nmeafile, &nmea, strlen(nmea), &bw);
-	GpsStat.Rdy = false;
-
-	while(!DetectPPS()) USB_Handler();
-*/
 
         nmea[0] = '\0';
 	HAL_TIM_Base_Start_IT(&t1);
