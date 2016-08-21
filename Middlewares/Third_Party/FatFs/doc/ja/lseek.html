@@ -16,7 +16,7 @@
 <p>ファイルのリード/ライト・ポインタを移動します。また、高速シーク機能使用時にはCLMT(後述)の作成にも使用します。</p>
 <pre>
 FRESULT f_lseek (
-  FIL* <span class="arg">fp</span>,    <span class="c">/* [IN] ファイル・オブジェクト構造体へのポインタ */</span>
+  FIL* <span class="arg">fp</span>,	<span class="c">/* [IN] ファイル・オブジェクト構造体へのポインタ */</span>
   DWORD <span class="arg">ofs</span>   <span class="c">/* [IN] 移動先オフセット */</span>
 );
 </pre>
@@ -68,53 +68,53 @@ FRESULT f_lseek (
 <div class="para use">
 <h4>使用例</h4>
 <pre>
-    <span class="c">/* ファイルを開く */</span>
-    fp = malloc(sizeof (FIL));
-    res = f_open(fp, "file.dat", FA_READ|FA_WRITE);
-    if (res) ...
+	<span class="c">/* ファイルを開く */</span>
+	fp = malloc(sizeof (FIL));
+	res = f_open(fp, "file.dat", FA_READ|FA_WRITE);
+	if (res) ...
 
-    <span class="c">/* ファイル・オフセット5000へ移動 */</span>
-    res = f_lseek(fp, 5000);
+	<span class="c">/* ファイル・オフセット5000へ移動 */</span>
+	res = f_lseek(fp, 5000);
 
-    <span class="c">/* ファイル終端へ移動(ファイル追記の準備) */</span>
-    res = f_lseek(fp, f_size(fp));
+	<span class="c">/* ファイル終端へ移動(ファイル追記の準備) */</span>
+	res = f_lseek(fp, f_size(fp));
 
-    <span class="c">/* 3000バイト進める */</span>
-    res = f_lseek(fp, f_tell(fp) + 3000);
+	<span class="c">/* 3000バイト進める */</span>
+	res = f_lseek(fp, f_tell(fp) + 3000);
 
-    <span class="c">/* 2000バイト戻す (ラップアラウンドに注意) */</span>
-    res = f_lseek(fp, f_tell(fp) - 2000);
+	<span class="c">/* 2000バイト戻す (ラップアラウンドに注意) */</span>
+	res = f_lseek(fp, f_tell(fp) - 2000);
 </pre>
 <pre>
 <span class="c">/* クラスタ先行割り当て (ストリーミング・ライト時のバッファ・オーバーラン防止) */</span>
 
-    res = f_open(fp, "record.wav", FA_CREATE_NEW | FA_WRITE);    <span class="c">/* ファイル作成 */</span>
+	res = f_open(fp, "record.wav", FA_CREATE_NEW | FA_WRITE);	<span class="c">/* ファイル作成 */</span>
 
-    res = f_lseek(fp, MAX_SIZE);             <span class="c">/* 十分なクラスタの先行割り当て */</span>
-    if (res || f_tell(fp) != PRE_SIZE) ...   <span class="c">/* 正しくファイルが拡張されたかチェック */</span>
+	res = f_lseek(fp, MAX_SIZE);			 <span class="c">/* 十分なクラスタの先行割り当て */</span>
+	if (res || f_tell(fp) != PRE_SIZE) ...   <span class="c">/* 正しくファイルが拡張されたかチェック */</span>
 
-    res = f_lseek(fp, DATA_START);           <span class="c">/* データ・ストリームの記録(アロケーションディレイ無し) */</span>
-    ...
+	res = f_lseek(fp, DATA_START);		   <span class="c">/* データ・ストリームの記録(アロケーションディレイ無し) */</span>
+	...
 
-    res = f_truncate(fp);                    <span class="c">/* 不要領域の切り捨て */</span>
-    res = f_lseek(fp, 0);                    <span class="c">/* ヘッダの記録 */</span>
-    ...
+	res = f_truncate(fp);					<span class="c">/* 不要領域の切り捨て */</span>
+	res = f_lseek(fp, 0);					<span class="c">/* ヘッダの記録 */</span>
+	...
 
-    res = f_close(fp);
+	res = f_close(fp);
 </pre>
 <pre>
 <span class="c">/* 高速シーク機能を使う */</span>
 
-    DWORD clmt[SZ_TBL];                    <span class="c">/* リンク・マップ・テーブル格納バッファ */</span>
+	DWORD clmt[SZ_TBL];					<span class="c">/* リンク・マップ・テーブル格納バッファ */</span>
 
-    res = f_lseek(fp, ofs1);               <span class="c">/* 通常シーク (オープン時、cltblはNULLに初期化される) */</span>
+	res = f_lseek(fp, ofs1);			   <span class="c">/* 通常シーク (オープン時、cltblはNULLに初期化される) */</span>
 
-    fp-&gt;cltbl = clmt;                      <span class="c">/* 高速シーク機能の有効化 */</span>
-    clmt[0] = SZ_TBL;                      <span class="c">/* 先頭要素に配列要素数をセット */</span>
-    res = f_lseek(fp, CREATE_LINKMAP);     <span class="c">/* CLMTの作成 */</span>
-    ...
+	fp-&gt;cltbl = clmt;					  <span class="c">/* 高速シーク機能の有効化 */</span>
+	clmt[0] = SZ_TBL;					  <span class="c">/* 先頭要素に配列要素数をセット */</span>
+	res = f_lseek(fp, CREATE_LINKMAP);	 <span class="c">/* CLMTの作成 */</span>
+	...
 
-    res = f_lseek(fp, ofs2);               <span class="c">/* 以降、f_read/f_write/f_lseekでFATアクセスは発生しない */</span>
+	res = f_lseek(fp, ofs2);			   <span class="c">/* 以降、f_read/f_write/f_lseekでFATアクセスは発生しない */</span>
 </pre>
 </div>
 

@@ -20,29 +20,29 @@ my @directories = qw(include/polarssl library doxygen/input);
 my $doxy_re = qr/\\(?!0)/;
 
 sub check_file {
-    my ($fname) = @_;
-    open my $fh, '<', $fname or die "Failed to open '$fname': $!\n";
+	my ($fname) = @_;
+	open my $fh, '<', $fname or die "Failed to open '$fname': $!\n";
 
-    # first line of the last normal comment block,
-    # or 0 if not in a normal comment block
-    my $block_start = 0;
-    while (my $line = <$fh>) {
-        $block_start = $.   if $line =~ m/\/\*(?![*!])/;
-        $block_start = 0    if $line =~ m/\*\//;
-        if ($block_start and $line =~ m/$doxy_re/) {
-            print "$fname:$block_start: directive on line $.\n";
-            $block_start = 0; # report only one directive per block
-        }
-    }
+	# first line of the last normal comment block,
+	# or 0 if not in a normal comment block
+	my $block_start = 0;
+	while (my $line = <$fh>) {
+		$block_start = $.   if $line =~ m/\/\*(?![*!])/;
+		$block_start = 0	if $line =~ m/\*\//;
+		if ($block_start and $line =~ m/$doxy_re/) {
+			print "$fname:$block_start: directive on line $.\n";
+			$block_start = 0; # report only one directive per block
+		}
+	}
 
-    close $fh;
+	close $fh;
 }
 
 sub check_dir {
-    my ($dirname) = @_;
-    for my $file (<$dirname/*.[ch]>) {
-        check_file($file);
-    }
+	my ($dirname) = @_;
+	for my $file (<$dirname/*.[ch]>) {
+		check_file($file);
+	}
 }
 
 # locate root directory based on invocation name
@@ -51,7 +51,7 @@ chdir $root or die "Can't chdir to '$root': $!\n";
 
 # just do it
 for my $dir (@directories) {
-    check_dir($dir)
+	check_dir($dir)
 }
 
 __END__

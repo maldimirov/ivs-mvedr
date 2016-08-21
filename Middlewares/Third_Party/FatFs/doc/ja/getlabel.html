@@ -17,8 +17,8 @@
 <pre>
 FRESULT f_getlabel (
   const TCHAR* <span class="arg">path</span>,  <span class="c">/* [IN] 対象ドライブ */</span>
-  TCHAR* <span class="arg">name</span>,        <span class="c">/* [OUT] ボリューム名を格納するバッファ */</span>
-  DWORD* <span class="arg">sn</span>           <span class="c">/* [OUT] ボリューム・シリアル番号を格納する変数 */</span>
+  TCHAR* <span class="arg">name</span>,		<span class="c">/* [OUT] ボリューム名を格納するバッファ */</span>
+  DWORD* <span class="arg">sn</span>		   <span class="c">/* [OUT] ボリューム・シリアル番号を格納する変数 */</span>
 );
 </pre>
 </div>
@@ -60,13 +60,13 @@ FRESULT f_getlabel (
 <div class="para use">
 <h4>使用例</h4>
 <pre>
-    char str[12];
+	char str[12];
 
-    <span class="c">/* デフォルト・ドライブのボリューム名を得る */</span>
-    f_getlabel("", str, 0);
+	<span class="c">/* デフォルト・ドライブのボリューム名を得る */</span>
+	f_getlabel("", str, 0);
 
-    <span class="c">/* ドライブ2のボリューム名を得る */</span>
-    f_getlabel("2:", str, 0);
+	<span class="c">/* ドライブ2のボリューム名を得る */</span>
+	f_getlabel("2:", str, 0);
 </pre>
 </div>
 

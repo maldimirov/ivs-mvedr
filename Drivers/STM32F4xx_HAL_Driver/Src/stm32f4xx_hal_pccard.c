@@ -512,7 +512,7 @@ HAL_StatusTypeDef HAL_CF_Reset(PCCARD_HandleTypeDef *hpccard)
 
   /* Provide an SW reset and Read and verify the:
    - CF Configuration Option Register at address 0x98000200 --> 0x80
-   - Card Configuration and Status Register	at address 0x98000202 --> 0x00
+   - Card Configuration and Status Register    at address 0x98000202 --> 0x00
    - Pin Replacement Register  at address 0x98000204 --> 0x0C
    - Socket and Copy Register at address 0x98000206 --> 0x00
   */

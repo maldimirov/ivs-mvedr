@@ -11,7 +11,7 @@ endif(CMAKE_COMPILER_IS_GNUCC)
  
 if(CMAKE_BUILD_TYPE STREQUAL "Coverage")
   if(CMAKE_COMPILER_IS_GNUCC)
-    set(CMAKE_SHARED_LINKER_FLAGS "-fprofile-arcs -ftest-coverage")
+	set(CMAKE_SHARED_LINKER_FLAGS "-fprofile-arcs -ftest-coverage")
   endif(CMAKE_COMPILER_IS_GNUCC)
 endif(CMAKE_BUILD_TYPE STREQUAL "Coverage")
 
@@ -30,7 +30,7 @@ if(ENABLE_ZLIB_SUPPORT)
   find_package(ZLIB)
 
   if(ZLIB_FOUND)
-    include_directories(ZLIB_INCLUDE_DIR)
+	include_directories(ZLIB_INCLUDE_DIR)
   endif(ZLIB_FOUND)
 endif(ENABLE_ZLIB_SUPPORT)
 
@@ -44,5 +44,5 @@ endif(CMAKE_COMPILER_IS_GNUCC)
 add_subdirectory(programs)
 
 ADD_CUSTOM_TARGET(apidoc
-                  COMMAND doxygen doxygen/polarssl.doxyfile
-                  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+				  COMMAND doxygen doxygen/polarssl.doxyfile
+				  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})

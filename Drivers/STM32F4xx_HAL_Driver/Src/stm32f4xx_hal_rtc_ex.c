@@ -429,7 +429,7 @@ HAL_StatusTypeDef HAL_RTCEx_SetTamper_IT(RTC_HandleTypeDef *hrtc, RTC_TamperType
   /* Configure the tamper trigger */
   if((sTamper->Trigger == RTC_TAMPERTRIGGER_RISINGEDGE) || (sTamper->Trigger == RTC_TAMPERTRIGGER_LOWLEVEL))
   {  
-    sTamper->Trigger = RTC_TAMPERTRIGGER_RISINGEDGE;	
+    sTamper->Trigger = RTC_TAMPERTRIGGER_RISINGEDGE;    
   }
   else
   { 

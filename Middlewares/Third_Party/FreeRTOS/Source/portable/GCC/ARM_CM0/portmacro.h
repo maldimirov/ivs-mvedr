@@ -82,35 +82,35 @@ extern "C" {
  */
 
 /* Type definitions. */
-#define portCHAR		char
-#define portFLOAT		float
-#define portDOUBLE		double
-#define portLONG		long
-#define portSHORT		short
-#define portSTACK_TYPE	unsigned portLONG
-#define portBASE_TYPE	long
+#define portCHAR        char
+#define portFLOAT        float
+#define portDOUBLE        double
+#define portLONG        long
+#define portSHORT        short
+#define portSTACK_TYPE    unsigned portLONG
+#define portBASE_TYPE    long
 
 #if( configUSE_16_BIT_TICKS == 1 )
-	typedef unsigned portSHORT portTickType;
-	#define portMAX_DELAY ( portTickType ) 0xffff
+    typedef unsigned portSHORT portTickType;
+    #define portMAX_DELAY ( portTickType ) 0xffff
 #else
-	typedef unsigned portLONG portTickType;
-	#define portMAX_DELAY ( portTickType ) 0xffffffff
+    typedef unsigned portLONG portTickType;
+    #define portMAX_DELAY ( portTickType ) 0xffffffff
 #endif
 /*-----------------------------------------------------------*/
 
 /* Architecture specifics. */
-#define portSTACK_GROWTH			( -1 )
-#define portTICK_RATE_MS			( ( portTickType ) 1000 / configTICK_RATE_HZ )
-#define portBYTE_ALIGNMENT			8
+#define portSTACK_GROWTH            ( -1 )
+#define portTICK_RATE_MS            ( ( portTickType ) 1000 / configTICK_RATE_HZ )
+#define portBYTE_ALIGNMENT            8
 /*-----------------------------------------------------------*/
 
 
 /* Scheduler utilities. */
 extern void vPortYield( void );
-#define portNVIC_INT_CTRL_REG		( * ( ( volatile unsigned long * ) 0xe000ed04 ) )
-#define portNVIC_PENDSVSET_BIT		( 1UL << 28UL )
-#define portYIELD()					vPortYield()
+#define portNVIC_INT_CTRL_REG        ( * ( ( volatile unsigned long * ) 0xe000ed04 ) )
+#define portNVIC_PENDSVSET_BIT        ( 1UL << 28UL )
+#define portYIELD()                    vPortYield()
 #define portEND_SWITCHING_ISR( xSwitchRequired ) if( xSwitchRequired ) portNVIC_INT_CTRL_REG = portNVIC_PENDSVSET_BIT
 #define portYIELD_FROM_ISR( x ) portEND_SWITCHING_ISR( x )
 /*-----------------------------------------------------------*/
@@ -122,12 +122,12 @@ extern void vPortExitCritical( void );
 extern unsigned long ulSetInterruptMaskFromISR( void ) __attribute__((naked));
 extern void vClearInterruptMaskFromISR( unsigned long ulMask )  __attribute__((naked));
 
-#define portSET_INTERRUPT_MASK_FROM_ISR()		ulSetInterruptMaskFromISR()
-#define portCLEAR_INTERRUPT_MASK_FROM_ISR(x)	vClearInterruptMaskFromISR( x )
-#define portDISABLE_INTERRUPTS()				__asm volatile 	( " cpsid i " )
-#define portENABLE_INTERRUPTS()					__asm volatile 	( " cpsie i " )
-#define portENTER_CRITICAL()					vPortEnterCritical()
-#define portEXIT_CRITICAL()						vPortExitCritical()
+#define portSET_INTERRUPT_MASK_FROM_ISR()        ulSetInterruptMaskFromISR()
+#define portCLEAR_INTERRUPT_MASK_FROM_ISR(x)    vClearInterruptMaskFromISR( x )
+#define portDISABLE_INTERRUPTS()                __asm volatile     ( " cpsid i " )
+#define portENABLE_INTERRUPTS()                    __asm volatile     ( " cpsie i " )
+#define portENTER_CRITICAL()                    vPortEnterCritical()
+#define portEXIT_CRITICAL()                        vPortExitCritical()
 
 /*-----------------------------------------------------------*/
 

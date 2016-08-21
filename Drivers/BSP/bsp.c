@@ -7,7 +7,7 @@ SPI_HandleTypeDef       hspi1;
 ADC_HandleTypeDef       adc1;
 PWR_StateType           Pwr;
 IWDG_HandleTypeDef      iwdg1;
-TIM_HandleTypeDef	t1;
+TIM_HandleTypeDef    t1;
 
 uint32_t SpiTimeout = SPI_TIMEOUT_MAX;      // Value of Timeout when SPI communication fails
 
@@ -98,16 +98,16 @@ void BSP_System_Init(void)
   __GPIOC_CLK_ENABLE();
   __HAL_RCC_LSI_ENABLE();
 
-	// Configure TIMER2 module as 1 microsecond counter
-	t1.Instance = TIM2;
-	t1.Channel = HAL_TIM_ACTIVE_CHANNEL_1;
-	t1.Init.CounterMode = TIM_COUNTERMODE_UP;
-	t1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-	t1.Init.Period = 0; //MAX_TIME_PERIOD; // = 10 seconds
-	t1.Init.Prescaler = 83; // F=84MHz / (Prescaler+1) = 1MHz
-	t1.Init.RepetitionCounter = 0;
-	HAL_TIM_Base_Init(&t1);
-	//HAL_TIM_Base_Start_IT(&t1);
+    // Configure TIMER2 module as 1 microsecond counter
+    t1.Instance = TIM2;
+    t1.Channel = HAL_TIM_ACTIVE_CHANNEL_1;
+    t1.Init.CounterMode = TIM_COUNTERMODE_UP;
+    t1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+    t1.Init.Period = 0; //MAX_TIME_PERIOD; // = 10 seconds
+    t1.Init.Prescaler = 83; // F=84MHz / (Prescaler+1) = 1MHz
+    t1.Init.RepetitionCounter = 0;
+    HAL_TIM_Base_Init(&t1);
+    //HAL_TIM_Base_Start_IT(&t1);
 
   // Configure GPIO pin : PB10 - CHARGE battery
   GPIO_InitStruct.Pin = BSP_CHARGE_PIN;

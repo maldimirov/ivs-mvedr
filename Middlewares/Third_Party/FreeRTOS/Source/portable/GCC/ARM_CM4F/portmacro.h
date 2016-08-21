@@ -82,35 +82,35 @@ extern "C" {
  */
 
 /* Type definitions. */
-#define portCHAR		char
-#define portFLOAT		float
-#define portDOUBLE		double
-#define portLONG		long
-#define portSHORT		short
-#define portSTACK_TYPE	unsigned portLONG
-#define portBASE_TYPE	long
+#define portCHAR        char
+#define portFLOAT        float
+#define portDOUBLE        double
+#define portLONG        long
+#define portSHORT        short
+#define portSTACK_TYPE    unsigned portLONG
+#define portBASE_TYPE    long
 
 #if( configUSE_16_BIT_TICKS == 1 )
-	typedef unsigned portSHORT portTickType;
-	#define portMAX_DELAY ( portTickType ) 0xffff
+    typedef unsigned portSHORT portTickType;
+    #define portMAX_DELAY ( portTickType ) 0xffff
 #else
-	typedef unsigned portLONG portTickType;
-	#define portMAX_DELAY ( portTickType ) 0xffffffff
+    typedef unsigned portLONG portTickType;
+    #define portMAX_DELAY ( portTickType ) 0xffffffff
 #endif
 /*-----------------------------------------------------------*/
 
 /* Architecture specifics. */
-#define portSTACK_GROWTH			( -1 )
-#define portTICK_RATE_MS			( ( portTickType ) 1000 / configTICK_RATE_HZ )
-#define portBYTE_ALIGNMENT			8
+#define portSTACK_GROWTH            ( -1 )
+#define portTICK_RATE_MS            ( ( portTickType ) 1000 / configTICK_RATE_HZ )
+#define portBYTE_ALIGNMENT            8
 /*-----------------------------------------------------------*/
 
 
 /* Scheduler utilities. */
 extern void vPortYield( void );
-#define portNVIC_INT_CTRL_REG		( * ( ( volatile unsigned long * ) 0xe000ed04 ) )
-#define portNVIC_PENDSVSET_BIT		( 1UL << 28UL )
-#define portYIELD()					vPortYield()
+#define portNVIC_INT_CTRL_REG        ( * ( ( volatile unsigned long * ) 0xe000ed04 ) )
+#define portNVIC_PENDSVSET_BIT        ( 1UL << 28UL )
+#define portYIELD()                    vPortYield()
 #define portEND_SWITCHING_ISR( xSwitchRequired ) if( xSwitchRequired ) portNVIC_INT_CTRL_REG = portNVIC_PENDSVSET_BIT
 #define portYIELD_FROM_ISR( x ) portEND_SWITCHING_ISR( x )
 /*-----------------------------------------------------------*/
@@ -120,12 +120,12 @@ extern void vPortEnterCritical( void );
 extern void vPortExitCritical( void );
 extern unsigned long ulPortSetInterruptMask( void );
 extern void vPortClearInterruptMask( unsigned long ulNewMaskValue );
-#define portSET_INTERRUPT_MASK_FROM_ISR()		ulPortSetInterruptMask()
-#define portCLEAR_INTERRUPT_MASK_FROM_ISR(x)	vPortClearInterruptMask(x)
-#define portDISABLE_INTERRUPTS()				ulPortSetInterruptMask()
-#define portENABLE_INTERRUPTS()					vPortClearInterruptMask(0)
-#define portENTER_CRITICAL()					vPortEnterCritical()
-#define portEXIT_CRITICAL()						vPortExitCritical()
+#define portSET_INTERRUPT_MASK_FROM_ISR()        ulPortSetInterruptMask()
+#define portCLEAR_INTERRUPT_MASK_FROM_ISR(x)    vPortClearInterruptMask(x)
+#define portDISABLE_INTERRUPTS()                ulPortSetInterruptMask()
+#define portENABLE_INTERRUPTS()                    vPortClearInterruptMask(0)
+#define portENTER_CRITICAL()                    vPortEnterCritical()
+#define portEXIT_CRITICAL()                        vPortExitCritical()
 
 /*-----------------------------------------------------------*/
 
@@ -138,43 +138,43 @@ not necessary for to use this port.  They are defined so the common demo files
 
 /* Tickless idle/low power functionality. */
 #ifndef portSUPPRESS_TICKS_AND_SLEEP
-	extern void vPortSuppressTicksAndSleep( portTickType xExpectedIdleTime );
-	#define portSUPPRESS_TICKS_AND_SLEEP( xExpectedIdleTime ) vPortSuppressTicksAndSleep( xExpectedIdleTime )
+    extern void vPortSuppressTicksAndSleep( portTickType xExpectedIdleTime );
+    #define portSUPPRESS_TICKS_AND_SLEEP( xExpectedIdleTime ) vPortSuppressTicksAndSleep( xExpectedIdleTime )
 #endif
 /*-----------------------------------------------------------*/
 
 /* Architecture specific optimisations. */
 #if configUSE_PORT_OPTIMISED_TASK_SELECTION == 1
 
-	/* Generic helper function. */
-	__attribute__( ( always_inline ) ) static inline unsigned char ucPortCountLeadingZeros( unsigned long ulBitmap )
-	{
-	unsigned char ucReturn;
+    /* Generic helper function. */
+    __attribute__( ( always_inline ) ) static inline unsigned char ucPortCountLeadingZeros( unsigned long ulBitmap )
+    {
+    unsigned char ucReturn;
 
-		__asm volatile ( "clz %0, %1" : "=r" ( ucReturn ) : "r" ( ulBitmap ) );
-		return ucReturn;
-	}
+        __asm volatile ( "clz %0, %1" : "=r" ( ucReturn ) : "r" ( ulBitmap ) );
+        return ucReturn;
+    }
 
-	/* Check the configuration. */
-	#if( configMAX_PRIORITIES > 32 )
-		#error configUSE_PORT_OPTIMISED_TASK_SELECTION can only be set to 1 when configMAX_PRIORITIES is less than or equal to 32.  It is very rare that a system requires more than 10 to 15 difference priorities as tasks that share a priority will time slice.
-	#endif
+    /* Check the configuration. */
+    #if( configMAX_PRIORITIES > 32 )
+        #error configUSE_PORT_OPTIMISED_TASK_SELECTION can only be set to 1 when configMAX_PRIORITIES is less than or equal to 32.  It is very rare that a system requires more than 10 to 15 difference priorities as tasks that share a priority will time slice.
+    #endif
 
-	/* Store/clear the ready priorities in a bit map. */
-	#define portRECORD_READY_PRIORITY( uxPriority, uxReadyPriorities ) ( uxReadyPriorities ) |= ( 1UL << ( uxPriority ) )
-	#define portRESET_READY_PRIORITY( uxPriority, uxReadyPriorities ) ( uxReadyPriorities ) &= ~( 1UL << ( uxPriority ) )
+    /* Store/clear the ready priorities in a bit map. */
+    #define portRECORD_READY_PRIORITY( uxPriority, uxReadyPriorities ) ( uxReadyPriorities ) |= ( 1UL << ( uxPriority ) )
+    #define portRESET_READY_PRIORITY( uxPriority, uxReadyPriorities ) ( uxReadyPriorities ) &= ~( 1UL << ( uxPriority ) )
 
-	/*-----------------------------------------------------------*/
+    /*-----------------------------------------------------------*/
 
-	#define portGET_HIGHEST_PRIORITY( uxTopPriority, uxReadyPriorities ) uxTopPriority = ( 31 - ucPortCountLeadingZeros( ( uxReadyPriorities ) ) )
+    #define portGET_HIGHEST_PRIORITY( uxTopPriority, uxReadyPriorities ) uxTopPriority = ( 31 - ucPortCountLeadingZeros( ( uxReadyPriorities ) ) )
 
 #endif /* configUSE_PORT_OPTIMISED_TASK_SELECTION */
 
 /*-----------------------------------------------------------*/
 
 #ifdef configASSERT
-	void vPortValidateInterruptPriority( void );
-	#define portASSERT_IF_INTERRUPT_PRIORITY_INVALID() 	vPortValidateInterruptPriority()
+    void vPortValidateInterruptPriority( void );
+    #define portASSERT_IF_INTERRUPT_PRIORITY_INVALID()     vPortValidateInterruptPriority()
 #endif
 
 /* portNOP() is not required by this port. */

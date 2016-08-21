@@ -40,8 +40,8 @@
 <h3>Unicode API</h3>
 <p>ファイル関数の入出力のうちファイル名やパス名を指定する引数の型は、<tt>TCHAR</tt>で定義されていますが、これは通常は<tt>char</tt>のエリアスになっています。そして、<tt>_CODE_PAGE</tt>で指定されるANSI/OEMコード(SBCSまたはDBCS)の文字列として扱われます。ファイル名入出力をUnicodeとする構成(<tt>_LFN_UNICODE == 1</tt>)にしたときは、<tt>TCHAR</tt>はワイド文字(<tt>WCHAR, unsigned short</tt>)に切り替わり、パス名の入出力にUnicodeを使用するようになります。これによりLFN規格に完全対応となり、ANSI/OEMコードにない文字(たとえば ✝☪✡☸☭など)も使用できます。この設定は文字列入出力関数のデータ型とエンコーディングにも影響を与えます。リテラル文字列を定義するとき、次に示すように<tt>_T(s)</tt>および<tt>_TEXT(s)</tt>マクロを使ってANSI/OEMとUnicodeを自動切り替えすることができます。</p>
 <pre>
- f_open(fp, "filename.txt", FA_READ);      <span class="c">/* ANSI/OEM専用コード */</span>
- f_open(fp, L"filename.txt", FA_READ);     <span class="c">/* Unicode専用コード */</span>
+ f_open(fp, "filename.txt", FA_READ);	  <span class="c">/* ANSI/OEM専用コード */</span>
+ f_open(fp, L"filename.txt", FA_READ);	 <span class="c">/* Unicode専用コード */</span>
  f_open(fp, _T("filename.txt"), FA_READ);  <span class="c">/* 両用コード(自動切り替え) */</span>
 </pre>
 </div>
@@ -56,10 +56,10 @@
    論理ドライブ3を物理ドライブ1(リムーバブル)に割り当てる場合。
 
 PARTITION VolToPart[] = {
-    {0, 1},     <span class="c">/* 論理ドライブ 0 ==> 物理ドライブ 0, 第1区画 */</span>
-    {0, 2},     <span class="c">/* 論理ドライブ 1 ==> 物理ドライブ 0, 第2区画 */</span>
-    {0, 3},     <span class="c">/* 論理ドライブ 2 ==> 物理ドライブ 0, 第3区画 */</span>
-    {1, 0}      <span class="c">/* 論理ドライブ 3 ==> 物理ドライブ 1, 自動検出 */</span>
+	{0, 1},	 <span class="c">/* 論理ドライブ 0 ==> 物理ドライブ 0, 第1区画 */</span>
+	{0, 2},	 <span class="c">/* 論理ドライブ 1 ==> 物理ドライブ 0, 第2区画 */</span>
+	{0, 3},	 <span class="c">/* 論理ドライブ 2 ==> 物理ドライブ 0, 第3区画 */</span>
+	{1, 0}	  <span class="c">/* 論理ドライブ 3 ==> 物理ドライブ 1, 自動検出 */</span>
 };
 </pre>
 <img src="../img/f7.png" width="828" height="288" alt="論理ドライブと物理ドライブの関係">

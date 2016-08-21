@@ -16,9 +16,9 @@
 <p>The f_open function creates a <em>file object</em> to be used to access the file.</p>
 <pre>
 FRESULT f_open (
-  FIL* <span class="arg">fp</span>,           <span class="c">/* [OUT] Pointer to the file object structure */</span>
+  FIL* <span class="arg">fp</span>,		   <span class="c">/* [OUT] Pointer to the file object structure */</span>
   const TCHAR* <span class="arg">path</span>, <span class="c">/* [IN] File name */</span>
-  BYTE <span class="arg">mode</span>          <span class="c">/* [IN] Mode flags */</span>
+  BYTE <span class="arg">mode</span>		  <span class="c">/* [IN] Mode flags */</span>
 );
 </pre>
 </div>
@@ -95,26 +95,26 @@ FATFS FatFs;   <span class="c">/* Work area (file system object) for logical dri
 
 int main (void)
 {
-    FIL fil;       <span class="c">/* File object */</span>
-    char line[82]; <span class="c">/* Line buffer */</span>
-    FRESULT fr;    <span class="c">/* FatFs return code */</span>
+	FIL fil;	   <span class="c">/* File object */</span>
+	char line[82]; <span class="c">/* Line buffer */</span>
+	FRESULT fr;	<span class="c">/* FatFs return code */</span>
 
 
-    <span class="c">/* Register work area to the default drive */</span>
-    f_mount(&amp;FatFs, "", 0);
+	<span class="c">/* Register work area to the default drive */</span>
+	f_mount(&amp;FatFs, "", 0);
 
-    <span class="c">/* Open a text file */</span>
-    fr = f_open(&fil, "message.txt", FA_READ);
-    if (fr) return (int)fr;
+	<span class="c">/* Open a text file */</span>
+	fr = f_open(&fil, "message.txt", FA_READ);
+	if (fr) return (int)fr;
 
-    <span class="c">/* Read all lines and display it */</span>
-    while (f_gets(line, sizeof line, &fil))
-        printf(line);
+	<span class="c">/* Read all lines and display it */</span>
+	while (f_gets(line, sizeof line, &fil))
+		printf(line);
 
-    <span class="c">/* Close the file */</span>
-    f_close(&fil);
+	<span class="c">/* Close the file */</span>
+	f_close(&fil);
 
-    return 0;
+	return 0;
 }
 </pre>
 <pre>
@@ -122,42 +122,42 @@ int main (void)
 
 int main (void)
 {
-    FATFS fs[2];         <span class="c">/* Work area (file system object) for logical drives */</span>
-    FIL fsrc, fdst;      <span class="c">/* File objects */</span>
-    BYTE buffer[4096];   <span class="c">/* File copy buffer */</span>
-    FRESULT fr;          <span class="c">/* FatFs function common result code */</span>
-    UINT br, bw;         <span class="c">/* File read/write count */</span>
+	FATFS fs[2];		 <span class="c">/* Work area (file system object) for logical drives */</span>
+	FIL fsrc, fdst;	  <span class="c">/* File objects */</span>
+	BYTE buffer[4096];   <span class="c">/* File copy buffer */</span>
+	FRESULT fr;		  <span class="c">/* FatFs function common result code */</span>
+	UINT br, bw;		 <span class="c">/* File read/write count */</span>
 
 
-    <span class="c">/* Register work area for each logical drive */</span>
-    f_mount(&amp;fs[0], "0:", 0);
-    f_mount(&amp;fs[1], "1:", 0);
+	<span class="c">/* Register work area for each logical drive */</span>
+	f_mount(&amp;fs[0], "0:", 0);
+	f_mount(&amp;fs[1], "1:", 0);
 
-    <span class="c">/* Open source file on the drive 1 */</span>
-    fr = f_open(&amp;fsrc, "1:file.bin", FA_OPEN_EXISTING | FA_READ);
-    if (fr) return (int)fr;
+	<span class="c">/* Open source file on the drive 1 */</span>
+	fr = f_open(&amp;fsrc, "1:file.bin", FA_OPEN_EXISTING | FA_READ);
+	if (fr) return (int)fr;
 
-    <span class="c">/* Create destination file on the drive 0 */</span>
-    fr = f_open(&amp;fdst, "0:file.bin", FA_CREATE_ALWAYS | FA_WRITE);
-    if (fr) return (int)fr;
+	<span class="c">/* Create destination file on the drive 0 */</span>
+	fr = f_open(&amp;fdst, "0:file.bin", FA_CREATE_ALWAYS | FA_WRITE);
+	if (fr) return (int)fr;
 
-    <span class="c">/* Copy source to destination */</span>
-    for (;;) {
-        fr = f_read(&amp;fsrc, buffer, sizeof buffer, &amp;br);  <span class="c">/* Read a chunk of source file */</span>
-        if (fr || br == 0) break; <span class="c">/* error or eof */</span>
-        fr = f_write(&amp;fdst, buffer, br, &amp;bw);            <span class="c">/* Write it to the destination file */</span>
-        if (fr || bw &lt; br) break; <span class="c">/* error or disk full */</span>
-    }
+	<span class="c">/* Copy source to destination */</span>
+	for (;;) {
+		fr = f_read(&amp;fsrc, buffer, sizeof buffer, &amp;br);  <span class="c">/* Read a chunk of source file */</span>
+		if (fr || br == 0) break; <span class="c">/* error or eof */</span>
+		fr = f_write(&amp;fdst, buffer, br, &amp;bw);			<span class="c">/* Write it to the destination file */</span>
+		if (fr || bw &lt; br) break; <span class="c">/* error or disk full */</span>
+	}
 
-    <span class="c">/* Close open files */</span>
-    f_close(&amp;fsrc);
-    f_close(&amp;fdst);
+	<span class="c">/* Close open files */</span>
+	f_close(&amp;fsrc);
+	f_close(&amp;fdst);
 
-    <span class="c">/* Unregister work area prior to discard it */</span>
-    f_mount(NULL, "0:", 0);
-    f_mount(NULL, "1:", 0);
+	<span class="c">/* Unregister work area prior to discard it */</span>
+	f_mount(NULL, "0:", 0);
+	f_mount(NULL, "1:", 0);
 
-    return (int)fr;
+	return (int)fr;
 }
 </pre>
 </div>

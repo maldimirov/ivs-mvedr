@@ -29,7 +29,7 @@ typedef struct {
   unsigned char Fix     : 1;
   unsigned char Ack     : 1;
   unsigned char First   : 1;
-  unsigned char PPS			: 1;
+  unsigned char PPS            : 1;
   unsigned char PrevPPS : 1; 
 } GPS_StatusTypedef;
 
@@ -99,8 +99,8 @@ extern uint16_t rmc_sog, rmc_cog;
 void    GPS_Handler(void);
 void    GPS_Init();
 char    GPS_DecodeNMEA(char *aMsg);
-bool 		LoadPOIFile();
-bool 		DetectPPS(void);
+bool         LoadPOIFile();
+bool         DetectPPS(void);
 
 char      ConvertDecimalToDMS     (char *dec, int *deg, int *min, int *sec);
 char      ConvertDecToMilliArcSec (char *dec, int *mArcs, double *gradus);

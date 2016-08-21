@@ -132,7 +132,7 @@ void MSD_PrepareData(void)
   msd[1] |= (MSD_Data.MSD_Control.passengers << 2);     // 1 bit size, pos 0000 0x00
   msd[1] |= ((MSD_Data.msgId >> 6) & 0x03);             // 8 bit size, pos 0000 00xx
 
-  msd[2] |= (MSD_Data.msgId << 2);                      // 8 bit size, pos xxxx xx00	
+  msd[2] |= (MSD_Data.msgId << 2);                      // 8 bit size, pos xxxx xx00    
   msd[2] |= MSD_Data.MSD_Control.activation << 1;       // 1 bit size, pos 0000 00x0
   msd[2] |= MSD_Data.MSD_Control.testCall;              // 1 bit size, pos 0000 000x
 

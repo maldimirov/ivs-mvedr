@@ -57,7 +57,7 @@ Large SNMP message support
 First of all you'll need to add the following define
 to your local lwipopts.h:
 
-#define LWIP_SNMP               1
+#define LWIP_SNMP			   1
 
 and add the source files in lwip/src/core/snmp
 and some snmp headers in lwip/src/include/lwip to your makefile.
@@ -114,7 +114,7 @@ snmp_get_sysuptime).
 If want to extend the agent with your own private MIB you'll need to
 add the following define to your local lwipopts.h:
 
-#define SNMP_PRIVATE_MIB        1
+#define SNMP_PRIVATE_MIB		1
 
 You must provide the private_mib.h and associated files yourself.
 Note we don't have a "MIB compiler" that generates C source from a MIB,

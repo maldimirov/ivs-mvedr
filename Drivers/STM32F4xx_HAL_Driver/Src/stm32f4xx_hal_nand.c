@@ -322,11 +322,11 @@ HAL_StatusTypeDef HAL_NAND_Read_ID(NAND_HandleTypeDef *hnand, NAND_IDTypeDef *pN
   /* Update the NAND controller state */ 
   hnand->State = HAL_NAND_STATE_BUSY;
   
-  /* Send Read ID command sequence */ 	
+  /* Send Read ID command sequence */     
   *(__IO uint8_t *)((uint32_t)(deviceAddress | CMD_AREA))  = 0x90;
   *(__IO uint8_t *)((uint32_t)(deviceAddress | ADDR_AREA)) = 0x00;
 
-  /* Read the electronic signature from NAND flash */	
+  /* Read the electronic signature from NAND flash */    
   data = *(__IO uint32_t *)deviceAddress;
   
   /* Return the data read */
@@ -430,7 +430,7 @@ HAL_StatusTypeDef HAL_NAND_Read_Page(NAND_HandleTypeDef *hnand, NAND_AddressType
   
   /* Page(s) read loop */  
   while((NumPageToRead != 0) && (nandAddress < (hnand->Info.BlockSize) * (hnand->Info.PageSize)))
-  {	   
+  {       
     /* update the buffer size */
     size = (hnand->Info.PageSize) + ((hnand->Info.PageSize) * numPagesRead);
     
@@ -809,7 +809,7 @@ HAL_StatusTypeDef HAL_NAND_Erase_Block(NAND_HandleTypeDef *hnand, NAND_AddressTy
   {
     *(__IO uint8_t *)((uint32_t)(DeviceAddress | ADDR_AREA)) = ADDR_4th_CYCLE(ARRAY_ADDRESS(pAddress, hnand));
   }  
-		
+        
   *(__IO uint8_t *)((uint32_t)(DeviceAddress | CMD_AREA)) = 0xD0; 
   
   /* Update the NAND controller state */

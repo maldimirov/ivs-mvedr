@@ -63,21 +63,21 @@ FRESULT f_utime (
 <h4>Example</h4>
 <pre>
 FRESULT set_timestamp (
-    char *obj,     <span class="c">/* Pointer to the file name */</span>
-    int year,
-    int month,
-    int mday,
-    int hour,
-    int min,
-    int sec
+	char *obj,	 <span class="c">/* Pointer to the file name */</span>
+	int year,
+	int month,
+	int mday,
+	int hour,
+	int min,
+	int sec
 )
 {
-    FILINFO fno;
+	FILINFO fno;
 
-    fno.fdate = (WORD)(((year - 1980) * 512U) | month * 32U | mday);
-    fno.ftime = (WORD)(hour * 2048U | min * 32U | sec / 2U);
+	fno.fdate = (WORD)(((year - 1980) * 512U) | month * 32U | mday);
+	fno.ftime = (WORD)(hour * 2048U | min * 32U | sec / 2U);
 
-    return f_utime(obj, &amp;fno);
+	return f_utime(obj, &amp;fno);
 }
 </pre>
 </div>

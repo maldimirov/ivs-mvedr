@@ -434,7 +434,7 @@ HAL_StatusTypeDef HAL_I2SEx_TransmitReceive_IT(I2S_HandleTypeDef *hi2s, uint16_t
           {
             /* Transmit First data */
             I2SxEXT(hi2s->Instance)->DR = (*hi2s->pTxBuffPtr++);
-            hi2s->TxXferCount--;	
+            hi2s->TxXferCount--;    
 
             if(hi2s->TxXferCount == 0)
             {

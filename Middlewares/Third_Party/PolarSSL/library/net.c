@@ -137,9 +137,9 @@ int net_connect( int *fd, const char *host, int port )
 #endif
 #if LWIP_DNS == 1
     if( ( server_host = gethostbyname( host ) ) == NULL ) {
-    	printf( "SSL: ! gethostbyname ERROR :" );
-    	printf(host);
-    	printf( "\n" );
+        printf( "SSL: ! gethostbyname ERROR :" );
+        printf(host);
+        printf( "\n" );
         return( POLARSSL_ERR_NET_UNKNOWN_HOST );
        }
     printf ( "SSL: gethostbyname OK\n" );

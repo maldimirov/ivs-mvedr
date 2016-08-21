@@ -68,7 +68,7 @@
 #define TIMERS_H
 
 #ifndef INC_FREERTOS_H
-	#error "include FreeRTOS.h must appear in source files before include timers.h"
+    #error "include FreeRTOS.h must appear in source files before include timers.h"
 #endif
 
 /*lint -e537 This headers are only multiply included if the application code
@@ -83,10 +83,10 @@ extern "C" {
 /* IDs for commands that can be sent/received on the timer queue.  These are to
 be used solely through the macros that make up the public software timer API,
 as defined below. */
-#define tmrCOMMAND_START					( ( portBASE_TYPE ) 0 )
-#define tmrCOMMAND_STOP						( ( portBASE_TYPE ) 1 )
-#define tmrCOMMAND_CHANGE_PERIOD			( ( portBASE_TYPE ) 2 )
-#define tmrCOMMAND_DELETE					( ( portBASE_TYPE ) 3 )
+#define tmrCOMMAND_START                    ( ( portBASE_TYPE ) 0 )
+#define tmrCOMMAND_STOP                        ( ( portBASE_TYPE ) 1 )
+#define tmrCOMMAND_CHANGE_PERIOD            ( ( portBASE_TYPE ) 2 )
+#define tmrCOMMAND_DELETE                    ( ( portBASE_TYPE ) 3 )
 
 /*-----------------------------------------------------------
  * MACROS AND DEFINITIONS
@@ -104,11 +104,11 @@ typedef void * xTimerHandle;
 typedef void (*tmrTIMER_CALLBACK)( xTimerHandle xTimer );
 
 /**
- * xTimerHandle xTimerCreate( 	const signed char *pcTimerName,
- * 								portTickType xTimerPeriodInTicks,
- * 								unsigned portBASE_TYPE uxAutoReload,
- * 								void * pvTimerID,
- * 								tmrTIMER_CALLBACK pxCallbackFunction );
+ * xTimerHandle xTimerCreate(     const signed char *pcTimerName,
+ *                                 portTickType xTimerPeriodInTicks,
+ *                                 unsigned portBASE_TYPE uxAutoReload,
+ *                                 void * pvTimerID,
+ *                                 tmrTIMER_CALLBACK pxCallbackFunction );
  *
  * Creates a new software timer instance.  This allocates the storage required
  * by the new timer, initialises the new timers internal state, and returns a
@@ -142,7 +142,7 @@ typedef void (*tmrTIMER_CALLBACK)( xTimerHandle xTimer );
  *
  * @param pxCallbackFunction The function to call when the timer expires.
  * Callback functions must have the prototype defined by tmrTIMER_CALLBACK,
- * which is	"void vCallbackFunction( xTimerHandle xTimer );".
+ * which is    "void vCallbackFunction( xTimerHandle xTimer );".
  *
  * @return If the timer is successfully create then a handle to the newly
  * created timer is returned.  If the timer cannot be created (because either
@@ -168,9 +168,9 @@ typedef void (*tmrTIMER_CALLBACK)( xTimerHandle xTimer );
  * long lArrayIndex;
  * const long xMaxExpiryCountBeforeStopping = 10;
  *
- * 	   // Optionally do something if the pxTimer parameter is NULL.
- * 	   configASSERT( pxTimer );
- * 	
+ *        // Optionally do something if the pxTimer parameter is NULL.
+ *        configASSERT( pxTimer );
+ *     
  *     // Which timer expired?
  *     lArrayIndex = ( long ) pvTimerGetTimerID( pxTimer );
  *
@@ -396,9 +396,9 @@ xTaskHandle xTimerGetTimerDaemonTaskHandle( void );
 #define xTimerStop( xTimer, xBlockTime ) xTimerGenericCommand( ( xTimer ), tmrCOMMAND_STOP, 0U, NULL, ( xBlockTime ) )
 
 /**
- * portBASE_TYPE xTimerChangePeriod( 	xTimerHandle xTimer,
- *										portTickType xNewPeriod,
- *										portTickType xBlockTime );
+ * portBASE_TYPE xTimerChangePeriod(     xTimerHandle xTimer,
+ *                                        portTickType xNewPeriod,
+ *                                        portTickType xBlockTime );
  *
  * Timer functionality is provided by a timer service/daemon task.  Many of the
  * public FreeRTOS timer API functions send commands to the timer service task
@@ -638,8 +638,8 @@ xTaskHandle xTimerGetTimerDaemonTaskHandle( void );
 #define xTimerReset( xTimer, xBlockTime ) xTimerGenericCommand( ( xTimer ), tmrCOMMAND_START, ( xTaskGetTickCount() ), NULL, ( xBlockTime ) )
 
 /**
- * portBASE_TYPE xTimerStartFromISR( 	xTimerHandle xTimer,
- *										portBASE_TYPE *pxHigherPriorityTaskWoken );
+ * portBASE_TYPE xTimerStartFromISR(     xTimerHandle xTimer,
+ *                                        portBASE_TYPE *pxHigherPriorityTaskWoken );
  *
  * A version of xTimerStart() that can be called from an interrupt service
  * routine.
@@ -723,8 +723,8 @@ xTaskHandle xTimerGetTimerDaemonTaskHandle( void );
 #define xTimerStartFromISR( xTimer, pxHigherPriorityTaskWoken ) xTimerGenericCommand( ( xTimer ), tmrCOMMAND_START, ( xTaskGetTickCountFromISR() ), ( pxHigherPriorityTaskWoken ), 0U )
 
 /**
- * portBASE_TYPE xTimerStopFromISR( 	xTimerHandle xTimer,
- *										portBASE_TYPE *pxHigherPriorityTaskWoken );
+ * portBASE_TYPE xTimerStopFromISR(     xTimerHandle xTimer,
+ *                                        portBASE_TYPE *pxHigherPriorityTaskWoken );
  *
  * A version of xTimerStop() that can be called from an interrupt service
  * routine.
@@ -787,8 +787,8 @@ xTaskHandle xTimerGetTimerDaemonTaskHandle( void );
 
 /**
  * portBASE_TYPE xTimerChangePeriodFromISR( xTimerHandle xTimer,
- *											portTickType xNewPeriod,
- *											portBASE_TYPE *pxHigherPriorityTaskWoken );
+ *                                            portTickType xNewPeriod,
+ *                                            portBASE_TYPE *pxHigherPriorityTaskWoken );
  *
  * A version of xTimerChangePeriod() that can be called from an interrupt
  * service routine.
@@ -859,8 +859,8 @@ xTaskHandle xTimerGetTimerDaemonTaskHandle( void );
 #define xTimerChangePeriodFromISR( xTimer, xNewPeriod, pxHigherPriorityTaskWoken ) xTimerGenericCommand( ( xTimer ), tmrCOMMAND_CHANGE_PERIOD, ( xNewPeriod ), ( pxHigherPriorityTaskWoken ), 0U )
 
 /**
- * portBASE_TYPE xTimerResetFromISR( 	xTimerHandle xTimer,
- *										portBASE_TYPE *pxHigherPriorityTaskWoken );
+ * portBASE_TYPE xTimerResetFromISR(     xTimerHandle xTimer,
+ *                                        portBASE_TYPE *pxHigherPriorityTaskWoken );
  *
  * A version of xTimerReset() that can be called from an interrupt service
  * routine.

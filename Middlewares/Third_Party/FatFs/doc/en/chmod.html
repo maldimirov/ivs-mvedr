@@ -17,8 +17,8 @@
 <pre>
 FRESULT f_chmod (
   const TCHAR* <span class="arg">path</span>, <span class="c">/* [IN] Object name */</span>
-  BYTE <span class="arg">attr</span>,         <span class="c">/* [IN] Attribute flags */</span>
-  BYTE <span class="arg">mask</span>          <span class="c">/* [IN] Attribute masks */</span>
+  BYTE <span class="arg">attr</span>,		 <span class="c">/* [IN] Attribute flags */</span>
+  BYTE <span class="arg">mask</span>		  <span class="c">/* [IN] Attribute masks */</span>
 );
 </pre>
 </div>
@@ -79,8 +79,8 @@ FRESULT f_chmod (
 <div class="para use">
 <h4>Example</h4>
 <pre>
-    <span class="c">/* Set read-only flag, clear archive flag and others are retained. */</span>
-    f_chmod("file.txt", AR_RDO, AR_RDO | AR_ARC);
+	<span class="c">/* Set read-only flag, clear archive flag and others are retained. */</span>
+	f_chmod("file.txt", AR_RDO, AR_RDO | AR_ARC);
 </pre>
 </div>
 

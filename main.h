@@ -38,7 +38,7 @@ extern volatile char UsbStat;
 extern volatile char fLog;
 extern uint16_t rmc_sog, rmc_cog;
 extern volatile uint32_t log_period;
-extern TIM_HandleTypeDef	t1;
+extern TIM_HandleTypeDef    t1;
 
 #define RX_BUFFER_SIZE    2048
 #define LINE_BUFFER_SIZE 1024

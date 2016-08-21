@@ -56,7 +56,7 @@ struct _hr_time
 #endif
 
 #if !defined(POLARSSL_HAVE_HARDCLOCK) && defined(POLARSSL_HAVE_ASM) &&  \
-	(defined(_MSC_VER) && defined(_M_IX86)) || defined(__WATCOMC__)
+    (defined(_MSC_VER) && defined(_M_IX86)) || defined(__WATCOMC__)
 
 #define POLARSSL_HAVE_HARDCLOCK
 
@@ -181,9 +181,9 @@ unsigned long hardclock( void )
 {
     LARGE_INTEGER offset;
     
-	QueryPerformanceCounter( &offset );
+    QueryPerformanceCounter( &offset );
 
-	return (unsigned long)( offset.QuadPart );
+    return (unsigned long)( offset.QuadPart );
 }
 #endif
 

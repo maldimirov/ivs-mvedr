@@ -105,9 +105,9 @@
 #define READ_PPS()              HAL_GPIO_ReadPin(BSP_PPS_GPIO_PORT, BSP_PPS_PIN)
 
 // @brief GSM power pin definitions
-#define BSP_LED_ON()       	{}
-#define BSP_LED_OFF()      	{}
-#define BSP_LED_TOGGLE()		{}
+#define BSP_LED_ON()           {}
+#define BSP_LED_OFF()          {}
+#define BSP_LED_TOGGLE()        {}
 
 
 #define BSP_GSM_PWR_LOW()       HAL_GPIO_WritePin(BSP_PWR_GPIO_PORT, BSP_PWR_PIN, GPIO_PIN_RESET)

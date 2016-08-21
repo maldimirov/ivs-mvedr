@@ -17,8 +17,8 @@
 <pre>
 FRESULT f_getfree (
   const TCHAR* <span class="arg">path</span>,  <span class="c">/* [IN] 対象ドライブを指定します */</span>
-  DWORD* <span class="arg">nclst</span>,       <span class="c">/* [OUT] 空きクラスタ数を格納する変数へのポインタ */</span>
-  FATFS** <span class="arg">fatfs</span>       <span class="c">/* [OUT] ファイル・システム・オブジェクトを指すポインタへのポインタ */</span>
+  DWORD* <span class="arg">nclst</span>,	   <span class="c">/* [OUT] 空きクラスタ数を格納する変数へのポインタ */</span>
+  FATFS** <span class="arg">fatfs</span>	   <span class="c">/* [OUT] ファイル・システム・オブジェクトを指すポインタへのポインタ */</span>
 );
 </pre>
 </div>
@@ -66,21 +66,21 @@ FRESULT f_getfree (
 <div class="para use">
 <h4>使用例</h4>
 <pre>
-    FATFS *fs;
-    DWORD fre_clust, fre_sect, tot_sect;
+	FATFS *fs;
+	DWORD fre_clust, fre_sect, tot_sect;
 
 
-    <span class="c">/* ドライブ1のボリューム情報と空きクラスタ数を得る */</span>
-    res = f_getfree("1:", &amp;fre_clust, &amp;fs);
-    if (res) die(res);
+	<span class="c">/* ドライブ1のボリューム情報と空きクラスタ数を得る */</span>
+	res = f_getfree("1:", &amp;fre_clust, &amp;fs);
+	if (res) die(res);
 
-    <span class="c">/* 全セクタ数と空きセクタ数を計算 */</span>
-    tot_sect = (fs->n_fatent - 2) * fs->csize;
-    fre_sect = fre_clust * fs->csize;
+	<span class="c">/* 全セクタ数と空きセクタ数を計算 */</span>
+	tot_sect = (fs->n_fatent - 2) * fs->csize;
+	fre_sect = fre_clust * fs->csize;
 
-    <span class="c">/* ボリューム全体のサイズと空きのサイズを表示 (512バイト/セクタと仮定) */</span>
-    printf("%10lu KiB total drive space.\n%10lu KiB available.\n",
-           tot_sect / 2, fre_sect / 2);
+	<span class="c">/* ボリューム全体のサイズと空きのサイズを表示 (512バイト/セクタと仮定) */</span>
+	printf("%10lu KiB total drive space.\n%10lu KiB available.\n",
+		   tot_sect / 2, fre_sect / 2);
 </pre>
 </div>
 

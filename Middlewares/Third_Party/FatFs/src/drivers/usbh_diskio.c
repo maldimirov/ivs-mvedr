@@ -251,7 +251,7 @@ DRESULT USBH_ioctl(BYTE cmd, void *buff)
     break;
     
   /* Get R/W sector size (WORD) */  
-  case GET_SECTOR_SIZE :	
+  case GET_SECTOR_SIZE :    
     if(USBH_MSC_GetLUNInfo(&HOST_HANDLE, 0, &info) == USBH_OK)
     {
       *(DWORD*)buff = info.capacity.block_size;

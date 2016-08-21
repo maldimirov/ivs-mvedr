@@ -80,32 +80,32 @@ FatFsモジュールはANSI C(C89)準拠で記述されているので、普通�
 <tr><th></th><th>ARM7<small><br>32bit</small></th><th>ARM7<small><br>Thumb</small></th><th>CM3<small><br>Thumb-2</small></th><th>AVR</th><th>H8/300H</th><th>PIC24</th><th>RL78</th><th>V850ES</th><th>SH-2A</th><th>RX600</th><th>IA-32</th></tr>
 <tr><td>Compiler</td><td>GCC</td><td>GCC</td><td>GCC</td><td>GCC</td><td>CH38</td><td>C30</td><td>CC78K0R</td><td>CA850</td><td>SHC</td><td>RXC</td><td>VC6</td></tr>
 <tr><td>_WORD_ACCESS</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td></tr>
-<!--                                          *ARM         *Thumb        *CM3         *AVR          *H8          *PIC24         *RL78       *V850ES       *SH-2A       *RX600       *IA-32   -->
+<!--										  *ARM		 *Thumb		*CM3		 *AVR		  *H8		  *PIC24		 *RL78	   *V850ES	   *SH-2A	   *RX600	   *IA-32   -->
 <tr class="lst3"><td>text (Full, R/W)</td><td>10591</td><td>7119</td><td>6565</td><td>13240</td><td>10864</td><td>11619</td><td>13192</td><td>8031</td><td>8960</td><td>5977</td><td>7856</td></tr>
-<tr>             <td>text (Min, R/W)</td>  <td>6671</td><td>4595</td><td>4293</td> <td>8512</td> <td>7232</td> <td>7674</td> <td>9033</td><td>5235</td><td>5768</td><td>3923</td><td>5129</td></tr>
-<tr>             <td>text (Full, R/O)</td> <td>4695</td><td>3121</td><td>2861</td> <td>6218</td> <td>5162</td> <td>5466</td> <td>6418</td><td>3799</td><td>3964</td><td>2847</td><td>3687</td></tr>
-<tr>             <td>text (Min, R/O)</td>  <td>3523</td><td>2463</td><td>2275</td> <td>4558</td> <td>4058</td> <td>4212</td> <td>4948</td><td>2959</td><td>3096</td><td>2199</td><td>2857</td></tr>
-<tr>             <td>bss</td><td>V*4 + 2</td><td>V*4 + 2</td><td>V*4 + 2</td><td>V*2 + 2</td><td>V*4 + 2</td><td>V*2 + 2</td><td>V*2 + 2</td><td>V*4 + 2</td><td>V*4 + 2</td><td>V*4 + 2</td><td>V*4 + 2</td></tr>
-<tr>             <td>Work area<br>(_FS_TINY == 0)</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*544</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*544</td><td>V*560 +<br>F*544</td><td>V*560 +<br>F*544</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*550</td></tr>
+<tr>			 <td>text (Min, R/W)</td>  <td>6671</td><td>4595</td><td>4293</td> <td>8512</td> <td>7232</td> <td>7674</td> <td>9033</td><td>5235</td><td>5768</td><td>3923</td><td>5129</td></tr>
+<tr>			 <td>text (Full, R/O)</td> <td>4695</td><td>3121</td><td>2861</td> <td>6218</td> <td>5162</td> <td>5466</td> <td>6418</td><td>3799</td><td>3964</td><td>2847</td><td>3687</td></tr>
+<tr>			 <td>text (Min, R/O)</td>  <td>3523</td><td>2463</td><td>2275</td> <td>4558</td> <td>4058</td> <td>4212</td> <td>4948</td><td>2959</td><td>3096</td><td>2199</td><td>2857</td></tr>
+<tr>			 <td>bss</td><td>V*4 + 2</td><td>V*4 + 2</td><td>V*4 + 2</td><td>V*2 + 2</td><td>V*4 + 2</td><td>V*2 + 2</td><td>V*2 + 2</td><td>V*4 + 2</td><td>V*4 + 2</td><td>V*4 + 2</td><td>V*4 + 2</td></tr>
+<tr>			 <td>Work area<br>(_FS_TINY == 0)</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*544</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*544</td><td>V*560 +<br>F*544</td><td>V*560 +<br>F*544</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*550</td><td>V*560 +<br>F*550</td></tr>
 <tr><td>Work area<br>(_FS_TINY == 1)</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*32</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*32</td><td>V*560 +<br>F*32</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*36</td><td>V*560 +<br>F*36</td></tr>
 </table>
 <pre>
 FatFs R0.10 options:
-_FS_READONLY     0 (R/W), 1 (R/O)
-_FS_MINIMIZE     0 (Full function), 3 (Minimized function)
-_USE_STRFUNC     0 (Disable string functions)
-_USE_MKFS        0 (Disable f_mkfs function)
-_USE_FORWARD     0 (Disable f_forward function)
-_USE_FASTSEEK    0 (Disable fast seek feature)
-_CODE_PAGE       932 (Japanese Shift-JIS)
-_USE_LFN         0 (Disable LFN)
-_MAX_SS          512 (Fixed sector size)
-_FS_RPATH        0 (Disable relative path feature)
-_FS_LABEL        0 (Disable volume label functions)
-_VOLUMES         V (Number of logical drives to be used)
+_FS_READONLY	 0 (R/W), 1 (R/O)
+_FS_MINIMIZE	 0 (Full function), 3 (Minimized function)
+_USE_STRFUNC	 0 (Disable string functions)
+_USE_MKFS		0 (Disable f_mkfs function)
+_USE_FORWARD	 0 (Disable f_forward function)
+_USE_FASTSEEK	0 (Disable fast seek feature)
+_CODE_PAGE	   932 (Japanese Shift-JIS)
+_USE_LFN		 0 (Disable LFN)
+_MAX_SS		  512 (Fixed sector size)
+_FS_RPATH		0 (Disable relative path feature)
+_FS_LABEL		0 (Disable volume label functions)
+_VOLUMES		 V (Number of logical drives to be used)
 _MULTI_PARTITION 0 (Single partition per drive)
-_FS_REENTRANT    0 (Disable reentrancy)
-_FS_LOCK         0 (Disable file lock control)
+_FS_REENTRANT	0 (Disable reentrancy)
+_FS_LOCK		 0 (Disable file lock control)
 </pre>
 </div>
 
@@ -256,7 +256,7 @@ _FS_LOCK         0 (Disable file lock control)
 <h3>FatFsのライセンスについて</h3>
 <p>ソース・ファイルのヘッダにライセンス条件が記述されているので、利用の際はそれに従うこと。英語を読めない方のために以下に日本語訳を示しておきます。</p>
 <pre>/*----------------------------------------------------------------------------/
-/  FatFs - FAT file system module  R0.10                    (C)ChaN, 2013
+/  FatFs - FAT file system module  R0.10					(C)ChaN, 2013
 /-----------------------------------------------------------------------------/
 / FatFsモジュールは、小規模な組み込みシステム向けの汎用FATファイルシステム・
 / モジュールです。これはフリー・ソフトウェアとして、教育・研究・開発のために

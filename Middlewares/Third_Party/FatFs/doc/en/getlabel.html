@@ -17,8 +17,8 @@
 <pre>
 FRESULT f_getlabel (
   const TCHAR* <span class="arg">path</span>,  <span class="c">/* [IN] Drive number */</span>
-  TCHAR* <span class="arg">buff</span>,        <span class="c">/* [OUT] Volume label */</span>
-  DWORD* <span class="arg">sn</span>           <span class="c">/* [OUT] Volume serial number */</span>
+  TCHAR* <span class="arg">buff</span>,		<span class="c">/* [OUT] Volume label */</span>
+  DWORD* <span class="arg">sn</span>		   <span class="c">/* [OUT] Volume serial number */</span>
 );
 </pre>
 </div>
@@ -60,13 +60,13 @@ FRESULT f_getlabel (
 <div class="para use">
 <h4>Example</h4>
 <pre>
-    char str[12];
+	char str[12];
 
-    <span class="c">/* Get volume label of the default drive */</span>
-    f_getlabel("", str, 0);
+	<span class="c">/* Get volume label of the default drive */</span>
+	f_getlabel("", str, 0);
 
-    <span class="c">/* Get volume label of the drive 2 */</span>
-    f_getlabel("2:", str, 0);
+	<span class="c">/* Get volume label of the drive 2 */</span>
+	f_getlabel("2:", str, 0);
 </pre>
 </div>
 

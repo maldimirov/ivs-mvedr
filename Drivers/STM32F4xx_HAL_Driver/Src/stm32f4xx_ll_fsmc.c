@@ -825,7 +825,7 @@ HAL_StatusTypeDef FSMC_PCCARD_DeInit(FSMC_PCCARD_TypeDef *Device)
   
   /* De-initialize the FSMC_PCCARD device */
   Device->PCR4    = 0x00000018; 
-  Device->SR4     = 0x00000000;	
+  Device->SR4     = 0x00000000;    
   Device->PMEM4   = 0xFCFCFCFC;
   Device->PATT4   = 0xFCFCFCFC;
   Device->PIO4    = 0xFCFCFCFC;

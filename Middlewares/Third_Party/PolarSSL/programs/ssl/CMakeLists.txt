@@ -1,13 +1,13 @@
 set(libs
-     polarssl
+	 polarssl
 )
 
 if(USE_PKCS11_HELPER_LIBRARY)
-    set(libs ${libs} pkcs11-helper)
+	set(libs ${libs} pkcs11-helper)
 endif(USE_PKCS11_HELPER_LIBRARY)
 
 if(ENABLE_ZLIB_SUPPORT)
-    set(libs ${libs} ${ZLIB_LIBRARIES})
+	set(libs ${libs} ${ZLIB_LIBRARIES})
 endif(ENABLE_ZLIB_SUPPORT)
 
 add_executable(ssl_client1 ssl_client1.c)
@@ -29,5 +29,5 @@ add_executable(ssl_mail_client ssl_mail_client.c)
 target_link_libraries(ssl_mail_client ${libs})
 
 install(TARGETS ssl_client1 ssl_client2 ssl_server ssl_fork_server ssl_mail_client
-        DESTINATION "bin"
-        PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+		DESTINATION "bin"
+		PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)

@@ -176,9 +176,9 @@ fct_logger__on_warn(fct_logger_i *logger, char const *warn);
 really only want to bother with this when we are "unwinding" the macros
 for debugging purposes. */
 #if defined(FCT_CONF_UNWIND)
-#	define _fct_cmt(string)		{char*_=string;}
+#    define _fct_cmt(string)        {char*_=string;}
 #else
-#	define _fct_cmt(string)
+#    define _fct_cmt(string)
 #endif
 
 /*
@@ -3254,7 +3254,7 @@ they are needed, but at runtime, only the cheap, first call is made. */
             (void)fctkern__cl_val2(NULL, NULL, NULL);\
             fctkern__log_suite_skip(NULL, NULL, NULL);\
             (void)fct_clp__is_param(NULL,NULL);\
-	    _fct_cmt("should never construct an object");\
+        _fct_cmt("should never construct an object");\
             (void)fct_test_new(NULL);\
             (void)fct_ts__chk_cnt(NULL);\
         }\
@@ -3657,7 +3657,7 @@ if it fails. */
 
 /* When in test mode, construct a mock test object for fct_xchk to operate
 with. If we fail a setup up, then we go directly to a teardown mode. */
-#define fct_req(_CNDTN_) 				                 \
+#define fct_req(_CNDTN_)                                  \
     if ( fct_ts__is_test_mode(fctkern_ptr__->ns.ts_curr) ) {             \
        _fct_req((_CNDTN_));                                              \
     }                                                                    \
@@ -3780,14 +3780,14 @@ _fct_chk_full_str(char const *s)
 
 #define fct_chk_excl_str(STR, CHECK_EXCLUDE) \
     fct_xchk(!fctstr_incl((STR), (CHECK_EXCLUDE)),\
-	  "fct_chk_excl_str: '%s' is included in '%s'",\
-	  (STR),\
+      "fct_chk_excl_str: '%s' is included in '%s'",\
+      (STR),\
           (CHECK_EXCLUDE)\
-	  )
+      )
 
 #define fct_chk_excl_istr(ISTR, ICHECK_EXCLUDE) \
     fct_xchk(!fctstr_iincl((ISTR), (ICHECK_EXCLUDE)),\
-	  "fct_chk_excl_istr (case insensitive): '%s' is "\
+      "fct_chk_excl_istr (case insensitive): '%s' is "\
           "included in'%s'",\
           (ISTR),\
           (ICHECK_EXCLUDE)\
@@ -3796,18 +3796,18 @@ _fct_chk_full_str(char const *s)
 #define fct_chk_incl_str(STR, CHECK_INCLUDE) \
     fct_xchk(fctstr_incl((STR), (CHECK_INCLUDE)),\
           "fct_chk_incl_str: '%s' does not include '%s'",\
-	      (STR),\
+          (STR),\
           (CHECK_INCLUDE)\
-	  )
+      )
 
 
 #define fct_chk_incl_istr(ISTR, ICHECK_INCLUDE) \
     fct_xchk(fctstr_iincl((ISTR), (ICHECK_INCLUDE)),\
           "fct_chk_incl_istr (case insensitive): '%s' does "\
           "not include '%s'",\
-	      (ISTR),\
+          (ISTR),\
           (ICHECK_INCLUDE)\
-	  )
+      )
 
 
 #define fct_chk_startswith_str(STR, CHECK)\
@@ -3854,7 +3854,7 @@ _fct_chk_full_str(char const *s)
           pass_chk_ex = false;        \
       }                               \
       fct_xchk(                       \
-	pass_chk_ex,                  \
+    pass_chk_ex,                  \
         "%s exception not generated", \
         #EXCEPTION                    \
       );                              \
@@ -3901,16 +3901,16 @@ file to define your test suite.  */
 
 
 #define FCTMF_FIXTURE_SUITE_BGN(NAME) \
-	void NAME (fctkern_t *fctkern_ptr__) {\
+    void NAME (fctkern_t *fctkern_ptr__) {\
         FCT_REFERENCE_FUNCS();\
         FCT_FIXTURE_SUITE_BGN( NAME ) {
 
 #define FCTMF_FIXTURE_SUITE_END() \
-		} FCT_FIXTURE_SUITE_END();\
-	}
+        } FCT_FIXTURE_SUITE_END();\
+    }
 
 #define FCTMF_SUITE_BGN(NAME) \
-	void NAME (fctkern_t *fctkern_ptr__) {\
+    void NAME (fctkern_t *fctkern_ptr__) {\
         FCT_REFERENCE_FUNCS();\
         FCT_SUITE_BGN( NAME ) {
 #define FCTMF_SUITE_END() \
@@ -3940,20 +3940,20 @@ The basic idea is that there is one test per test suite.
 */
 
 #define FCT_QTEST_BGN(NAME) \
-	FCT_SUITE_BGN(NAME) {\
-		FCT_TEST_BGN(NAME) {\
+    FCT_SUITE_BGN(NAME) {\
+        FCT_TEST_BGN(NAME) {\
  
 #define FCT_QTEST_END() \
-		} FCT_TEST_END();\
-	} FCT_SUITE_END();
+        } FCT_TEST_END();\
+    } FCT_SUITE_END();
 
 
 #define FCT_QTEST_BGN_IF(_CONDITION_, _NAME_) \
-	FCT_SUITE_BGN(_NAME_) {\
-		FCT_TEST_BGN_IF(_CONDITION_, _NAME_) {\
+    FCT_SUITE_BGN(_NAME_) {\
+        FCT_TEST_BGN_IF(_CONDITION_, _NAME_) {\
  
 #define FCT_QTEST_END_IF() \
-		} FCT_TEST_END_IF();\
-	} FCT_SUITE_END();
+        } FCT_TEST_END_IF();\
+    } FCT_SUITE_END();
 
 #endif /* !FCT_INCLUDED__IMB */

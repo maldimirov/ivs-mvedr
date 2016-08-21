@@ -758,7 +758,7 @@ HAL_StatusTypeDef HAL_SAI_Transmit_IT(SAI_HandleTypeDef *hsai, uint16_t *pData, 
     /* Transmit data */
     hsai->Instance->DR = (*hsai->pTxBuffPtr++);
     
-    hsai->TxXferCount--;	
+    hsai->TxXferCount--;    
     
     if(hsai->TxXferCount == 0)
     {

@@ -2110,15 +2110,15 @@ int mpi_self_test( int verbose )
         MPI_CHK( mpi_lset( &X, gcd_pairs[i][0] ) );
         MPI_CHK( mpi_lset( &Y, gcd_pairs[i][1] ) );
 
-	    MPI_CHK( mpi_gcd( &A, &X, &Y ) );
+        MPI_CHK( mpi_gcd( &A, &X, &Y ) );
 
-	    if( mpi_cmp_int( &A, gcd_pairs[i][2] ) != 0 )
-	    {
-		    if( verbose != 0 )
-			    printf( "failed at %d\n", i );
+        if( mpi_cmp_int( &A, gcd_pairs[i][2] ) != 0 )
+        {
+            if( verbose != 0 )
+                printf( "failed at %d\n", i );
 
-		    return( 1 );
-	    }
+            return( 1 );
+        }
     }
 
     if( verbose != 0 )

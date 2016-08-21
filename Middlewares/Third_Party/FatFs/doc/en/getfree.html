@@ -17,8 +17,8 @@
 <pre>
 FRESULT f_getfree (
   const TCHAR* <span class="arg">path</span>,  <span class="c">/* [IN] Logical drive number */</span>
-  DWORD* <span class="arg">nclst</span>,       <span class="c">/* [OUT] Number of free clusters */</span>
-  FATFS** <span class="arg">fatfs</span>       <span class="c">/* [OUT] Corresponding file system object */</span>
+  DWORD* <span class="arg">nclst</span>,	   <span class="c">/* [OUT] Number of free clusters */</span>
+  FATFS** <span class="arg">fatfs</span>	   <span class="c">/* [OUT] Corresponding file system object */</span>
 );
 </pre>
 </div>
@@ -66,21 +66,21 @@ FRESULT f_getfree (
 <div class="para use">
 <h4>Example</h4>
 <pre>
-    FATFS *fs;
-    DWORD fre_clust, fre_sect, tot_sect;
+	FATFS *fs;
+	DWORD fre_clust, fre_sect, tot_sect;
 
 
-    <span class="c">/* Get volume information and free clusters of drive 1 */</span>
-    res = f_getfree("1:", &amp;fre_clust, &amp;fs);
-    if (res) die(res);
+	<span class="c">/* Get volume information and free clusters of drive 1 */</span>
+	res = f_getfree("1:", &amp;fre_clust, &amp;fs);
+	if (res) die(res);
 
-    <span class="c">/* Get total sectors and free sectors */</span>
-    tot_sect = (fs->n_fatent - 2) * fs->csize;
-    fre_sect = fre_clust * fs->csize;
+	<span class="c">/* Get total sectors and free sectors */</span>
+	tot_sect = (fs->n_fatent - 2) * fs->csize;
+	fre_sect = fre_clust * fs->csize;
 
-    <span class="c">/* Print the free space (assuming 512 bytes/sector) */</span>
-    printf("%10lu KiB total drive space.\n%10lu KiB available.\n",
-           tot_sect / 2, fre_sect / 2);
+	<span class="c">/* Print the free space (assuming 512 bytes/sector) */</span>
+	printf("%10lu KiB total drive space.\n%10lu KiB available.\n",
+		   tot_sect / 2, fre_sect / 2);
 </pre>
 </div>
 

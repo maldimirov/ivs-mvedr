@@ -89,9 +89,9 @@ int32_t osKernelRunning(void)
   else
     return 1;
 #else
-	return (-1);
+    return (-1);
 #endif
-	
+    
 }
 
 /*********************** Thread Management *****************************/
@@ -227,7 +227,7 @@ osTimerId osTimerCreate (osTimerDef_t *timer_def, os_timer_type type, void *argu
                       (void *) argument,
                       (pdTASK_CODE)timer_def->ptimer);
 #else 
-	return NULL;
+    return NULL;
 #endif
 }
 
@@ -242,7 +242,7 @@ osStatus osTimerStart (osTimerId timer_id, uint32_t millisec)
 {
   osStatus result = osOK;
 #if (configUSE_TIMERS == 1)  
-	portBASE_TYPE taskWoken = pdFALSE;
+    portBASE_TYPE taskWoken = pdFALSE;
   portTickType ticks = millisec / portTICK_RATE_MS;
   
   if (xTimerIsTimerActive(timer_id) != pdFALSE)

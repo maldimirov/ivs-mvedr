@@ -146,8 +146,8 @@ The following functions must be implemented by the sys_arch:
   To allow for efficient implementations, this can be defined as a
   function-like macro in sys_arch.h instead of a normal function. For
   example, a naive implementation could be:
-    #define sys_arch_mbox_tryfetch(mbox,msg) \
-      sys_arch_mbox_fetch(mbox,msg,1)
+	#define sys_arch_mbox_tryfetch(mbox,msg) \
+	  sys_arch_mbox_fetch(mbox,msg,1)
   although this would introduce unnecessary delays.
 
 - int sys_mbox_valid(sys_mbox_t *mbox)
@@ -218,29 +218,29 @@ can't be performed when sys_arch uses mem_malloc.
 Additional files required for the "OS support" emulation layer:
 -------------------------------------------------------------------------------
 
-cc.h       - Architecture environment, some compiler specific, some
-             environment specific (probably should move env stuff 
-             to sys_arch.h.)
+cc.h	   - Architecture environment, some compiler specific, some
+			 environment specific (probably should move env stuff 
+			 to sys_arch.h.)
 
   Typedefs for the types used by lwip -
-    u8_t, s8_t, u16_t, s16_t, u32_t, s32_t, mem_ptr_t
+	u8_t, s8_t, u16_t, s16_t, u32_t, s32_t, mem_ptr_t
 
   Compiler hints for packing lwip's structures -
-    PACK_STRUCT_FIELD(x)
-    PACK_STRUCT_STRUCT
-    PACK_STRUCT_BEGIN
-    PACK_STRUCT_END
+	PACK_STRUCT_FIELD(x)
+	PACK_STRUCT_STRUCT
+	PACK_STRUCT_BEGIN
+	PACK_STRUCT_END
 
   Platform specific diagnostic output -
-    LWIP_PLATFORM_DIAG(x)    - non-fatal, print a message.
-    LWIP_PLATFORM_ASSERT(x)  - fatal, print message and abandon execution.
-    Portability defines for printf formatters:
-    U16_F, S16_F, X16_F, U32_F, S32_F, X32_F, SZT_F
+	LWIP_PLATFORM_DIAG(x)	- non-fatal, print a message.
+	LWIP_PLATFORM_ASSERT(x)  - fatal, print message and abandon execution.
+	Portability defines for printf formatters:
+	U16_F, S16_F, X16_F, U32_F, S32_F, X32_F, SZT_F
 
   "lightweight" synchronization mechanisms -
-    SYS_ARCH_DECL_PROTECT(x) - declare a protection state variable.
-    SYS_ARCH_PROTECT(x)      - enter protection mode.
-    SYS_ARCH_UNPROTECT(x)    - leave protection mode.
+	SYS_ARCH_DECL_PROTECT(x) - declare a protection state variable.
+	SYS_ARCH_PROTECT(x)	  - enter protection mode.
+	SYS_ARCH_UNPROTECT(x)	- leave protection mode.
 
   If the compiler does not provide memset() this file must include a
   definition of it, or include a file which defines it.
@@ -250,18 +250,18 @@ cc.h       - Architecture environment, some compiler specific, some
   to make lwip/arch.h define the codes which are used throughout.
 
 
-perf.h     - Architecture specific performance measurement.
+perf.h	 - Architecture specific performance measurement.
   Measurement calls made throughout lwip, these can be defined to nothing.
-    PERF_START               - start measuring something.
-    PERF_STOP(x)             - stop measuring something, and record the result.
+	PERF_START			   - start measuring something.
+	PERF_STOP(x)			 - stop measuring something, and record the result.
 
 sys_arch.h - Tied to sys_arch.c
 
   Arch dependent types for the following objects:
-    sys_sem_t, sys_mbox_t, sys_thread_t,
+	sys_sem_t, sys_mbox_t, sys_thread_t,
   And, optionally:
-    sys_prot_t
+	sys_prot_t
 
   Defines to set vars of sys_mbox_t and sys_sem_t to NULL.
-    SYS_MBOX_NULL NULL
-    SYS_SEM_NULL NULL
+	SYS_MBOX_NULL NULL
+	SYS_SEM_NULL NULL

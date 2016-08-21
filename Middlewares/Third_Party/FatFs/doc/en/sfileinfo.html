@@ -16,14 +16,14 @@
 <p>The <tt>FILINFO</tt> structure holds a file information returned by <tt>f_readdir()</tt> and <tt>f_stat()</tt> function.</p>
 <pre>
 <span class="k">typedef struct</span> {
-    DWORD fsize;      <span class="c">/* File size */</span>
-    WORD  fdate;      <span class="c">/* Last modified date */</span>
-    WORD  ftime;      <span class="c">/* Last modified time */</span>
-    BYTE  fattrib;    <span class="c">/* Attribute */</span>
-    TCHAR fname[13];  <span class="c">/* Short file name (8.3 format) */</span>
+	DWORD fsize;	  <span class="c">/* File size */</span>
+	WORD  fdate;	  <span class="c">/* Last modified date */</span>
+	WORD  ftime;	  <span class="c">/* Last modified time */</span>
+	BYTE  fattrib;	<span class="c">/* Attribute */</span>
+	TCHAR fname[13];  <span class="c">/* Short file name (8.3 format) */</span>
 <span class="k">#if</span> _USE_LFN
-    TCHAR* lfname;    <span class="c">/* Pointer to the LFN buffer */</span>
-    int   lfsize;     <span class="c">/* Size of the LFN buffer in unit of TCHAR */</span>
+	TCHAR* lfname;	<span class="c">/* Pointer to the LFN buffer */</span>
+	int   lfsize;	 <span class="c">/* Size of the LFN buffer in unit of TCHAR */</span>
 <span class="k">#endif</span>
 } FILINFO;
 </pre>

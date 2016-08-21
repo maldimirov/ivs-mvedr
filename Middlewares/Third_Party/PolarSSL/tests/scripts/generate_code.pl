@@ -29,19 +29,19 @@ my ( $suite_defines ) = $test_cases =~ /BEGIN_DEPENDENCIES\n(.*?)\nEND_DEPENDENC
 my $requirements;
 if ($suite_defines =~ /^depends_on:/)
 {
-    ( $requirements ) = $suite_defines =~ /^depends_on:(.*)$/;
+	( $requirements ) = $suite_defines =~ /^depends_on:(.*)$/;
 }
-    
+	
 my @var_req_arr = split(/:/, $requirements);
 my $suite_pre_code;
 my $suite_post_code;
 
 while (@var_req_arr)
 {
-    my $req = shift @var_req_arr;
+	my $req = shift @var_req_arr;
 
-    $suite_pre_code .= "#ifdef $req\n";
-    $suite_post_code .= "#endif /* $req */\n";
+	$suite_pre_code .= "#ifdef $req\n";
+	$suite_post_code .= "#endif /* $req */\n";
 }
 
 $/ = $line_separator;
@@ -59,87 +59,87 @@ FCT_BGN()
 {
 $suite_pre_code
 
-    FCT_SUITE_BGN($suite_name)
-    {
+	FCT_SUITE_BGN($suite_name)
+	{
 END
 
 while (my $line = <TEST_DATA>)
 {
-    my $description = $line;
-    $line = <TEST_DATA>;
+	my $description = $line;
+	$line = <TEST_DATA>;
 
-    my $test_name = $description;
-    $test_name =~ tr/A-Z \-/a-z__/;
-    $test_name =~ tr/a-z0-9_//cd;
+	my $test_name = $description;
+	$test_name =~ tr/A-Z \-/a-z__/;
+	$test_name =~ tr/a-z0-9_//cd;
 
-    # Carve the defines required for this test case
-    my $requirements;
-    if ($line =~ /^depends_on:/)
-    {
-        my $depends_on_line = $line;
-        $line = <TEST_DATA>;
+	# Carve the defines required for this test case
+	my $requirements;
+	if ($line =~ /^depends_on:/)
+	{
+		my $depends_on_line = $line;
+		$line = <TEST_DATA>;
 
-        ( $requirements ) = $depends_on_line =~ /^depends_on:(.*)$/;
-    }
-    
-    my @var_req_arr = split(/:/, $requirements);
-    my $pre_code;
-    my $post_code;
+		( $requirements ) = $depends_on_line =~ /^depends_on:(.*)$/;
+	}
+	
+	my @var_req_arr = split(/:/, $requirements);
+	my $pre_code;
+	my $post_code;
 
-    while (@var_req_arr)
-    {
-        my $req = shift @var_req_arr;
+	while (@var_req_arr)
+	{
+		my $req = shift @var_req_arr;
 
-        $pre_code .= "#ifdef $req\n";
-        $post_code .= "#endif /* $req */\n";
-    }
+		$pre_code .= "#ifdef $req\n";
+		$post_code .= "#endif /* $req */\n";
+	}
 
-    my $command_line = $line;
-    $line = <TEST_DATA>;
+	my $command_line = $line;
+	$line = <TEST_DATA>;
 
-    # Carve the case name and variable values
-    #
-    my ( $case, $var_value ) = $command_line =~ /^([\w_]+):(.*)$/;
+	# Carve the case name and variable values
+	#
+	my ( $case, $var_value ) = $command_line =~ /^([\w_]+):(.*)$/;
 
-    # Escape the escaped colons (Not really escaped now)
-    #
-    $var_value =~ s/\\:/{colon_sign}/g;
+	# Escape the escaped colons (Not really escaped now)
+	#
+	$var_value =~ s/\\:/{colon_sign}/g;
 
-    # Carve the case and variable definition
-    #
-    my ( $var_def, $case_code ) = $test_cases =~ /BEGIN_CASE\n$case:([^\n]*)\n(.*?)\nEND_CASE/s;
+	# Carve the case and variable definition
+	#
+	my ( $var_def, $case_code ) = $test_cases =~ /BEGIN_CASE\n$case:([^\n]*)\n(.*?)\nEND_CASE/s;
 
-    my @var_def_arr = split(/:/, $var_def);
-    my @var_value_arr = split(/:/, $var_value);
+	my @var_def_arr = split(/:/, $var_def);
+	my @var_value_arr = split(/:/, $var_value);
 
-    while (@var_def_arr)
-    {
-        my $def = shift @var_def_arr;
-        my $val = shift @var_value_arr;
+	while (@var_def_arr)
+	{
+		my $def = shift @var_def_arr;
+		my $val = shift @var_value_arr;
 
-        $case_code =~ s/\{$def\}/$val/g;
-    }
-    $case_code = "int ${test_name}_code_present = 0;\nTEST_ASSERT( ${test_name}_code_present == 1 );" if ($case_code =~ /^\s*$/);
+		$case_code =~ s/\{$def\}/$val/g;
+	}
+	$case_code = "int ${test_name}_code_present = 0;\nTEST_ASSERT( ${test_name}_code_present == 1 );" if ($case_code =~ /^\s*$/);
 
-    $case_code =~ s/{colon_sign}/:/g;
-    $case_code =~ s/TEST_ASSERT/fct_chk/g;
-    $case_code =~ s/TEST_EQUALS/fct_chk/g;
+	$case_code =~ s/{colon_sign}/:/g;
+	$case_code =~ s/TEST_ASSERT/fct_chk/g;
+	$case_code =~ s/TEST_EQUALS/fct_chk/g;
 
-    $case_code =~ s/^/        /gm;
+	$case_code =~ s/^/		/gm;
 
 
-    print TEST_FILE << "END";
+	print TEST_FILE << "END";
 $pre_code
-        FCT_TEST_BGN($test_name)
+		FCT_TEST_BGN($test_name)
 $case_code
-        FCT_TEST_END();
+		FCT_TEST_END();
 $post_code
 END
 }
 
 print TEST_FILE << "END";
-    }
-    FCT_SUITE_END();
+	}
+	FCT_SUITE_END();
 
 $suite_post_code
 }

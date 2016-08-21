@@ -234,9 +234,9 @@ void CFG_AnalyzeKeyValue(CFG_GlobVarsTypedef *aCFG_GlobVarsStruct, CFG_KeyValueT
   }
 
   if (CFG_VerifyValue(aCFG_KeyValueStruct->key, CFG_KeyLogTimeout)) {
-	  // Found test eCalls key so copy the value to the actual Global varialbe
-	  strcpy(aCFG_GlobVarsStruct->logTimeout, aCFG_KeyValueStruct->value);
-	  return;
+      // Found test eCalls key so copy the value to the actual Global varialbe
+      strcpy(aCFG_GlobVarsStruct->logTimeout, aCFG_KeyValueStruct->value);
+      return;
   }
 
   if (CFG_VerifyValue(aCFG_KeyValueStruct->key, CFG_KeyLowVoltage)) {

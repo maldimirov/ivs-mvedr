@@ -31,28 +31,28 @@ approach was chosen: there is one main thread running the lwIP core
 this thread! Application threads using the sequential- or socket API
 communicate with this main thread through message passing.
 
-      As such, the list of functions that may be called from
-      other threads or an ISR is very limited! Only functions
-      from these API header files are thread-safe:
-      - api.h
-      - netbuf.h
-      - netdb.h
-      - netifapi.h
-      - sockets.h
-      - sys.h
+	  As such, the list of functions that may be called from
+	  other threads or an ISR is very limited! Only functions
+	  from these API header files are thread-safe:
+	  - api.h
+	  - netbuf.h
+	  - netdb.h
+	  - netifapi.h
+	  - sockets.h
+	  - sys.h
 
-      Additionaly, memory (de-)allocation functions may be
-      called from multiple threads (not ISR!) with NO_SYS=0
-      since they are protected by SYS_LIGHTWEIGHT_PROT and/or
-      semaphores.
+	  Additionaly, memory (de-)allocation functions may be
+	  called from multiple threads (not ISR!) with NO_SYS=0
+	  since they are protected by SYS_LIGHTWEIGHT_PROT and/or
+	  semaphores.
 
-      Only since 1.3.0, if SYS_LIGHTWEIGHT_PROT is set to 1
-      and LWIP_ALLOW_MEM_FREE_FROM_OTHER_CONTEXT is set to 1,
-      pbuf_free() may also be called from another thread or
-      an ISR (since only then, mem_free - for PBUF_RAM - may
-      be called from an ISR: otherwise, the HEAP is only
-      protected by semaphores).
-      
+	  Only since 1.3.0, if SYS_LIGHTWEIGHT_PROT is set to 1
+	  and LWIP_ALLOW_MEM_FREE_FROM_OTHER_CONTEXT is set to 1,
+	  pbuf_free() may also be called from another thread or
+	  an ISR (since only then, mem_free - for PBUF_RAM - may
+	  be called from an ISR: otherwise, the HEAP is only
+	  protected by semaphores).
+	  
 
 ** The remainder of this document discusses the "raw" API. **
 
@@ -108,7 +108,7 @@ incoming connections or be explicitly connected to another host.
   available for creating the new pcb, NULL is returned.
 
 - err_t tcp_bind(struct tcp_pcb *pcb, ip_addr_t *ipaddr,
-                 u16_t port)
+				 u16_t port)
 
   Binds the pcb to a local IP address and port number. The IP address
   can be specified as IP_ADDR_ANY in order to bind the connection to
@@ -151,16 +151,16 @@ incoming connections or be explicitly connected to another host.
   into the accept callback!
 
 - void tcp_accept(struct tcp_pcb *pcb,
-                  err_t (* accept)(void *arg, struct tcp_pcb *newpcb,
-                                   err_t err))
+				  err_t (* accept)(void *arg, struct tcp_pcb *newpcb,
+								   err_t err))
 
   Specified the callback function that should be called when a new
   connection arrives on a listening connection.
 
 - err_t tcp_connect(struct tcp_pcb *pcb, ip_addr_t *ipaddr,
-                    u16_t port, err_t (* connected)(void *arg,
-                                                    struct tcp_pcb *tpcb,
-                                                    err_t err));
+					u16_t port, err_t (* connected)(void *arg,
+													struct tcp_pcb *tpcb,
+													err_t err));
 
   Sets up the pcb to connect to the remote host and sends the
   initial SYN segment which opens the connection. 
@@ -187,18 +187,18 @@ host, the application will be notified with a call to a specified
 callback function.
 
 - err_t tcp_write(struct tcp_pcb *pcb, const void *dataptr, u16_t len,
-                  u8_t apiflags)
+				  u8_t apiflags)
 
   Enqueues the data pointed to by the argument dataptr. The length of
   the data is passed as the len parameter. The apiflags can be one or more of:
   - TCP_WRITE_FLAG_COPY: indicates whether the new memory should be allocated
-    for the data to be copied into. If this flag is not given, no new memory
-    should be allocated and the data should only be referenced by pointer. This
-    also means that the memory behind dataptr must not change until the data is
-    ACKed by the remote host
+	for the data to be copied into. If this flag is not given, no new memory
+	should be allocated and the data should only be referenced by pointer. This
+	also means that the memory behind dataptr must not change until the data is
+	ACKed by the remote host
   - TCP_WRITE_FLAG_MORE: indicates that more data follows. If this is given,
-    the PSH flag is set in the last segment created by this call to tcp_write.
-    If this flag is given, the PSH flag is not set.
+	the PSH flag is set in the last segment created by this call to tcp_write.
+	If this flag is given, the PSH flag is not set.
 
   The tcp_write() function will fail and return ERR_MEM if the length
   of the data exceeds the current send buffer size or if the length of
@@ -212,8 +212,8 @@ callback function.
   data has been successfully received by the other host and try again.
 
 - void tcp_sent(struct tcp_pcb *pcb,
-                err_t (* sent)(void *arg, struct tcp_pcb *tpcb,
-                u16_t len))
+				err_t (* sent)(void *arg, struct tcp_pcb *tpcb,
+				u16_t len))
 
   Specifies the callback function that should be called when data has
   successfully been received (i.e., acknowledged) by the remote
@@ -230,8 +230,8 @@ function to indicate that TCP can advertise increase the receive
 window.
 
 - void tcp_recv(struct tcp_pcb *pcb,
-                err_t (* recv)(void *arg, struct tcp_pcb *tpcb,
-                               struct pbuf *p, err_t err))
+				err_t (* recv)(void *arg, struct tcp_pcb *tpcb,
+							   struct pbuf *p, err_t err))
 
   Sets the callback function that will be called when new data
   arrives. The callback function will be passed a NULL pbuf to
@@ -258,8 +258,8 @@ the application may use the polling functionality to call tcp_write()
 again when the connection has been idle for a while.
 
 - void tcp_poll(struct tcp_pcb *pcb, 
-                err_t (* poll)(void *arg, struct tcp_pcb *tpcb),
-                u8_t interval)
+				err_t (* poll)(void *arg, struct tcp_pcb *tpcb),
+				u8_t interval)
 
   Specifies the polling interval and the callback function that should
   be called to poll the application. The interval is specified in
@@ -296,7 +296,7 @@ connection are when there is a shortage of memory. The callback
 function to be called is set using the tcp_err() function.
 
 - void tcp_err(struct tcp_pcb *pcb, void (* err)(void *arg,
-       err_t err))
+	   err_t err))
 
   The error callback function does not get the pcb passed to it as a
   parameter since the pcb may already have been deallocated.
@@ -329,14 +329,14 @@ level of complexity of UDP, the interface is significantly simpler.
   Removes and deallocates the pcb.  
   
 - err_t udp_bind(struct udp_pcb *pcb, ip_addr_t *ipaddr,
-                 u16_t port)
+				 u16_t port)
 
   Binds the pcb to a local address. The IP-address argument "ipaddr"
   can be IP_ADDR_ANY to indicate that it should listen to any local IP
   address. The function currently always return ERR_OK.
 
 - err_t udp_connect(struct udp_pcb *pcb, ip_addr_t *ipaddr,
-                    u16_t port)
+					u16_t port)
 
   Sets the remote end of the pcb. This function does not generate any
   network traffic, but only set the remote address of the pcb.
@@ -351,11 +351,11 @@ level of complexity of UDP, the interface is significantly simpler.
   Sends the pbuf p. The pbuf is not deallocated.
 
 - void udp_recv(struct udp_pcb *pcb,
-                void (* recv)(void *arg, struct udp_pcb *upcb,
-                                         struct pbuf *p,
-                                         ip_addr_t *addr,
-                                         u16_t port),
-                              void *recv_arg)
+				void (* recv)(void *arg, struct udp_pcb *upcb,
+										 struct pbuf *p,
+										 ip_addr_t *addr,
+										 u16_t port),
+							  void *recv_arg)
 
   Specifies a callback function that should be called when a UDP
   datagram is received.
@@ -415,9 +415,9 @@ Call these functions in the order of appearance:
   predefined regular intervals after this initialization. 
   
 - netif_add(struct netif *netif, ip_addr_t *ipaddr,
-            ip_addr_t *netmask, ip_addr_t *gw,
-            void *state, err_t (* init)(struct netif *netif),
-            err_t (* input)(struct pbuf *p, struct netif *netif))
+			ip_addr_t *netmask, ip_addr_t *gw,
+			void *state, err_t (* init)(struct netif *netif),
+			err_t (* input)(struct pbuf *p, struct netif *netif))
 
   Adds your network interface to the netif_list. Allocate a struct
   netif and pass a pointer to this structure as the first argument.
@@ -429,11 +429,11 @@ Call these functions in the order of appearance:
   
   err_t netif_if_init(struct netif *netif)
   {
-    u8_t i;
-    
-    for(i = 0; i < ETHARP_HWADDR_LEN; i++) netif->hwaddr[i] = some_eth_addr[i];
-    init_my_eth_device();
-    return ERR_OK;
+	u8_t i;
+	
+	for(i = 0; i < ETHARP_HWADDR_LEN; i++) netif->hwaddr[i] = some_eth_addr[i];
+	init_my_eth_device();
+	return ERR_OK;
   }
   
   For ethernet drivers, the input function pointer must point to the lwip

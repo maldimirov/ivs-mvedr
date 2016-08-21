@@ -237,7 +237,7 @@ void L3GD20_INT1InterruptCmd(uint8_t InterruptState)
   /* Read CTRL_REG3 register */
   L3GD20_Read(&tmpreg, L3GD20_CTRL_REG3_ADDR, 1);
                   
-  tmpreg &= 0x7F;	
+  tmpreg &= 0x7F;    
   tmpreg |= InterruptState;
   
   /* Write value to MEMS CTRL_REG3 regsister */
@@ -259,7 +259,7 @@ void L3GD20_INT2InterruptCmd(uint8_t InterruptState)
   /* Read CTRL_REG3 register */
   L3GD20_Read(&tmpreg, L3GD20_CTRL_REG3_ADDR, 1);
                   
-  tmpreg &= 0xF7;	
+  tmpreg &= 0xF7;    
   tmpreg |= InterruptState;
   
   /* Write value to MEMS CTRL_REG3 regsister */

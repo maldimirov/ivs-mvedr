@@ -31,7 +31,7 @@
 
 #include <stdint.h>
 #include "core_cmFunc.h"
-	
+    
 #include "FreeRTOS.h"
 #include "task.h"
 #include "timers.h"
@@ -127,7 +127,7 @@ used throughout the whole project.
 /**
   * @note   CAN BE CHANGED: \b osCMSIS_KERNEL identifies the underlaying RTOS kernel and version number.
   */
-#define osCMSIS_KERNEL    0x10000	   /* RTOS identification and version (main [31:16] .sub [15:0]) */
+#define osCMSIS_KERNEL    0x10000       /* RTOS identification and version (main [31:16] .sub [15:0]) */
 
 /**
   * @note   MUST REMAIN UNCHANGED: \b osKernelSystemId shall be consistent in every CMSIS-RTOS.

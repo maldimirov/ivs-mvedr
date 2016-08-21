@@ -11,8 +11,8 @@ cat sslconf.txt > sslconf_use.txt
 echo "CN=PolarSSL Test CA" >> sslconf_use.txt
 
 openssl req -config sslconf_use.txt -days 3653 -x509 -newkey rsa:2048 \
-            -set_serial 0 -text -keyout test-ca.key -out test-ca.crt \
-	    -passout pass:$PASSWORD
+			-set_serial 0 -text -keyout test-ca.key -out test-ca.crt \
+		-passout pass:$PASSWORD
 
 echo "Generating rest"
 openssl genrsa -out server1.key 2048
@@ -103,6 +103,6 @@ rm ca_crl.pem
 
 echo "Generating PKCS12"
 openssl pkcs12 -export -in client2.crt -inkey client2.key \
-                      -out client2.pfx -passout pass:$PASSWORD
+					  -out client2.pfx -passout pass:$PASSWORD
 
 rm *.old sslconf_use.txt

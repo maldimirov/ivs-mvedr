@@ -17,27 +17,27 @@
 
 <pre>
 <span class="k">typedef</span> <span class="k">struct</span> {
-    FATFS*  fs;           <span class="c">/* Pointer to the owner file system object */</span>
-    WORD    id;           <span class="c">/* Owner file system mount ID */</span>
-    BYTE    flag;         <span class="c">/* File object status flags */</span>
-    BYTE    err;          <span class="c">/* Abort flag (error code) */</span>
-    DWORD   fptr;         <span class="c">/* File read/write pointer (Byte offset origin from top of the file) */</span>
-    DWORD   fsize;        <span class="c">/* File size in unit of byte */</span>
-    DWORD   sclust;       <span class="c">/* File start cluster */</span>
-    DWORD   clust;        <span class="c">/* Current cluster */</span>
-    DWORD   dsect;        <span class="c">/* Current data sector */</span>
+	FATFS*  fs;		   <span class="c">/* Pointer to the owner file system object */</span>
+	WORD	id;		   <span class="c">/* Owner file system mount ID */</span>
+	BYTE	flag;		 <span class="c">/* File object status flags */</span>
+	BYTE	err;		  <span class="c">/* Abort flag (error code) */</span>
+	DWORD   fptr;		 <span class="c">/* File read/write pointer (Byte offset origin from top of the file) */</span>
+	DWORD   fsize;		<span class="c">/* File size in unit of byte */</span>
+	DWORD   sclust;	   <span class="c">/* File start cluster */</span>
+	DWORD   clust;		<span class="c">/* Current cluster */</span>
+	DWORD   dsect;		<span class="c">/* Current data sector */</span>
 <span class="k">#if</span> !_FS_READONLY
-    DWORD   dir_sect;     <span class="c">/* Sector containing the directory entry */</span>
-    BYTE*   dir_ptr;      <span class="c">/* Ponter to the directory entry in the window */</span>
+	DWORD   dir_sect;	 <span class="c">/* Sector containing the directory entry */</span>
+	BYTE*   dir_ptr;	  <span class="c">/* Ponter to the directory entry in the window */</span>
 <span class="k">#endif</span>
 <span class="k">#if</span> _USE_FASTSEEK
-    DWORD*  cltbl;        <span class="c">/* Pointer to the cluster link map table (Nulled on file open) */</span>
+	DWORD*  cltbl;		<span class="c">/* Pointer to the cluster link map table (Nulled on file open) */</span>
 <span class="k">#endif</span>
 <span class="k">#if</span> _FS_LOCK
-    UINT    lockid;       <span class="c">/* Fle lock ID */</span>
+	UINT	lockid;	   <span class="c">/* Fle lock ID */</span>
 <span class="k">#endif</span>
 <span class="k">#if</span> !_FS_TINY
-    BYTE    buf[_MAX_SS]; <span class="c">/* File private data transfer buffer */</span>
+	BYTE	buf[_MAX_SS]; <span class="c">/* File private data transfer buffer */</span>
 <span class="k">#endif</span>
 } FIL;
 </pre>

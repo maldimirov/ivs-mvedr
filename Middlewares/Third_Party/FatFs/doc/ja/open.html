@@ -16,9 +16,9 @@
 <p>ƒtƒ@ƒCƒ‹‚ğƒI[ƒvƒ“‚Ü‚½‚Íì¬‚µ‚Ü‚·B</p>
 <pre>
 FRESULT f_open (
-  FIL* <span class="arg">fp</span>,           <span class="c">/* [OUT] ‹ó‚Ìƒtƒ@ƒCƒ‹EƒIƒuƒWƒFƒNƒg\‘¢‘Ì‚Ö‚Ìƒ|ƒCƒ“ƒ^ */</span>
+  FIL* <span class="arg">fp</span>,		   <span class="c">/* [OUT] ‹ó‚Ìƒtƒ@ƒCƒ‹EƒIƒuƒWƒFƒNƒg\‘¢‘Ì‚Ö‚Ìƒ|ƒCƒ“ƒ^ */</span>
   const TCHAR* <span class="arg">path</span>, <span class="c">/* [IN] ƒtƒ@ƒCƒ‹‚Ìƒtƒ‹ƒpƒX–¼‚Ö‚Ìƒ|ƒCƒ“ƒ^ */</span>
-  BYTE <span class="arg">mode</span>          <span class="c">/* [IN] ƒ‚[ƒhƒtƒ‰ƒO */</span>
+  BYTE <span class="arg">mode</span>		  <span class="c">/* [IN] ƒ‚[ƒhƒtƒ‰ƒO */</span>
 );
 </pre>
 </div>
@@ -94,26 +94,26 @@ FATFS FatFs;   <span class="c">/* ˜_—ƒhƒ‰ƒCƒu‚Ìƒ[ƒNEƒGƒŠƒA(ƒtƒ@ƒCƒ‹EƒVƒXƒeƒ
 
 int main (void)
 {
-    FIL fil;       <span class="c">/* ƒtƒ@ƒCƒ‹EƒIƒuƒWƒFƒNƒg */</span>
-    char line[82]; <span class="c">/* sƒoƒbƒtƒ@ */</span>
-    FRESULT fr;    <span class="c">/* –ß‚è’l */</span>
+	FIL fil;	   <span class="c">/* ƒtƒ@ƒCƒ‹EƒIƒuƒWƒFƒNƒg */</span>
+	char line[82]; <span class="c">/* sƒoƒbƒtƒ@ */</span>
+	FRESULT fr;	<span class="c">/* –ß‚è’l */</span>
 
 
-    <span class="c">/* ƒfƒtƒHƒ‹ƒgEƒhƒ‰ƒCƒu‚Éƒ[ƒNƒGƒŠƒA‚ğ—^‚¦‚é */</span>
-    f_mount(&amp;FatFs, "", 0);
+	<span class="c">/* ƒfƒtƒHƒ‹ƒgEƒhƒ‰ƒCƒu‚Éƒ[ƒNƒGƒŠƒA‚ğ—^‚¦‚é */</span>
+	f_mount(&amp;FatFs, "", 0);
 
-    <span class="c">/* ƒeƒLƒXƒgEƒtƒ@ƒCƒ‹‚ğŠJ‚­ */</span>
-    fr = f_open(&fil, "message.txt", FA_READ);
-    if (fr) return (int)fr;
+	<span class="c">/* ƒeƒLƒXƒgEƒtƒ@ƒCƒ‹‚ğŠJ‚­ */</span>
+	fr = f_open(&fil, "message.txt", FA_READ);
+	if (fr) return (int)fr;
 
-    <span class="c">/* 1s‚¸‚Â“Ç‚İo‚µ‚Ä•\¦ */</span>
-    while (f_gets(line, sizeof line, &fil))
-        printf(line);
+	<span class="c">/* 1s‚¸‚Â“Ç‚İo‚µ‚Ä•\¦ */</span>
+	while (f_gets(line, sizeof line, &fil))
+		printf(line);
 
-    <span class="c">/* ƒtƒ@ƒCƒ‹‚ğ•Â‚¶‚é */</span>
-    f_close(&fil);
+	<span class="c">/* ƒtƒ@ƒCƒ‹‚ğ•Â‚¶‚é */</span>
+	f_close(&fil);
 
-    return 0;
+	return 0;
 }
 </pre>
 <pre>
@@ -121,41 +121,41 @@ int main (void)
 
 int main (void)
 {
-    FATFS fs[2];         <span class="c">/* ˜_—ƒhƒ‰ƒCƒu‚Ìƒ[ƒNƒGƒŠƒA(ƒtƒ@ƒCƒ‹EƒVƒXƒeƒ€EƒIƒuƒWƒFƒNƒg) */</span>
-    FIL fsrc, fdst;      <span class="c">/* ƒtƒ@ƒCƒ‹EƒIƒuƒWƒFƒNƒg */</span>
-    BYTE buffer[4096];   <span class="c">/* File copy buffer */</span>
-    FRESULT fr;          <span class="c">/* FatFs function common result code */</span>
-    UINT br, bw;         <span class="c">/* File R/W count */</span>
+	FATFS fs[2];		 <span class="c">/* ˜_—ƒhƒ‰ƒCƒu‚Ìƒ[ƒNƒGƒŠƒA(ƒtƒ@ƒCƒ‹EƒVƒXƒeƒ€EƒIƒuƒWƒFƒNƒg) */</span>
+	FIL fsrc, fdst;	  <span class="c">/* ƒtƒ@ƒCƒ‹EƒIƒuƒWƒFƒNƒg */</span>
+	BYTE buffer[4096];   <span class="c">/* File copy buffer */</span>
+	FRESULT fr;		  <span class="c">/* FatFs function common result code */</span>
+	UINT br, bw;		 <span class="c">/* File R/W count */</span>
 
-    <span class="c">/* ƒhƒ‰ƒCƒu0,1‚Éƒ[ƒNEƒGƒŠƒA‚ğ—^‚¦‚é */</span>
-    f_mount(&amp;fs[0], "0:", 0);
-    f_mount(&amp;fs[1], "1:", 0);
+	<span class="c">/* ƒhƒ‰ƒCƒu0,1‚Éƒ[ƒNEƒGƒŠƒA‚ğ—^‚¦‚é */</span>
+	f_mount(&amp;fs[0], "0:", 0);
+	f_mount(&amp;fs[1], "1:", 0);
 
-    <span class="c">/* ƒhƒ‰ƒCƒu1‚ÌƒRƒs[Œ³ƒtƒ@ƒCƒ‹‚ğŠJ‚­ */</span>
-    res = f_open(&amp;fsrc, "1:file.dat", FA_OPEN_EXISTING | FA_READ);
-    if (fr) return (int)fr;
+	<span class="c">/* ƒhƒ‰ƒCƒu1‚ÌƒRƒs[Œ³ƒtƒ@ƒCƒ‹‚ğŠJ‚­ */</span>
+	res = f_open(&amp;fsrc, "1:file.dat", FA_OPEN_EXISTING | FA_READ);
+	if (fr) return (int)fr;
 
-    <span class="c">/* ƒhƒ‰ƒCƒu0‚ÉƒRƒs[æƒtƒ@ƒCƒ‹‚ğì¬‚·‚é */</span>
-    res = f_open(&amp;fdst, "0:file.dat", FA_CREATE_ALWAYS | FA_WRITE);
-    if (fr) return (int)fr;
+	<span class="c">/* ƒhƒ‰ƒCƒu0‚ÉƒRƒs[æƒtƒ@ƒCƒ‹‚ğì¬‚·‚é */</span>
+	res = f_open(&amp;fdst, "0:file.dat", FA_CREATE_ALWAYS | FA_WRITE);
+	if (fr) return (int)fr;
 
-    <span class="c">/* ƒRƒs[Œ³‚©‚çƒRƒs[æ‚Éƒf[ƒ^“]‘—‚·‚é */</span>
-    for (;;) {
-        res = f_read(&amp;fsrc, buffer, sizeof buffer, &amp;br); <span class="c">/* ƒRƒs[Œ³‚©‚ç‚©‚ç“Ç‚İo‚· */</span>
-        if (res || br == 0) break;   <span class="c">/* ƒGƒ‰[‚©ƒtƒ@ƒCƒ‹I’[ */</span>
-        res = f_write(&amp;fdst, buffer, br, &amp;bw);           <span class="c">/* ‚»‚ê‚ğƒRƒs[æ‚É‘‚«‚Ş */</span>
-        if (res || bw &lt; br) break;   <span class="c">/* ƒGƒ‰[‚©ƒfƒBƒXƒN–”t */</span>
-    }
+	<span class="c">/* ƒRƒs[Œ³‚©‚çƒRƒs[æ‚Éƒf[ƒ^“]‘—‚·‚é */</span>
+	for (;;) {
+		res = f_read(&amp;fsrc, buffer, sizeof buffer, &amp;br); <span class="c">/* ƒRƒs[Œ³‚©‚ç‚©‚ç“Ç‚İo‚· */</span>
+		if (res || br == 0) break;   <span class="c">/* ƒGƒ‰[‚©ƒtƒ@ƒCƒ‹I’[ */</span>
+		res = f_write(&amp;fdst, buffer, br, &amp;bw);		   <span class="c">/* ‚»‚ê‚ğƒRƒs[æ‚É‘‚«‚Ş */</span>
+		if (res || bw &lt; br) break;   <span class="c">/* ƒGƒ‰[‚©ƒfƒBƒXƒN–”t */</span>
+	}
 
-    <span class="c">/* ‘S‚Ä‚Ìƒtƒ@ƒCƒ‹‚ğ•Â‚¶‚é */</span>
-    f_close(&amp;fsrc);
-    f_close(&amp;fdst);
+	<span class="c">/* ‘S‚Ä‚Ìƒtƒ@ƒCƒ‹‚ğ•Â‚¶‚é */</span>
+	f_close(&amp;fsrc);
+	f_close(&amp;fdst);
 
-    <span class="c">/* ƒ[ƒNEƒGƒŠƒA‚ğŠJ•ú‚·‚é */</span>
-    f_mount(NULL, "0:", 0);
-    f_mount(NULL, "1:", 0);
+	<span class="c">/* ƒ[ƒNEƒGƒŠƒA‚ğŠJ•ú‚·‚é */</span>
+	f_mount(NULL, "0:", 0);
+	f_mount(NULL, "1:", 0);
 
-    return (int)fr;
+	return (int)fr;
 }
 </pre>
 </div>

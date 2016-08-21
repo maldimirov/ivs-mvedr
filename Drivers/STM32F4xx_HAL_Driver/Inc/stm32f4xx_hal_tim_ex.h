@@ -90,19 +90,19 @@ typedef struct {
   */ 
 typedef struct
 {
-  uint32_t OffStateRunMode;	        /*!< TIM off state in run mode
+  uint32_t OffStateRunMode;            /*!< TIM off state in run mode
                                          This parameter can be a value of @ref TIM_OSSR_Off_State_Selection_for_Run_mode_state */
-  uint32_t OffStateIDLEMode;	      /*!< TIM off state in IDLE mode
+  uint32_t OffStateIDLEMode;          /*!< TIM off state in IDLE mode
                                          This parameter can be a value of @ref TIM_OSSI_Off_State_Selection_for_Idle_mode_state */
-  uint32_t LockLevel;	 	            /*!< TIM Lock level
+  uint32_t LockLevel;                     /*!< TIM Lock level
                                          This parameter can be a value of @ref TIM_Lock_level */                             
-  uint32_t DeadTime;	 	            /*!< TIM dead Time 
+  uint32_t DeadTime;                     /*!< TIM dead Time 
                                          This parameter can be a number between Min_Data = 0x00 and Max_Data = 0xFF */
-  uint32_t BreakState;	 	          /*!< TIM Break State 
+  uint32_t BreakState;                   /*!< TIM Break State 
                                          This parameter can be a value of @ref TIM_Break_Input_enable_disable */
-  uint32_t BreakPolarity;	 	        /*!< TIM Break input polarity 
+  uint32_t BreakPolarity;                 /*!< TIM Break input polarity 
                                          This parameter can be a value of @ref TIM_Break_Polarity */
-  uint32_t AutomaticOutput;	 	      /*!< TIM Automatic Output Enable state 
+  uint32_t AutomaticOutput;               /*!< TIM Automatic Output Enable state 
                                          This parameter can be a value of @ref TIM_AOE_Bit_Set_Reset */           
 }TIM_BreakDeadTimeConfigTypeDef;
 
@@ -126,7 +126,7 @@ typedef struct
 #define TIM_TIM11_GPIO                         (0x00000000)
 #define TIM_TIM11_HSE                          (0x00000002)
 
-#define IS_TIM_REMAP(TIM_REMAP)	 (((TIM_REMAP) == TIM_TIM2_TIM8_TRGO)||\
+#define IS_TIM_REMAP(TIM_REMAP)     (((TIM_REMAP) == TIM_TIM2_TIM8_TRGO)||\
                                   ((TIM_REMAP) == TIM_TIM2_ETH_PTP)||\
                                   ((TIM_REMAP) == TIM_TIM2_USBFS_SOF)||\
                                   ((TIM_REMAP) == TIM_TIM2_USBHS_SOF)||\

@@ -2826,7 +2826,7 @@ void HAL_TIM_IRQHandler(TIM_HandleTypeDef *htim)
   */
 
 /** @defgroup TIM_Group8 Peripheral Control functions
- *  @brief   	Peripheral Control functions
+ *  @brief       Peripheral Control functions
  *
 @verbatim
   ==============================================================================

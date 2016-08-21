@@ -153,8 +153,8 @@ typedef struct
 #define CMD_AREA                   ((uint32_t)(1<<16))  /* A16 = CLE high */
 #define ADDR_AREA                  ((uint32_t)(1<<17))  /* A17 = ALE high */
 
-#define	NAND_CMD_AREA_A            ((uint8_t)0x00)
-#define	NAND_CMD_AREA_B            ((uint8_t)0x01)
+#define    NAND_CMD_AREA_A            ((uint8_t)0x00)
+#define    NAND_CMD_AREA_B            ((uint8_t)0x01)
 #define NAND_CMD_AREA_C            ((uint8_t)0x50)
 
 /* NAND memory status */

@@ -16,10 +16,10 @@
 <p>The f_write writes data to a file.</p>
 <pre>
 FRESULT f_write (
-  FIL* <span class="arg">fp</span>,          <span class="c">/* [IN] Pointer to the file object structure */</span>
+  FIL* <span class="arg">fp</span>,		  <span class="c">/* [IN] Pointer to the file object structure */</span>
   const void* <span class="arg">buff</span>, <span class="c">/* [IN] Pointer to the data to be written */</span>
-  UINT <span class="arg">btw</span>,         <span class="c">/* [IN] Number of bytes to write */</span>
-  UINT* <span class="arg">bw</span>          <span class="c">/* [OUT] Pointer to the variable to return number of bytes written */</span>
+  UINT <span class="arg">btw</span>,		 <span class="c">/* [IN] Number of bytes to write */</span>
+  UINT* <span class="arg">bw</span>		  <span class="c">/* [OUT] Pointer to the variable to return number of bytes written */</span>
 );
 </pre>
 </div>

@@ -14,22 +14,22 @@ void LIS3DH_Handler(void)
 {
   int32_t AccLevel;
   if (LIS3DH_GetDataStatus() & 0x08) {
-    LIS3DH_ReadXYZAcc(Acc);
-    if(aAcc[0] == 0 && aAcc[1] == 0 && aAcc[2] == 0) {
-      aAcc[0] = Acc[0]; aAcc[1] = Acc[1]; aAcc[2] = Acc[2];
-    }
-    dAcc[0] = Acc[0] - aAcc[0];
-    dAcc[1] = Acc[1] - aAcc[1];
-    dAcc[2] = Acc[2] - aAcc[2];
-    aAcc[0] = (aAcc[0] + Acc[0]) / 2;
-    aAcc[1] = (aAcc[1] + Acc[1]) / 2;
-    aAcc[2] = (aAcc[2] + Acc[2]) / 2;
-    AccLevel = atoi(CFG_GlobVarsStruct.accLevel);
-    if(dAcc[0] > AccLevel || dAcc[1] > AccLevel || dAcc[2] > AccLevel) {
-      if((eCall == ECALL_IDLE) && (!Gsm.eCall)){
-        if(AccStat) eCall = ECALL_AUTO;
-      }
-    }
+	LIS3DH_ReadXYZAcc(Acc);
+	if(aAcc[0] == 0 && aAcc[1] == 0 && aAcc[2] == 0) {
+	  aAcc[0] = Acc[0]; aAcc[1] = Acc[1]; aAcc[2] = Acc[2];
+	}
+	dAcc[0] = Acc[0] - aAcc[0];
+	dAcc[1] = Acc[1] - aAcc[1];
+	dAcc[2] = Acc[2] - aAcc[2];
+	aAcc[0] = (aAcc[0] + Acc[0]) / 2;
+	aAcc[1] = (aAcc[1] + Acc[1]) / 2;
+	aAcc[2] = (aAcc[2] + Acc[2]) / 2;
+	AccLevel = atoi(CFG_GlobVarsStruct.accLevel);
+	if(dAcc[0] > AccLevel || dAcc[1] > AccLevel || dAcc[2] > AccLevel) {
+	  if((eCall == ECALL_IDLE) && (!Gsm.eCall)){
+		if(AccStat) eCall = ECALL_AUTO;
+	  }
+	}
   }
 }
 
@@ -41,27 +41,27 @@ uint8_t LIS3DH_Configure(void)
   LIS3DH_FilterConfigTypedef LIS3DH_FilterStruct;
   
   if(LIS3DH_ReadID() == I_AM_LIS3DH) {
-    // Configure Mems LIS3DH
-    LIS3DH_InitStruct.PowerMode = LIS3DH_MODE_NORMAL;
-    LIS3DH_InitStruct.OutputDataRate = LIS3DH_ODR_100_HZ;
-    LIS3DH_InitStruct.AxesEnable = LIS3DH_AXES_ENABLE;
-    LIS3DH_InitStruct.HighResolution = LIS3DH_HR_ENABLE;
-    LIS3DH_InitStruct.BlockDataUpdate = LIS3DH_BlockUpdate_Continuous;
-    LIS3DH_InitStruct.Endianness = LIS3DH_BLE_LSB;
-    LIS3DH_InitStruct.FullScale = LIS3DH_FULLSCALE_2G; 
-    LIS3DH_Init(&LIS3DH_InitStruct);
-     
-    LIS3DH_FilterStruct.HPF_ModeSelection = LIS3DH_HPM_NORMAL_MODE;
-    LIS3DH_FilterStruct.HPF_CutOffFrequency = LIS3DH_HPFCF_1;
-    LIS3DH_FilterStruct.HPF_AOI1 = LIS3DH_HPF_AOI1_DISABLE;
-    LIS3DH_FilterStruct.HPF_AOI2 = LIS3DH_HPF_AOI2_DISABLE;
-    LIS3DH_FilterConfig(&LIS3DH_FilterStruct);
-    
-    //./LIS3DH_FilterCmd(LIS3DH_HIGHPASSFILTER_ENABLE);
+	// Configure Mems LIS3DH
+	LIS3DH_InitStruct.PowerMode = LIS3DH_MODE_NORMAL;
+	LIS3DH_InitStruct.OutputDataRate = LIS3DH_ODR_100_HZ;
+	LIS3DH_InitStruct.AxesEnable = LIS3DH_AXES_ENABLE;
+	LIS3DH_InitStruct.HighResolution = LIS3DH_HR_ENABLE;
+	LIS3DH_InitStruct.BlockDataUpdate = LIS3DH_BlockUpdate_Continuous;
+	LIS3DH_InitStruct.Endianness = LIS3DH_BLE_LSB;
+	LIS3DH_InitStruct.FullScale = LIS3DH_FULLSCALE_2G; 
+	LIS3DH_Init(&LIS3DH_InitStruct);
+	 
+	LIS3DH_FilterStruct.HPF_ModeSelection = LIS3DH_HPM_NORMAL_MODE;
+	LIS3DH_FilterStruct.HPF_CutOffFrequency = LIS3DH_HPFCF_1;
+	LIS3DH_FilterStruct.HPF_AOI1 = LIS3DH_HPF_AOI1_DISABLE;
+	LIS3DH_FilterStruct.HPF_AOI2 = LIS3DH_HPF_AOI2_DISABLE;
+	LIS3DH_FilterConfig(&LIS3DH_FilterStruct);
+	
+	//./LIS3DH_FilterCmd(LIS3DH_HIGHPASSFILTER_ENABLE);
 
-    //./LIS3DH_AccIT1Enable(LIS3DH_IT1_DRY1);
+	//./LIS3DH_AccIT1Enable(LIS3DH_IT1_DRY1);
 
-    retVal = ACC_OK;
+	retVal = ACC_OK;
   }
 
   return retVal;
@@ -70,7 +70,7 @@ uint8_t LIS3DH_Configure(void)
 /**
   * @brief  Set LIS3DH Initialization.
   * @param  LIS3DH_InitStruct: pointer to a LIS3DH_InitTypeDef structure 
-  *         that contains the configuration setting for the LIS3DH.
+  *		 that contains the configuration setting for the LIS3DH.
   * @retval None
   */
 void LIS3DH_Init(LIS3DH_InitTypedef *LIS3DH_InitStruct)
@@ -81,10 +81,10 @@ void LIS3DH_Init(LIS3DH_InitTypedef *LIS3DH_InitStruct)
 
   // Configure MEMS: data rate, power mode, full scale and axes
   ctrl1 |= (uint8_t) (LIS3DH_InitStruct->PowerMode | LIS3DH_InitStruct->OutputDataRate | \
-                      LIS3DH_InitStruct->AxesEnable);
+					  LIS3DH_InitStruct->AxesEnable);
   
   ctrl4 |= (uint8_t) (LIS3DH_InitStruct->BlockDataUpdate | LIS3DH_InitStruct->Endianness | \
-                      LIS3DH_InitStruct->FullScale | LIS3DH_InitStruct->HighResolution);
+					  LIS3DH_InitStruct->FullScale | LIS3DH_InitStruct->HighResolution);
 
   // Write value to MEMS CTRL_REG1 regsister
   LIS3DH_Write(&ctrl1, LIS3DH_CTRL_REG1_ADDR, 1);
@@ -95,7 +95,7 @@ void LIS3DH_Init(LIS3DH_InitTypedef *LIS3DH_InitStruct)
 
 /**
   * @brief  Set High Pass Filter Modality
-  * @param  FilterStruct: contains the configuration setting for the L3GD20.        
+  * @param  FilterStruct: contains the configuration setting for the L3GD20.		
   * @retval None
   */
 void LIS3DH_FilterConfig(LIS3DH_FilterConfigTypedef *LIS3DH_FilterStruct)
@@ -109,7 +109,7 @@ void LIS3DH_FilterConfig(LIS3DH_FilterConfigTypedef *LIS3DH_FilterStruct)
   
   // Configure MEMS: mode and cutoff frquency
   tmpreg |= (uint8_t)(LIS3DH_FilterStruct->HPF_ModeSelection | LIS3DH_FilterStruct->HPF_CutOffFrequency | \
-                      LIS3DH_FilterStruct->HPF_AOI1 | LIS3DH_FilterStruct->HPF_AOI2);
+					  LIS3DH_FilterStruct->HPF_AOI1 | LIS3DH_FilterStruct->HPF_AOI2);
 
   // Write value to MEMS CTRL_REG2 regsister
   LIS3DH_Write(&tmpreg, LIS3DH_CTRL_REG2_ADDR, 1);
@@ -118,9 +118,9 @@ void LIS3DH_FilterConfig(LIS3DH_FilterConfigTypedef *LIS3DH_FilterStruct)
 /**
   * @brief  Enable or Disable High Pass Filter
   * @param  HighPassFilterState: new state of the High Pass Filter feature.
-  *      This parameter can be: 
-  *         @arg: LIS3DH_HIGHPASSFILTER_DISABLE 
-  *         @arg: LIS3DH_HIGHPASSFILTER_ENABLE          
+  *	  This parameter can be: 
+  *		 @arg: LIS3DH_HIGHPASSFILTER_DISABLE 
+  *		 @arg: LIS3DH_HIGHPASSFILTER_ENABLE		  
   * @retval None
   */
 void LIS3DH_FilterCmd(uint8_t HighPassFilterState)
@@ -155,13 +155,13 @@ void LIS3DH_AccIT1Enable(uint8_t interrupts)
 /**
   * @brief Disable LSM303DLHC Interrupt1
   * @param  LSM303DLHC_IT: specifies the LSM303DLHC interrupt source to be enabled.
-  *           This parameter can be any combination of the following values: 
-  *         @arg   LSM303DLHC_IT1_CLICK
-  *         @arg   LSM303DLHC_IT1_AOI1
-  *         @arg   LSM303DLHC_IT1_AOI2
-  *         @arg   LSM303DLHC_IT1_DRY1
-  *         @arg   LSM303DLHC_IT1_WTM
-  *         @arg   LSM303DLHC_IT1_OVERRUN.
+  *		   This parameter can be any combination of the following values: 
+  *		 @arg   LSM303DLHC_IT1_CLICK
+  *		 @arg   LSM303DLHC_IT1_AOI1
+  *		 @arg   LSM303DLHC_IT1_AOI2
+  *		 @arg   LSM303DLHC_IT1_DRY1
+  *		 @arg   LSM303DLHC_IT1_WTM
+  *		 @arg   LSM303DLHC_IT1_OVERRUN.
   * @retval None
   */
 void LIS3DH_AccIT1Disable(uint8_t interrupts)
@@ -213,7 +213,7 @@ uint8_t LIS3DH_ReadID(void)
 
 /**
   * @brief  Get status for LIS3DH data
-  * @param  None         
+  * @param  None		 
   * @retval Data status in a LIS3DH Data
   */
 uint8_t LIS3DH_GetDataStatus(void)
@@ -222,7 +222,7 @@ uint8_t LIS3DH_GetDataStatus(void)
   
   // Read STATUS_REG register
   LIS3DH_Read(&tmpreg, LIS3DH_STATUS_REG_ADDR, 1);
-                  
+				  
   return tmpreg;
 }
 
@@ -240,45 +240,45 @@ void LIS3DH_ReadXYZAcc(int32_t * piData)
   
   // check in the control register 4 the data alignment (Big Endian or Little Endian)
   if(!(tmpreg & LIS3DH_BLE_MSB)) {
-    for(i = 0; i < 3; i++)
-    {
-      RawData[i]=(int16_t)(((uint16_t)tmpbuffer[2*i+1] << 8) + tmpbuffer[2*i]);
-    }
+	for(i = 0; i < 3; i++)
+	{
+	  RawData[i]=(int16_t)(((uint16_t)tmpbuffer[2*i+1] << 8) + tmpbuffer[2*i]);
+	}
   } else {
-    for(i = 0; i < 3; i++)
-    {
-      RawData[i]=(int16_t)(((uint16_t)tmpbuffer[2*i] << 8) + tmpbuffer[2*i+1]);
-    }
+	for(i = 0; i < 3; i++)
+	{
+	  RawData[i]=(int16_t)(((uint16_t)tmpbuffer[2*i] << 8) + tmpbuffer[2*i+1]);
+	}
   }
   
   // Switch the sensitivity value set in the CRTL4
   switch(tmpreg & LIS3DH_FULLSCALE_SELECTION) {
-    case LIS3DH_FULLSCALE_2G :
-      sensitivity = LIS3DH_SENSITIVITY_2G;
-      break;
-    case LIS3DH_FULLSCALE_4G :
-      sensitivity = LIS3DH_SENSITIVITY_4G;
-      break;
-    case LIS3DH_FULLSCALE_8G :
-      sensitivity = LIS3DH_SENSITIVITY_8G;
-      break;
-    case LIS3DH_FULLSCALE_16G :
-      sensitivity = LIS3DH_SENSITIVITY_16G;
-      break;
+	case LIS3DH_FULLSCALE_2G :
+	  sensitivity = LIS3DH_SENSITIVITY_2G;
+	  break;
+	case LIS3DH_FULLSCALE_4G :
+	  sensitivity = LIS3DH_SENSITIVITY_4G;
+	  break;
+	case LIS3DH_FULLSCALE_8G :
+	  sensitivity = LIS3DH_SENSITIVITY_8G;
+	  break;
+	case LIS3DH_FULLSCALE_16G :
+	  sensitivity = LIS3DH_SENSITIVITY_16G;
+	  break;
   }
 
   LIS3DH_Read(&tmpreg, LIS3DH_CTRL_REG5_ADDR, 1);
 
   if (tmpreg & LIS3DH_FIFO_ENABLE) {
-    div = 64;
+	div = 64;
   } else {
-    div = 16;
+	div = 16;
   }
 
   // divide by sensitivity
   for(i = 0; i < 3; i++)
   {
-    piData[i] = ((int32_t)RawData[i] * (int32_t)sensitivity) / (int32_t)div;
+	piData[i] = ((int32_t)RawData[i] * (int32_t)sensitivity) / (int32_t)div;
   }
  
 }
@@ -290,7 +290,7 @@ void LIS3DH_Write(uint8_t* pBuffer, uint8_t WriteAddr, uint16_t NumByteToWrite)
   //  - When 1, the address will be auto incremented in multiple read/write commands.
 
   if(NumByteToWrite > 0x01) {
-    WriteAddr |= (uint8_t)LIS3DH_MULTIPLEBYTE_CMD;
+	WriteAddr |= (uint8_t)LIS3DH_MULTIPLEBYTE_CMD;
   }
 
   // Set chip select Low at the start of the transmission
@@ -302,9 +302,9 @@ void LIS3DH_Write(uint8_t* pBuffer, uint8_t WriteAddr, uint16_t NumByteToWrite)
   // Send the data that will be written into the device (MSB First)
   while(NumByteToWrite >= 0x01)
   {
-    BSP_SPI1_WriteRead(*pBuffer);
-    NumByteToWrite--;
-    pBuffer++;
+	BSP_SPI1_WriteRead(*pBuffer);
+	NumByteToWrite--;
+	pBuffer++;
   }
   
   // Set chip select High at the end of the transmission
@@ -314,9 +314,9 @@ void LIS3DH_Write(uint8_t* pBuffer, uint8_t WriteAddr, uint16_t NumByteToWrite)
 void LIS3DH_Read(uint8_t* pBuffer, uint8_t ReadAddr, uint16_t NumByteToRead)
 {
   if(NumByteToRead > 0x01) {
-    ReadAddr |= (uint8_t)(LIS3DH_READWRITE_CMD | LIS3DH_MULTIPLEBYTE_CMD);
+	ReadAddr |= (uint8_t)(LIS3DH_READWRITE_CMD | LIS3DH_MULTIPLEBYTE_CMD);
   } else {
-    ReadAddr |= (uint8_t)LIS3DH_READWRITE_CMD;
+	ReadAddr |= (uint8_t)LIS3DH_READWRITE_CMD;
   }
 
   // Set chip select Low at the start of the transmission
@@ -328,10 +328,10 @@ void LIS3DH_Read(uint8_t* pBuffer, uint8_t ReadAddr, uint16_t NumByteToRead)
   // Receive the data that will be read from the device (MSB First)
   while(NumByteToRead > 0x00)
   {
-    // Send dummy byte (0x00) to generate the SPI clock to GYRO (Slave device)
-    *pBuffer = BSP_SPI1_WriteRead(LIS3DH_DUMMY_BYTE);
-    NumByteToRead--;
-    pBuffer++;
+	// Send dummy byte (0x00) to generate the SPI clock to GYRO (Slave device)
+	*pBuffer = BSP_SPI1_WriteRead(LIS3DH_DUMMY_BYTE);
+	NumByteToRead--;
+	pBuffer++;
   }
   
   // Set chip select High at the end of the transmission

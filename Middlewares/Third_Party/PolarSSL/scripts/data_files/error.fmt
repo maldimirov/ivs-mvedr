@@ -39,53 +39,53 @@ HEADER_INCLUDED
 
 void error_strerror( int ret, char *buf, size_t buflen )
 {
-    size_t len;
-    int use_ret;
+	size_t len;
+	int use_ret;
 
-    memset( buf, 0x00, buflen );
-     
-    if( ret < 0 )
-        ret = -ret;
+	memset( buf, 0x00, buflen );
+	 
+	if( ret < 0 )
+		ret = -ret;
 
-    if( ret & 0xFF80 )
-    {
-        use_ret = ret & 0xFF80;
+	if( ret & 0xFF80 )
+	{
+		use_ret = ret & 0xFF80;
 
-        // High level error codes
-        //
+		// High level error codes
+		//
 HIGH_LEVEL_CODE_CHECKS
-        if( strlen( buf ) == 0 )
-            snprintf( buf, buflen, "UNKNOWN ERROR CODE (%04X)", use_ret );
-    }
+		if( strlen( buf ) == 0 )
+			snprintf( buf, buflen, "UNKNOWN ERROR CODE (%04X)", use_ret );
+	}
 
-    use_ret = ret & ~0xFF80;
+	use_ret = ret & ~0xFF80;
 
-    if( use_ret == 0 )
-        return;
+	if( use_ret == 0 )
+		return;
 
-    // If high level code is present, make a concatenation between both
-    // error strings.
-    //
-    len = strlen( buf );
+	// If high level code is present, make a concatenation between both
+	// error strings.
+	//
+	len = strlen( buf );
 
-    if( len > 0 )
-    {
-        if( buflen - len < 5 )
-            return;
+	if( len > 0 )
+	{
+		if( buflen - len < 5 )
+			return;
 
-        snprintf( buf + len, buflen - len, " : " );
+		snprintf( buf + len, buflen - len, " : " );
 
-        buf += len + 3;
-        buflen -= len + 3;
-    }
+		buf += len + 3;
+		buflen -= len + 3;
+	}
 
-    // Low level error codes
-    //
+	// Low level error codes
+	//
 LOW_LEVEL_CODE_CHECKS
-    if( strlen( buf ) != 0 )
-        return;
+	if( strlen( buf ) != 0 )
+		return;
 
-    snprintf( buf, buflen, "UNKNOWN ERROR CODE (%04X)", use_ret );
+	snprintf( buf, buflen, "UNKNOWN ERROR CODE (%04X)", use_ret );
 }
 
 #else /* POLARSSL_ERROR_C */
@@ -99,10 +99,10 @@ LOW_LEVEL_CODE_CHECKS
  */
 void error_strerror( int ret, char *buf, size_t buflen )
 {
-    ((void) ret);
+	((void) ret);
 
-    if( buflen > 0 )
-        buf[0] = '\0';
+	if( buflen > 0 )
+		buf[0] = '\0';
 }
 
 #endif /* POLARSSL_ERROR_STRERROR_DUMMY */

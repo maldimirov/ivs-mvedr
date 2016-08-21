@@ -64,25 +64,25 @@ static: libpolarssl.a
 shared: libpolarssl.$(DLEXT)
 
 libpolarssl.a: $(OBJS)
-	echo "  AR    $@"
+	echo "  AR	$@"
 	$(AR) r $@ $(OBJS)
-	echo "  RL    $@"
+	echo "  RL	$@"
 	$(AR) s $@
 
 libpolarssl.so: libpolarssl.a
-	echo "  LD    $@"
+	echo "  LD	$@"
 	$(CC) ${LDFLAGS} -shared -Wl,-soname,$(SONAME) -o $@ $(OBJS)
 
 libpolarssl.dylib: libpolarssl.a
-	echo "  LD    $@"
+	echo "  LD	$@"
 	$(CC) ${LDFLAGS} -dynamiclib -o $@ $(OBJS)
 
 libpolarssl.dll: libpolarssl.a 
-	echo "  LD    $@" 
+	echo "  LD	$@" 
 	$(CC) -shared -Wl,-soname,$@ -o $@ $(OBJS) -lws2_32 -lwinmm -lgdi32 
 
 .c.o:
-	echo "  CC    $<"
+	echo "  CC	$<"
 	$(CC) $(CFLAGS) $(OFLAGS) -c $<
 
 clean:

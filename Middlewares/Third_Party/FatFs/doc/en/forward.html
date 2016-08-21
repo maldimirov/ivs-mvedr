@@ -16,10 +16,10 @@
 <p>The f_forward function reads the file data and forward it to the data streaming device.</p>
 <pre>
 FRESULT f_forward (
-  FIL* <span class="arg">fp</span>,                        <span class="c">/* [IN] File object */</span>
+  FIL* <span class="arg">fp</span>,						<span class="c">/* [IN] File object */</span>
   UINT (*<span class="arg">func</span>)(const BYTE*,UINT), <span class="c">/* [IN] Data streaming function */</span>
-  UINT <span class="arg">btf</span>,                       <span class="c">/* [IN] Number of bytes to forward */</span>
-  UINT* <span class="arg">bf</span>                        <span class="c">/* [OUT] Number of bytes forwarded */</span>
+  UINT <span class="arg">btf</span>,					   <span class="c">/* [IN] Number of bytes to forward */</span>
+  UINT* <span class="arg">bf</span>						<span class="c">/* [OUT] Number of bytes forwarded */</span>
 );
 </pre>
 </div>
@@ -72,58 +72,58 @@ FRESULT f_forward (
 <span class="c">/*------------------------------------------------------------------------*/</span>
 
 UINT out_stream (   <span class="c">/* Returns number of bytes sent or stream status */</span>
-    const BYTE *p,  <span class="c">/* Pointer to the data block to be sent */</span>
-    UINT btf        <span class="c">/* &gt;0: Transfer call (Number of bytes to be sent). 0: Sense call */</span>
+	const BYTE *p,  <span class="c">/* Pointer to the data block to be sent */</span>
+	UINT btf		<span class="c">/* &gt;0: Transfer call (Number of bytes to be sent). 0: Sense call */</span>
 )
 {
-    UINT cnt = 0;
+	UINT cnt = 0;
 
 
-    if (btf == 0) {     <span class="c">/* Sense call */</span>
-        <span class="c">/* Return stream status (0: Busy, 1: Ready) */</span>
-        <span class="c">/* When once it returned ready to sense call, it must accept a byte at least */</span>
-        <span class="c">/* at subsequent transfer call, or f_forward will fail with FR_INT_ERR. */</span>
-        if (FIFO_READY) cnt = 1;
-    }
-    else {              <span class="c">/* Transfer call */</span>
-        do {    <span class="c">/* Repeat while there is any data to be sent and the stream is ready */</span>
-            FIFO_PORT = *p++;
-            cnt++;
-        } while (cnt &lt; btf &amp;&amp; FIFO_READY);
-    }
+	if (btf == 0) {	 <span class="c">/* Sense call */</span>
+		<span class="c">/* Return stream status (0: Busy, 1: Ready) */</span>
+		<span class="c">/* When once it returned ready to sense call, it must accept a byte at least */</span>
+		<span class="c">/* at subsequent transfer call, or f_forward will fail with FR_INT_ERR. */</span>
+		if (FIFO_READY) cnt = 1;
+	}
+	else {			  <span class="c">/* Transfer call */</span>
+		do {	<span class="c">/* Repeat while there is any data to be sent and the stream is ready */</span>
+			FIFO_PORT = *p++;
+			cnt++;
+		} while (cnt &lt; btf &amp;&amp; FIFO_READY);
+	}
 
-    return cnt;
+	return cnt;
 }
 
 
 <span class="c">/*------------------------------------------------------------------------*/</span>
-<span class="c">/* Sample code using f_forward function                                   */</span>
+<span class="c">/* Sample code using f_forward function								   */</span>
 <span class="c">/*------------------------------------------------------------------------*/</span>
 
 FRESULT play_file (
-    char *fn        <span class="c">/* Pointer to the audio file name to be played */</span>
+	char *fn		<span class="c">/* Pointer to the audio file name to be played */</span>
 )
 {
-    FRESULT rc;
-    FIL fil;
-    UINT dmy;
+	FRESULT rc;
+	FIL fil;
+	UINT dmy;
 
-    <span class="c">/* Open the audio file in read only mode */</span>
-    rc = f_open(&amp;fil, fn, FA_READ);
-    if (rc) return rc;
+	<span class="c">/* Open the audio file in read only mode */</span>
+	rc = f_open(&amp;fil, fn, FA_READ);
+	if (rc) return rc;
 
-    <span class="c">/* Repeat until the file pointer reaches end of the file */</span>
-    while (rc == FR_OK &amp;&amp; fil.fptr &lt; fil.fsize) {
+	<span class="c">/* Repeat until the file pointer reaches end of the file */</span>
+	while (rc == FR_OK &amp;&amp; fil.fptr &lt; fil.fsize) {
 
-        <span class="c">/* any other processes... */</span>
+		<span class="c">/* any other processes... */</span>
 
-        <span class="c">/* Fill output stream periodicaly or on-demand */</span>
-        rc = f_forward(&amp;fil, out_stream, 1000, &amp;dmy);
-    }
+		<span class="c">/* Fill output stream periodicaly or on-demand */</span>
+		rc = f_forward(&amp;fil, out_stream, 1000, &amp;dmy);
+	}
 
-    <span class="c">/* Close the file and return */</span>
-    f_close(&amp;fil);
-    return rc;
+	<span class="c">/* Close the file and return */</span>
+	f_close(&amp;fil);
+	return rc;
 }
 </pre>
 </div>
