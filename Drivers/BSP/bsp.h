@@ -137,6 +137,10 @@
 #define BSP_ACC_CS_LOW()        HAL_GPIO_WritePin(BSP_ACC_CS_GPIO_PORT, BSP_ACC_CS_PIN, GPIO_PIN_RESET)
 #define BSP_ACC_CS_HIGH()       HAL_GPIO_WritePin(BSP_ACC_CS_GPIO_PORT, BSP_ACC_CS_PIN, GPIO_PIN_SET)
 
+// @brief Magnetometer Chip Select macro definition
+#define BSP_MAG_CS_LOW()        HAL_GPIO_WritePin(BSP_MAG_CS_GPIO_PORT, BSP_MAG_CS_PIN, GPIO_PIN_RESET)
+#define BSP_MAG_CS_HIGH()       HAL_GPIO_WritePin(BSP_MAG_CS_GPIO_PORT, BSP_MAG_CS_PIN, GPIO_PIN_SET)
+
 /* Maximum Timeout values for flags waiting loops. These timeouts are not based
    on accurate values, they just guarantee that the application will not remain
    stuck if the SPI communication is corrupted.
@@ -171,6 +175,7 @@ void    BSP_System_Init (void);
 void      BSP_GSM_Init        (void);
 void      BSP_GyroInit        (void);
 void      BSP_AccInit         (void);
+void      BSP_MagInit         (void);
 void      BSP_USART1_Init     (void);
 void      BSP_USART2_Init     (void);
 void      BSP_SPI1_Init       (void);
