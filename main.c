@@ -106,8 +106,6 @@ int main()
     Tunnel = 0;
     //mq_in = 0;
 
-        printf("Hello from me");
-
     // Init file system on SD-card
     FATFS_LinkDriver(&SD_Driver, SDPath);
     f_mount(&SDFatFs, (TCHAR const*)SDPath, 0);
