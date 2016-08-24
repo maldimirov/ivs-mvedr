@@ -28,7 +28,7 @@ void BSP_Config(void)
 
   BSP_AccInit();
 
-  //BSP_MagInit();
+  BSP_MagInit();
 
   BSP_GyroInit();
 
@@ -442,40 +442,6 @@ uint8_t BSP_SPI1_WriteRead(uint8_t Byte)
   return rcvByte;
 }
 
-void BSP_GyroInit(void)
-{
-  GPIO_InitTypeDef GPIO_InitStruct;
-
-  // GPIOx clock enable
-  __GPIOA_CLK_ENABLE();
-
-  // Configure GPIO pin : PA4/CS
-  GPIO_InitStruct.Pin = BSP_GYRO_CS_PIN;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_MEDIUM;
-  HAL_GPIO_Init(BSP_GYRO_CS_GPIO_PORT, &GPIO_InitStruct);
-
-  BSP_GYRO_CS_HIGH();     // Deselect gyro
-
-
-  // Enable INT2 GPIO clock and Configure GPIO pin to detect Interrupts
-
-  __GPIOC_CLK_ENABLE();     // GPIOx clock enable
-
-  GPIO_InitStruct.Pin = BSP_GYRO_INT2_PIN;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
-  GPIO_InitStruct.Pull= GPIO_NOPULL;
-  HAL_GPIO_Init(BSP_GYRO_INT1_GPIO_PORT, &GPIO_InitStruct);
-
-  // Enable and set INT2/DRDY EXTI Interrupt to the lowest priority
-  HAL_NVIC_SetPriority(BSP_GYRO_INT2_EXTI_IRQn, 0x07, 0);
-  //HAL_NVIC_EnableIRQ(BSP_GYRO_INT2_EXTI_IRQn);
-
-  BSP_SPI1_Init();
-}
-
 void BSP_AccInit(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct;
@@ -510,6 +476,40 @@ void BSP_MagInit(void)
   HAL_GPIO_Init(BSP_MAG_CS_GPIO_PORT, &GPIO_InitStruct);
 
   BSP_MAG_CS_HIGH();     // Deselect Magnetometer
+
+  BSP_SPI1_Init();
+}
+
+void BSP_GyroInit(void)
+{
+  GPIO_InitTypeDef GPIO_InitStruct;
+
+  // GPIOx clock enable
+  __GPIOA_CLK_ENABLE();
+
+  // Configure GPIO pin : PA4/CS
+  GPIO_InitStruct.Pin = BSP_GYRO_CS_PIN;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_MEDIUM;
+  HAL_GPIO_Init(BSP_GYRO_CS_GPIO_PORT, &GPIO_InitStruct);
+
+  BSP_GYRO_CS_HIGH();     // Deselect gyro
+
+
+  // Enable INT2 GPIO clock and Configure GPIO pin to detect Interrupts
+
+  __GPIOC_CLK_ENABLE();     // GPIOx clock enable
+
+  GPIO_InitStruct.Pin = BSP_GYRO_INT2_PIN;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+  GPIO_InitStruct.Pull= GPIO_NOPULL;
+  HAL_GPIO_Init(BSP_GYRO_INT1_GPIO_PORT, &GPIO_InitStruct);
+
+  // Enable and set INT2/DRDY EXTI Interrupt to the lowest priority
+  HAL_NVIC_SetPriority(BSP_GYRO_INT2_EXTI_IRQn, 0x07, 0);
+  //HAL_NVIC_EnableIRQ(BSP_GYRO_INT2_EXTI_IRQn);
 
   BSP_SPI1_Init();
 }
