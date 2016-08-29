@@ -8,6 +8,7 @@
 #include "gps.h"
 #include "l3gd20.h"
 #include "lis3dh.h"
+#include "lsm303c.h"
 
 #define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
 #define GPS_FLAG 0x3FFFFFFF;
@@ -159,6 +160,7 @@ static void MainThread(void const *argument)
     memset(mq, 0, sizeof(mq));
     AccStatus = (LIS3DH_StatusTypedef)LIS3DH_Configure();
     GyroStatus = (L3GD20_StatusTypedef)L3GD20_Configure();
+    MagStatus = (LSM303C_StatusTypedef)LSM303C_Configure();
     if ((GyroStatus == GYRO_OK) && (AccStatus == ACC_OK)) AccStat = 1;
     GSM_Init();
     USB_Handler();

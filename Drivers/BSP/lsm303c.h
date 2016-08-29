@@ -73,7 +73,24 @@
 #define I_AM_LSM303C_A                  ((uint8_t)0x41)
 #define I_AM_LSM303C_M                  ((uint8_t)0x3D)
 
+// @brief Big/little endian data selection
+#define LSM303C_BLE_LSB                ((uint8_t)0x00)   // Little endian: data LSB @ lower address
+#define LSM303C_BLE_MSB                ((uint8_t)0x02)   // Big endian: data MSB @ lower address
+
 typedef enum {
   MAG_OK = 0,
   MAG_ERROR,
 } LSM303C_StatusTypedef;
+
+extern LSM303C_StatusTypedef MagStatus;
+extern int32_t MagInt[3];
+
+void LSM303C_Handler(void);
+uint8_t LSM303C_ReadID(void);
+void LSM303C_Write(uint8_t* pBuffer, uint8_t WriteAddr, uint16_t NumByteToWrite);
+void LSM303C_Read(uint8_t* pBuffer, uint8_t ReadAddr, uint16_t NumByteToRead);
+uint8_t LSM303C_GetDataStatus(void);
+void LSM303C_ReadXYZMag(void);
+uint8_t LSM303C_Configure(void);
+
+#endif
