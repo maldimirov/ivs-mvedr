@@ -58,6 +58,11 @@ uint8_t LSM303C_Configure(void)
   uint8_t reg;
 
   BSP_MagInit();
+
+  // Enable SPI read/write
+  reg = 0x85;
+  LSM303C_Write(&reg, LSM303C_CTRL_REG3_M, 1);
+
   if(LSM303C_ReadID() == I_AM_LSM303C_M) {
     // Configure Mems LSM303C
     // Write value to MAG CTRL_REG1 regsister
@@ -69,8 +74,8 @@ uint8_t LSM303C_Configure(void)
     LSM303C_Write(&reg, LSM303C_CTRL_REG2_M, 1);
 
     // Write value to MAG CTRL_REG3 regsister
-    reg = 0xA5;
-    LSM303C_Write(&reg, LSM303C_CTRL_REG3_M, 1);
+    //reg = 0x85;
+    //LSM303C_Write(&reg, LSM303C_CTRL_REG3_M, 1);
 
     // Write value to MAG CTRL_REG4 regsister
     reg = 0x08;
@@ -135,6 +140,9 @@ void LSM303C_Read(uint8_t* pBuffer, uint8_t ReadAddr, uint16_t NumByteToRead)
     ReadAddr |= (uint8_t)LSM303C_READWRITE_CMD;
   }
 
+  hspi1.Init.Direction = SPI_DIRECTION_1LINE;
+  HAL_SPI_Init(&hspi1);
+
   // Set chip select Low at the start of the transmission
   BSP_MAG_CS_LOW();
 
@@ -144,13 +152,14 @@ void LSM303C_Read(uint8_t* pBuffer, uint8_t ReadAddr, uint16_t NumByteToRead)
   GPIO_InitTypeDef GPIO_InitStruct;
   uint8_t tmp;
 
+/*
     GPIO_InitStruct.Pin = GPIO_PIN_7;
     GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
     GPIO_InitStruct.Pull = GPIO_PULLDOWN;
     GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
     GPIO_InitStruct.Alternate = 0;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
+*/
 
   // Receive the data that will be read from the device (MSB First)
   while(NumByteToRead > 0x00)
@@ -162,14 +171,14 @@ void LSM303C_Read(uint8_t* pBuffer, uint8_t ReadAddr, uint16_t NumByteToRead)
     NumByteToRead--;
     pBuffer++;
   }
-
+/*
     GPIO_InitStruct.Pin = GPIO_PIN_7;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
     GPIO_InitStruct.Alternate = GPIO_AF5_SPI1;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
+*/
   // Set chip select High at the end of the transmission
   BSP_MAG_CS_HIGH();
 }
