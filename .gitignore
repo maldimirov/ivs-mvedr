@@ -1,1 +1,3 @@
-EWARM/*
+EWARM/debug
+EWARM/release
+*.bak
