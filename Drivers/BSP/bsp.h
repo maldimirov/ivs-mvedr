@@ -147,6 +147,7 @@
    You may modify these timeout values depending on CPU frequency and application
    conditions (interrupts routines ...). */
 #define SPI_TIMEOUT_MAX         ((uint32_t)0x1000)
+extern uint32_t SpiTimeout;
 
 
 typedef struct {

@@ -60,7 +60,7 @@ uint8_t LSM303C_Configure(void)
   BSP_MagInit();
 
   // Enable SPI read/write
-  reg = 0x85;
+  reg = 0x84; // I2C disabled , SPI -R/W, Cont.conv
   LSM303C_Write(&reg, LSM303C_CTRL_REG3_M, 1);
 
   if(LSM303C_ReadID() == I_AM_LSM303C_M) {
@@ -73,11 +73,7 @@ uint8_t LSM303C_Configure(void)
     reg = 0x60;
     LSM303C_Write(&reg, LSM303C_CTRL_REG2_M, 1);
 
-    // Write value to MAG CTRL_REG3 regsister
-    //reg = 0x85;
-    //LSM303C_Write(&reg, LSM303C_CTRL_REG3_M, 1);
-
-    // Write value to MAG CTRL_REG4 regsister
+     // Write value to MAG CTRL_REG4 regsister
     reg = 0x08;
     LSM303C_Write(&reg, LSM303C_CTRL_REG4_M, 1);
 
@@ -114,22 +110,24 @@ void LSM303C_Write(uint8_t* pBuffer, uint8_t WriteAddr, uint16_t NumByteToWrite)
     WriteAddr |= (uint8_t)LSM303C_MULTIPLEBYTE_CMD;
   }
 
+  hspi1.Init.Direction = SPI_DIRECTION_1LINE;
+  HAL_SPI_Init(&hspi1);
+
   // Set chip select Low at the start of the transmission
+  __HAL_SPI_1LINE_TX(&hspi1);
   BSP_MAG_CS_LOW();
 
   // Send the Address of the indexed register
-  BSP_SPI1_WriteRead(WriteAddr);
+  HAL_SPI_Transmit(&hspi1, &WriteAddr, 1, SpiTimeout);
 
   // Send the data that will be written into the device (MSB First)
-  while(NumByteToWrite >= 0x01)
-  {
-    BSP_SPI1_WriteRead(*pBuffer);
-    NumByteToWrite--;
-    pBuffer++;
-  }
+  HAL_SPI_Transmit(&hspi1, pBuffer, NumByteToWrite, SpiTimeout);
 
   // Set chip select High at the end of the transmission
   BSP_MAG_CS_HIGH();
+
+  hspi1.Init.Direction = SPI_DIRECTION_2LINES;
+  HAL_SPI_Init(&hspi1);
 }
 
 void LSM303C_Read(uint8_t* pBuffer, uint8_t ReadAddr, uint16_t NumByteToRead)
@@ -144,41 +142,19 @@ void LSM303C_Read(uint8_t* pBuffer, uint8_t ReadAddr, uint16_t NumByteToRead)
   HAL_SPI_Init(&hspi1);
 
   // Set chip select Low at the start of the transmission
+  __HAL_SPI_1LINE_TX(&hspi1);
   BSP_MAG_CS_LOW();
 
   // Send the Address of the indexed register
-  BSP_SPI1_WriteRead(ReadAddr);
-
-  GPIO_InitTypeDef GPIO_InitStruct;
-  uint8_t tmp;
-
-/*
-    GPIO_InitStruct.Pin = GPIO_PIN_7;
-    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-    GPIO_InitStruct.Pull = GPIO_PULLDOWN;
-    GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
-    GPIO_InitStruct.Alternate = 0;
-    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-*/
+  HAL_SPI_Transmit(&hspi1, &ReadAddr, 1, SpiTimeout);
 
   // Receive the data that will be read from the device (MSB First)
-  while(NumByteToRead > 0x00)
-  {
-    // Send dummy byte (0x00) to generate the SPI clock to GYRO (Slave device)
+  __HAL_SPI_1LINE_RX(&hspi1);
+  HAL_SPI_Receive(&hspi1, pBuffer, NumByteToRead, SpiTimeout);
 
-    tmp = BSP_SPI1_WriteRead(LSM303C_DUMMY_BYTE);
-    *pBuffer = tmp;
-    NumByteToRead--;
-    pBuffer++;
-  }
-/*
-    GPIO_InitStruct.Pin = GPIO_PIN_7;
-    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
-    GPIO_InitStruct.Alternate = GPIO_AF5_SPI1;
-    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-*/
   // Set chip select High at the end of the transmission
   BSP_MAG_CS_HIGH();
+
+  hspi1.Init.Direction = SPI_DIRECTION_2LINES;
+  HAL_SPI_Init(&hspi1);
 }
