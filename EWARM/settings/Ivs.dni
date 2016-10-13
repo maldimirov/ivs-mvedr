@@ -9,7 +9,7 @@ TriggerName=main
 LimitSize=0
 ByteLimit=50
 [DebugChecksum]
-Checksum=-761295217
+Checksum=708461432
 [Exceptions]
 StopOnUncaught=_ 0
 StopOnThrow=_ 0
@@ -107,7 +107,7 @@ Exclusions=
 [Disassemble mode]
 mode=0
 [Breakpoints2]
-Bp0=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\Drivers\BSP\lsm303c.c}.66.6" 0 0 1 "" 0 "" 0
+Bp0=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\main.c}.164.5" 0 0 1 "" 0 "" 0
 Count=1
 [Aliases]
 A0=_ "D:\Projects\ARM\IvsV2\Ivs v1_1n\Middlewares\Third_Party\FreeRTOS\Source\tasks.c" "C:\Work\Personal\Vanio\heero\fw\Ivs v1_1n\Middlewares\Third_Party\FreeRTOS\Source\tasks.c"
