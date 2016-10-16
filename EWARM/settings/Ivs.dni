@@ -89,6 +89,11 @@ Fmt0=int16_t[3]	4	0
 [watch_formats]
 Fmt0={W}0:data	5	0
 Fmt1={W}0:tmp	4	0
+[Disassemble mode]
+mode=0
+[Breakpoints2]
+Bp0=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\main.c}.164.5" 0 0 1 "" 0 "" 0
+Count=1
 [Log file]
 LoggingEnabled=_ 0
 LogFile=_ ""
@@ -96,6 +101,11 @@ Category=_ 0
 [TermIOLog]
 LoggingEnabled=_ 0
 LogFile=_ ""
+[Aliases]
+A0=_ "D:\Projects\ARM\IvsV2\Ivs v1_1n\Middlewares\Third_Party\FreeRTOS\Source\tasks.c" "C:\Work\Personal\Vanio\heero\fw\Ivs v1_1n\Middlewares\Third_Party\FreeRTOS\Source\tasks.c"
+A1=_ "D:\Projects\ARM\IvsV2\Ivs v1_1n\main.c" "C:\Work\Personal\Vanio\heero\fw\Ivs v1_1n\main.c"
+Count=2
+SuppressDialog=1
 [CallStackLog]
 Enabled=0
 [DriverProfiling]
@@ -104,13 +114,3 @@ Mode=0
 Graph=0
 Symbiont=0
 Exclusions=
-[Disassemble mode]
-mode=0
-[Breakpoints2]
-Bp0=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\main.c}.164.5" 0 0 1 "" 0 "" 0
-Count=1
-[Aliases]
-A0=_ "D:\Projects\ARM\IvsV2\Ivs v1_1n\Middlewares\Third_Party\FreeRTOS\Source\tasks.c" "C:\Work\Personal\Vanio\heero\fw\Ivs v1_1n\Middlewares\Third_Party\FreeRTOS\Source\tasks.c"
-A1=_ "D:\Projects\ARM\IvsV2\Ivs v1_1n\main.c" "C:\Work\Personal\Vanio\heero\fw\Ivs v1_1n\main.c"
-Count=2
-SuppressDialog=1
