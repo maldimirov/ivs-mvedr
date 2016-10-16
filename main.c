@@ -49,7 +49,7 @@ void InertialSampleTask()
     LSM303C_Handler();
     ms.AccX = Acc[0]; ms.AccY = Acc[1]; ms.AccZ = Acc[2];
     ms.AngX = AngRate[0]; ms.AngY = AngRate[1]; ms.AngZ = AngRate[2];
-    ms.MagX = Mag[0]; ms.MagY = Mag[1]; ms.MagZ = Mag[2];
+    ms.MagX = MagInt[0]; ms.MagY = MagInt[1]; ms.MagZ = MagInt[2];
     MyTick = 1;
 }
 

@@ -19,9 +19,8 @@ uint8_t LSM303C_Configure(void)
   uint8_t retVal = MAG_ERROR;
 
   LSM303C_InitTypedef LSM303C_InitStruct;
-  LSM303C_FilterConfigTypedef LSM303C_FilterStruct;
 
-  if(LSM303C_ReadID() == I_AM_LSM303C) {
+  if(LSM303C_ReadID() == I_AM_LSM303C_M) {
     // Configure Mems LSM303C
     LSM303C_InitStruct.PowerMode = LSM303C_M_LOW_POWER_DISABLE;
     LSM303C_InitStruct.TempMode = LSM303C_M_TEMP_DISABLE;
@@ -40,6 +39,11 @@ uint8_t LSM303C_Configure(void)
   }
 
   return retVal;
+}
+
+void LSM303C_Init(LSM303C_InitTypedef *LSM303C_InitStruct)
+{
+  //TODO
 }
 
 void LSM303C_ReadXYZMag()

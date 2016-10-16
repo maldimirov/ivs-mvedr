@@ -162,7 +162,7 @@ typedef struct {
   uint8_t BlockDataUpdate;      // Block data update
   uint8_t Endianness;           // Endian data selection
   uint8_t FullScale;            // Full scale selection
-} LIS3DH_InitTypedef;
+} LSM303C_InitTypedef;
 
 extern LSM303C_StatusTypedef MagStatus;
 extern int32_t MagInt[3];
@@ -174,5 +174,6 @@ void LSM303C_Read(uint8_t* pBuffer, uint8_t ReadAddr, uint16_t NumByteToRead);
 uint8_t LSM303C_GetDataStatus(void);
 void LSM303C_ReadXYZMag(void);
 uint8_t LSM303C_Configure(void);
+void LSM303C_Init(LSM303C_InitTypedef *LSM303C_InitStruct);
 
 #endif
