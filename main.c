@@ -43,11 +43,13 @@ void dputc(char ch)
 
 void InertialSampleTask()
 {
-    if ((GyroStatus != GYRO_OK) || (AccStatus != ACC_OK)) return;
+    if ((GyroStatus != GYRO_OK) || (AccStatus != ACC_OK)|| (MagStatus != MAG_OK)) return;
     L3GD20_Handler();
     LIS3DH_Handler();
+    LSM303C_Handler();
     ms.AccX = Acc[0]; ms.AccY = Acc[1]; ms.AccZ = Acc[2];
     ms.AngX = AngRate[0]; ms.AngY = AngRate[1]; ms.AngZ = AngRate[2];
+    ms.MagX = Mag[0]; ms.MagY = Mag[1]; ms.MagZ = Mag[2];
     MyTick = 1;
 }
 
@@ -161,18 +163,21 @@ static void MainThread(void const *argument)
     AccStatus = (LIS3DH_StatusTypedef)LIS3DH_Configure();
     GyroStatus = (L3GD20_StatusTypedef)L3GD20_Configure();
     MagStatus = (LSM303C_StatusTypedef)LSM303C_Configure();
-    if ((GyroStatus == GYRO_OK) && (AccStatus == ACC_OK)) AccStat = 1;
+    if ((GyroStatus == GYRO_OK) && (AccStatus == ACC_OK) && MagStatus == MAG_OK) AccStat = 1;
     GSM_Init();
     USB_Handler();
 
     //HAL_Delay(log_timeout);
 
     tp.AccX = 0;
-    tp.AngX = 0;
     tp.AccY = 0;
-    tp.AngY = 0;
     tp.AccZ = 0;
+    tp.AngX = 0;
+    tp.AngY = 0;
     tp.AngZ = 0;
+    tp.MagX = 0;
+    tp.MagY = 0;
+    tp.MagZ = 0;
     dsec = 0;
 
         // Open INS log file
@@ -197,7 +202,7 @@ static void MainThread(void const *argument)
         USB_Handler();
     }
 
-        nmea[0] = '\0';
+    nmea[0] = '\0';
     HAL_TIM_Base_Start_IT(&t1);
 
     while (1)
@@ -212,11 +217,14 @@ static void MainThread(void const *argument)
                 {
                     f_write(&accfile, &tp, sizeof(mot), &bw);
                     tp.AccX = 0;
-                    tp.AngX = 0;
                     tp.AccY = 0;
-                    tp.AngY = 0;
                     tp.AccZ = 0;
+                    tp.AngX = 0;
+                    tp.AngY = 0;
                     tp.AngZ = 0;
+                    tp.MagX = 0;
+                    tp.MagY = 0;
+                    tp.MagZ = 0;
                 }
                 f_write(&accfile, &ms, sizeof(mot), &bw);
             }
