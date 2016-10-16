@@ -27,6 +27,9 @@ typedef struct _mot_ {
   int32_t AngX;
   int32_t AngY;
   int32_t AngZ;
+  int32_t MagX;
+  int32_t MagY;
+  int32_t MagZ;
 } mot;
 
 #define INERTIAL_SAMPLE_TIME_MS 10
