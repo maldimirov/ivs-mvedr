@@ -2,3 +2,5 @@ EWARM/debug
 EWARM/release
 *.bak
 EWARM/Ivs.dep
+EWARM/settings/Ivs.wsdt
+EWARM/EW9756.tmp
