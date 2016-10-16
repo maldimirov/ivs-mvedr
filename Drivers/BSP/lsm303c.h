@@ -73,14 +73,96 @@
 #define I_AM_LSM303C_A                  ((uint8_t)0x41)
 #define I_AM_LSM303C_M                  ((uint8_t)0x3D)
 
-// @brief Big/little endian data selection
-#define LSM303C_BLE_LSB                ((uint8_t)0x00)   // Little endian: data LSB @ lower address
-#define LSM303C_BLE_MSB                ((uint8_t)0x02)   // Big endian: data MSB @ lower address
+//////////////////////////////////
+// CTRL_REG1_M register values map
+//////////////////////////////////
+// Temperature sensor mode
+#define LSM303C_M_TEMP_DISABLE                    0x00;   //Disable temp sensor
+#define LSM303C_M_TEMP_ENABLE                     0x80;   //Enable temp sensor
+
+// X and Y axes operative mode selection
+#define LSM303C_M_XY_LOW_POWER            0x00;   //Low power mode
+#define LSM303C_M_XY_MEDIUM_PERF          0x20;   //Medium-performance mode
+#define LSM303C_M_XY_High_PERF            0x40;   //High-performance mode
+#define LSM303C_M_XY_ULTRAHIGH_PERF       0x60;   //Ultra-high performance mode
+
+// ODR Selection
+#define LSM303C_M_ODR_0_625_HZ            0x00;   //ODR 0.625 Hz
+#define LSM303C_M_ODR_1_25_HZ             0x04;   //ODR 1.25  Hz
+#define LSM303C_M_ODR_2_5_HZ              0x08;   //ODR 2.5   Hz
+#define LSM303C_M_ODR_5_HZ                0x0C;   //ODR 5  Hz
+#define LSM303C_M_ODR_10_HZ               0x10;   //ODR 10 Hz
+#define LSM303C_M_ODR_20_HZ               0x14;   //ODR 20 Hz
+#define LSM303C_M_ODR_40_HZ               0x18;   //ODR 40 Hz
+#define LSM303C_M_ODR_80_HZ               0x1C;   //ODR 80 Hz
+
+//////////////////////////////////
+// CTRL_REG2_M register values map
+//////////////////////////////////
+// Full scale configuration
+#define LSM303C_M_FULL_SCALE              0xC0;   //Full Scale +-16 Gauss
+
+//////////////////////////////////
+// CTRL_REG3_M register values map
+//////////////////////////////////
+// I2C mode
+#define LSM303C_M_I2C_ENABLE              0x00; //Enable communication over I2C
+#define LSM303C_M_I2C_DISABLE             0x80; //Disable communication over I2C
+
+// System power mode
+#define LSM303C_M_LOW_POWER_ENABLE        0x20; //Enable low power mode  => ODR = 0.625Hz
+#define LSM303C_M_LOW_POWER_DISABLE       0x00; //Disable low power mode => ODR = ODR Selection
+
+// Serial Interface Mode
+#define LSM303C_M_SPI_WRITE_ONLY          0x00; //SPI only Write operations enabled
+#define LSM303C_M_SPI_READ_WRITE          0x04; //SPI Read and Write operations enabled
+
+// System operating mode selection
+#define LSM303C_M_SOM_CONT_CONV               0x00; //Continuous Conversion Mode
+#define LSM303C_M_SOM_SINGLE_CONV             0x01; //Single-conversion mode => measurement is made only when asked for
+#define LSM303C_M_SOM_POWER_DOWN1             0x02; //Power Down Mode
+#define LSM303C_M_SOM_POWER_DOWN2             0x03; //Power Down Mode
+
+//////////////////////////////////
+// CTRL_REG4_M register values map
+//////////////////////////////////
+// Z-axis operative mode
+#define LSM303C_M_Z_LOW_POWER             0x00; //Low power mode
+#define LSM303C_M_Z_MEDIUM_PERF           0x04; //Medium-performance mode
+#define LSM303C_M_Z_HIGH_PERF             0x08; //High-performance mode
+#define LSM303C_M_Z_ULTRAHIGH_PERF        0x0C; //Ultra-high performance mode
+
+// Endianness selection
+#define LSM303C_M_BLE_LSB                 0x00; //data LSb at lower address
+#define LSM303C_M_BLE_MSB                 0x02; //data MSb at lower address
+
+//////////////////////////////////
+// CTRL_REG5_M register values map
+//////////////////////////////////
+// Block data update for magnetic data
+#define LSM303C_M_BDU_CONTINUOUS          0x00; //Continuous update
+#define LSM303C_M_BDU_SINGLE              0x40; //Output registers not updated until MSB and LSB have been read
+
 
 typedef enum {
   MAG_OK = 0,
   MAG_ERROR,
 } LSM303C_StatusTypedef;
+
+// LSM303C MAG struct
+typedef struct {
+  uint8_t PowerMode;            // Low power enable/disable
+  uint8_t TempMode;           // Temperature sensor enable/disable
+  uint8_t XYOperativeMode;      // Operative mode for X and Y axes
+  uint8_t ZOperativeMode;       // Operative mode for Z axis
+  uint8_t OutputDataRate;       // Output data rate
+  uint8_t InterfaceModeI2C;     // Enable/disable I2C interface
+  uint8_t InterfaceModeSPI;     // Select SPI interface mode (Write only / Read & Write)
+  uint8_t SystemOperatingMode;  // System operating mode selection
+  uint8_t BlockDataUpdate;      // Block data update
+  uint8_t Endianness;           // Endian data selection
+  uint8_t FullScale;            // Full scale selection
+} LIS3DH_InitTypedef;
 
 extern LSM303C_StatusTypedef MagStatus;
 extern int32_t MagInt[3];

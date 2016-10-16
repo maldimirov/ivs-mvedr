@@ -13,32 +13,38 @@ void LSM303C_Handler(void)
   }
 }
 
-
-void LSM303C_ReadXYZMag(void)
+uint8_t LSM303C_Configure(void)
 {
-  uint8_t tmpbuffer[6] = {0};
-  int16_t RawData[3] = {0};
-  uint8_t tmpreg = 0;
-  int i =0;
+  //Configure only the Magnetometer
+  uint8_t retVal = MAG_ERROR;
 
-  LSM303C_Read(&tmpreg, LSM303C_CTRL_REG4_M, 1);
+  LSM303C_InitTypedef LSM303C_InitStruct;
+  LSM303C_FilterConfigTypedef LSM303C_FilterStruct;
 
-  LSM303C_Read(tmpbuffer, LSM303C_OUT_X_L_M, 6);
+  if(LSM303C_ReadID() == I_AM_LSM303C) {
+    // Configure Mems LSM303C
+    LSM303C_InitStruct.PowerMode = LSM303C_M_LOW_POWER_DISABLE;
+    LSM303C_InitStruct.TempMode = LSM303C_M_TEMP_DISABLE;
+    LSM303C_InitStruct.XYOperativeMode = LSM303C_M_XY_ULTRAHIGH_PERF;
+    LSM303C_InitStruct.ZOperativeMode = LSM303C_M_Z_ULTRAHIGH_PERF;
+    LSM303C_InitStruct.OutputDataRate = LSM303C_M_ODR_80_HZ;
+    LSM303C_InitStruct.InterfaceModeI2C = LSM303C_M_I2C_DISABLE;
+    LSM303C_InitStruct.InterfaceModeSPI = LSM303C_M_SPI_READ_WRITE;
+    LSM303C_InitStruct.SystemOperatingMode = LSM303C_M_SOM_CONT_CONV;
+    LSM303C_InitStruct.BlockDataUpdate = LSM303C_M_BDU_CONTINUOUS;
+    LSM303C_InitStruct.Endianness = LSM303C_M_BLE_LSB;
+    LSM303C_InitStruct.FullScale = LSM303C_M_FULL_SCALE;
+    LSM303C_Init(&LSM303C_InitStruct);
 
-  // check in the control register 4 the data alignment (Big Endian or Little Endian)
-  if(!(tmpreg & LSM303C_BLE_MSB)) {
-    for(i = 0; i < 3; i++)
-    {
-      RawData[i]=(int16_t)(((uint16_t)tmpbuffer[2*i+1] << 8) + tmpbuffer[2*i]);
-    }
-  } else {
-    for(i = 0; i < 3; i++)
-    {
-      RawData[i]=(int16_t)(((uint16_t)tmpbuffer[2*i] << 8) + tmpbuffer[2*i+1]);
-    }
+    retVal = MAG_OK;
   }
 
-  for (i = 0; i < 3; i++) MagInt[i] = RawData[i];
+  return retVal;
+}
+
+void LSM303C_ReadXYZMag()
+{
+
 }
 
 
@@ -52,7 +58,7 @@ uint8_t LSM303C_GetDataStatus(void)
   return tmpreg;
 }
 
-uint8_t LSM303C_Configure(void)
+uint8_t LSM303C_Configure_old(void)
 {
   uint8_t retVal = MAG_ERROR;
   uint8_t reg;
@@ -110,6 +116,7 @@ void LSM303C_Write(uint8_t* pBuffer, uint8_t WriteAddr, uint16_t NumByteToWrite)
     WriteAddr |= (uint8_t)LSM303C_MULTIPLEBYTE_CMD;
   }
 
+  //Set the uC in 1 line half duplex SPI mode
   hspi1.Init.Direction = SPI_DIRECTION_1LINE;
   HAL_SPI_Init(&hspi1);
 
@@ -126,6 +133,7 @@ void LSM303C_Write(uint8_t* pBuffer, uint8_t WriteAddr, uint16_t NumByteToWrite)
   // Set chip select High at the end of the transmission
   BSP_MAG_CS_HIGH();
 
+  //Reset the uC in 2 line SPI mode
   hspi1.Init.Direction = SPI_DIRECTION_2LINES;
   HAL_SPI_Init(&hspi1);
 }
@@ -138,6 +146,7 @@ void LSM303C_Read(uint8_t* pBuffer, uint8_t ReadAddr, uint16_t NumByteToRead)
     ReadAddr |= (uint8_t)LSM303C_READWRITE_CMD;
   }
 
+  //Set the uC in 1 line half duplex SPI mode
   hspi1.Init.Direction = SPI_DIRECTION_1LINE;
   HAL_SPI_Init(&hspi1);
 
@@ -155,6 +164,7 @@ void LSM303C_Read(uint8_t* pBuffer, uint8_t ReadAddr, uint16_t NumByteToRead)
   // Set chip select High at the end of the transmission
   BSP_MAG_CS_HIGH();
 
+  //Reset the uC in 2 line SPI mode
   hspi1.Init.Direction = SPI_DIRECTION_2LINES;
   HAL_SPI_Init(&hspi1);
 }
