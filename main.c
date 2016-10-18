@@ -21,7 +21,7 @@ char txline[LINE_BUFFER_SIZE];
 char rxline[LINE_BUFFER_SIZE];
 
 volatile char AccStat;
-volatile char MyTick;
+volatile char InsTick;
 volatile char Tunnel;
 volatile char UsbStat;
 
@@ -30,9 +30,9 @@ extern FATFS SDFatFs;      // File system object for SD card logical drive
 extern TIM_HandleTypeDef t1;
 
 //static uint32_t mq_in;
-static mot mq[IQ_LEN];
+static InsSample mq[IQ_LEN];
 //static osTimerId        InertialTimerId;
-static mot ms, tp;
+static InsSample currentSample, flagSample;
 
 void dputc(char ch)
 {
@@ -47,10 +47,10 @@ void InertialSampleTask()
     L3GD20_Handler();
     LIS3DH_Handler();
     LSM303C_Handler();
-    ms.AccX = Acc[0]; ms.AccY = Acc[1]; ms.AccZ = Acc[2];
-    ms.AngX = AngRate[0]; ms.AngY = AngRate[1]; ms.AngZ = AngRate[2];
-    ms.MagX = MagInt[0]; ms.MagY = MagInt[1]; ms.MagZ = MagInt[2];
-    MyTick = 1;
+    currentSample.AccX = Acc[0]; currentSample.AccY = Acc[1]; currentSample.AccZ = Acc[2];
+    currentSample.AngX = AngRate[0]; currentSample.AngY = AngRate[1]; currentSample.AngZ = AngRate[2];
+    currentSample.MagX = MagInt[0]; currentSample.MagY = MagInt[1]; currentSample.MagZ = MagInt[2];
+    InsTick = 1;
 }
 
 //void AccLog()
@@ -126,7 +126,7 @@ int main()
 #define ONE_SECOND_US    1000000
 static void MainThread(void const *argument)
 {
-    uint32_t bw, dsec = 0, log_speed_file = 0;
+    uint32_t bw, recordingTime = 0, log_speed_file = 0;
     char LogFilePath[16], NmeaFilePath[16];
     FIL accfile, nmeafile;
 
@@ -139,12 +139,12 @@ static void MainThread(void const *argument)
     f_open(&accfile, LogFilePath, FA_CREATE_NEW | FA_WRITE);
     f_close(&accfile);
 
-        // Init GPS log file
+    // Init GPS log file
     if (FR_OK != f_open(&nmeafile, NmeaFilePath, FA_WRITE))
     f_open(&nmeafile, NmeaFilePath, FA_CREATE_NEW | FA_WRITE);
     f_close(&nmeafile);
 
-        // Load configuration from SD card
+    // Load configuration from SD card
     CFG_LoadConfigFile();
     log_repeat = atoi(CFG_GlobVarsStruct.logRepeat);
     log_period = atoi(CFG_GlobVarsStruct.logPeriod);
@@ -167,30 +167,30 @@ static void MainThread(void const *argument)
     GSM_Init();
     USB_Handler();
 
-    //HAL_Delay(log_timeout);
+    HAL_Delay(log_timeout);
 
-    tp.AccX = 0;
-    tp.AccY = 0;
-    tp.AccZ = 0;
-    tp.AngX = 0;
-    tp.AngY = 0;
-    tp.AngZ = 0;
-    tp.MagX = 0;
-    tp.MagY = 0;
-    tp.MagZ = 0;
-    dsec = 0;
+    flagSample.AccX = 0;
+    flagSample.AccY = 0;
+    flagSample.AccZ = 0;
+    flagSample.AngX = 0;
+    flagSample.AngY = 0;
+    flagSample.AngZ = 0;
+    flagSample.MagX = 0;
+    flagSample.MagY = 0;
+    flagSample.MagZ = 0;
+    recordingTime = 0;
 
-        // Open INS log file
+    // Create INS log file
     f_open(&accfile, LogFilePath, FA_WRITE);
     f_lseek(&accfile, f_size(&accfile));
     log_speed_file = log_speed / 1000;
     f_write(&accfile, &log_speed_file, sizeof(uint32_t), &bw);
 
-        // Open GPS log file
+    // Create GPS log file
     f_open(&nmeafile, NmeaFilePath, FA_WRITE);
     f_lseek(&nmeafile, f_size(&nmeafile));
 
-        // Wait for GPS to get fix
+    // Wait for GPS to get fix
     while(!GpsStat.Fix)
     {
         if (DetectPPS())
@@ -207,56 +207,73 @@ static void MainThread(void const *argument)
 
     while (1)
     {
-        if (MyTick)
-        {
-            MyTick = 0;
-            if ((UsbStat == 0) && (log_period*(ONE_SECOND_US / log_speed) > dsec))
-            {
-                dsec++;
-                if (tp.AccX == 0x3FFFFFFF)
-                {
-                    f_write(&accfile, &tp, sizeof(mot), &bw);
-                    tp.AccX = 0;
-                    tp.AccY = 0;
-                    tp.AccZ = 0;
-                    tp.AngX = 0;
-                    tp.AngY = 0;
-                    tp.AngZ = 0;
-                    tp.MagX = 0;
-                    tp.MagY = 0;
-                    tp.MagZ = 0;
-                }
-                f_write(&accfile, &ms, sizeof(mot), &bw);
-            }
-            else
-            {
-                f_close(&accfile);
-                f_close(&nmeafile);
-                HAL_TIM_Base_Stop(&t1);
-            }
-            USB_Handler();
-        }
+      //If the usb is unplugged process GPS and INS data
+      if(UsbStat == 0)
+      {
+          //If INS data is available write it to the file
+          if (InsTick)
+          {
+              InsTick = 0;
+              if (recordingTime < log_period * (ONE_SECOND_US / log_speed))
+              {
+                  recordingTime++;
+                  if (flagSample.AccX == 0x3FFFFFFF)
+                  {
+                      f_write(&accfile, &flagSample, sizeof(InsSample), &bw);
+                      flagSample.AccX = 0;
+                      flagSample.AccY = 0;
+                      flagSample.AccZ = 0;
+                      flagSample.AngX = 0;
+                      flagSample.AngY = 0;
+                      flagSample.AngZ = 0;
+                      flagSample.MagX = 0;
+                      flagSample.MagY = 0;
+                      flagSample.MagZ = 0;
+                  }
+                  f_write(&accfile, &currentSample, sizeof(InsSample), &bw);
+              }
+              else
+              {
+                  f_close(&accfile);
+                  f_close(&nmeafile);
+                  HAL_TIM_Base_Stop(&t1);
+                  break;
+              }
+          }
 
-        if (DetectPPS())
-        {
-            GpsStat.Req = true;
-            GpsStat.Rdy = false;
-            tp.AccX = GPS_FLAG;
-            tp.AngX = GPS_FLAG;
-            tp.AccY = GPS_FLAG;
-            tp.AngY = GPS_FLAG;
-            tp.AccZ = GPS_FLAG;
-            tp.AngZ = GPS_FLAG;
-        }
+          //If INS data is available write it to the file
+          if (DetectPPS())
+          {
+              GpsStat.Req = true;
+              GpsStat.Rdy = false;
+              flagSample.AccX = GPS_FLAG;
+              flagSample.AccY = GPS_FLAG;
+              flagSample.AccZ = GPS_FLAG;
+              flagSample.AngX = GPS_FLAG;
+              flagSample.AngY = GPS_FLAG;
+              flagSample.AngZ = GPS_FLAG;
+              flagSample.MagX = GPS_FLAG;
+              flagSample.MagY = GPS_FLAG;
+              flagSample.MagZ = GPS_FLAG;
+          }
 
-        GPS_Handler();
-        GSM_Handler();
+          GPS_Handler();
+          GSM_Handler();
 
-        if (GpsStat.Rdy == true)
-        {
-            f_write(&nmeafile, &nmea, strlen(nmea), &bw);
-            GpsStat.Rdy = false;
-        }
+          if (GpsStat.Rdy == true)
+          {
+              f_write(&nmeafile, &nmea, strlen(nmea), &bw);
+              GpsStat.Rdy = false;
+          }
+      }
+
+      //Check USB status
+      USB_Handler();
+    }
+
+    //Finish with a USB connection
+    while (1) {
+      USB_Handler();
     }
 }
 

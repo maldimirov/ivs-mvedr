@@ -30,7 +30,7 @@ typedef struct _mot_ {
   int32_t MagX;
   int32_t MagY;
   int32_t MagZ;
-} mot;
+} InsSample;
 
 #define INERTIAL_SAMPLE_TIME_MS 10
 #define IQ_LEN 1300
