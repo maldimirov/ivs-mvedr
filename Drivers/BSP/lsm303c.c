@@ -8,7 +8,9 @@ int32_t MagInt[3] = {0, 0, 0};
 
 void LSM303C_Handler(void)
 {
-  if (LSM303C_GetDataStatus() & 0x08) {
+  uint8_t dataStatus = LSM303C_GetDataStatus();
+
+  if (dataStatus & 0x08) {
       LSM303C_ReadXYZMag();
   }
 }
@@ -94,9 +96,18 @@ void LSM303C_Init(LSM303C_InitTypedef *LSM303C_InitStruct)
 
 void LSM303C_ReadXYZMag()
 {
-    MagInt[0] += 1;
-    MagInt[1] += 1;
-    MagInt[2] += 1;
+  int16_t RawData[3] = {0};
+  int32_t sensitivity = 580;
+  int i = 0;
+
+  RawData[0] =  5800;
+  RawData[1] = 11600;
+  RawData[2] = 17400;
+
+  for(i = 0; i < 3; i++)
+  {
+    MagInt[i] = (uint32_t)RawData[i] * sensitivity;
+  }
 }
 
 uint8_t LSM303C_GetDataStatus(void)
@@ -172,7 +183,7 @@ void LSM303C_Write(uint8_t* pBuffer, uint8_t WriteAddr, uint16_t NumByteToWrite)
   HAL_SPI_Init(&hspi1);
 
   // Set chip select Low at the start of the transmission
-  __HAL_SPI_1LINE_TX(&hspi1);
+  //__HAL_SPI_1LINE_TX(&hspi1);
   BSP_MAG_CS_LOW();
 
   // Send the Address of the indexed register
@@ -202,15 +213,16 @@ void LSM303C_Read(uint8_t* pBuffer, uint8_t ReadAddr, uint16_t NumByteToRead)
   HAL_SPI_Init(&hspi1);
 
   // Set chip select Low at the start of the transmission
-  __HAL_SPI_1LINE_TX(&hspi1);
+  //__HAL_SPI_1LINE_TX(&hspi1);
   BSP_MAG_CS_LOW();
 
   // Send the Address of the indexed register
   HAL_SPI_Transmit(&hspi1, &ReadAddr, 1, SpiTimeout);
 
   // Receive the data that will be read from the device (MSB First)
-  __HAL_SPI_1LINE_RX(&hspi1);
+  //__HAL_SPI_1LINE_RX(&hspi1);
   HAL_SPI_Receive(&hspi1, pBuffer, NumByteToRead, SpiTimeout);
+  //__HAL_SPI_1LINE_TX(&hspi1);
 
   // Set chip select High at the end of the transmission
   BSP_MAG_CS_HIGH();

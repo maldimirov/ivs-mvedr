@@ -55,7 +55,7 @@
 #define LSM303C_CTRL_REG3_M             0x22  // MAG Control register 3
 #define LSM303C_CTRL_REG4_M             0x23  // MAG Control register 4
 #define LSM303C_CTRL_REG5_M             0x24  // MAG Control register 5
-#define LSM303C_STATUS_REG_M            0x27  // MAG Accelerometer status data register
+#define LSM303C_STATUS_REG_M            0x27  // MAG status data register
 #define LSM303C_OUT_X_L_M               0x28  // MAG output X axis low byte
 #define LSM303C_OUT_X_H_M               0x29  // MAG output X axis high byte
 #define LSM303C_OUT_Y_L_M               0x2A  // MAG output Y axis low byte

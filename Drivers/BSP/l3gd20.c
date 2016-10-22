@@ -8,7 +8,9 @@ int32_t AngRate[3] = {0, 0, 0};
 
 void L3GD20_Handler(void)
 {
-  if (L3GD20_GetDataStatus() & 0x08) {
+  uint8_t dataStatus = L3GD20_GetDataStatus();
+
+  if (dataStatus & 0x08) {
     L3GD20_ReadXYZAngRate();
   }
 }

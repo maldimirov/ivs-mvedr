@@ -11,7 +11,9 @@ char adata[80];
 void LIS3DH_Handler(void)
 {
   int32_t AccLevel;
-  if (LIS3DH_GetDataStatus() & 0x08) {
+  uint8_t dataStatus = LIS3DH_GetDataStatus();
+
+  if (dataStatus & 0x08) {
     LIS3DH_ReadXYZAcc(Acc);
 
     //Check if trigger level was reached and do something
