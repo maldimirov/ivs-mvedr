@@ -221,7 +221,7 @@ void LSM303C_Read(uint8_t* pBuffer, uint8_t ReadAddr, uint16_t NumByteToRead)
 
   // Receive the data that will be read from the device (MSB First)
   //__HAL_SPI_1LINE_RX(&hspi1);
-  HAL_SPI_Receive(&hspi1, pBuffer, NumByteToRead, SpiTimeout);
+  //HAL_SPI_Receive(&hspi1, pBuffer, NumByteToRead, SpiTimeout);
   //__HAL_SPI_1LINE_TX(&hspi1);
 
   // Set chip select High at the end of the transmission

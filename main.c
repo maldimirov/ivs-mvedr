@@ -163,7 +163,7 @@ static void MainThread(void const *argument)
     MagStatus = (LSM303C_StatusTypedef)LSM303C_Configure();
     AccStatus = (LIS3DH_StatusTypedef)LIS3DH_Configure();
     GyroStatus = (L3GD20_StatusTypedef)L3GD20_Configure();
-    //MagStatus = MAG_OK;
+    MagStatus = MAG_OK;
     if ((GyroStatus == GYRO_OK) && (AccStatus == ACC_OK) && MagStatus == MAG_OK) AccStat = 1;
     GSM_Init();
     USB_Handler();
@@ -235,14 +235,11 @@ static void MainThread(void const *argument)
               }
               else
               {
-                  f_close(&accfile);
-                  f_close(&nmeafile);
-                  HAL_TIM_Base_Stop(&t1);
                   break;
               }
           }
 
-          //If INS data is available write it to the file
+          //If GPS data is available write it to the file
           if (DetectPPS())
           {
               GpsStat.Req = true;
@@ -271,6 +268,10 @@ static void MainThread(void const *argument)
       //Check USB status
       USB_Handler();
     }
+
+    f_close(&accfile);
+    f_close(&nmeafile);
+    HAL_TIM_Base_Stop(&t1);
 
     //Finish with a USB connection
     while (1) {
