@@ -46,7 +46,7 @@ void InertialSampleTask()
     if ((GyroStatus != GYRO_OK) || (AccStatus != ACC_OK)|| (MagStatus != MAG_OK)) return;
     L3GD20_Handler();
     LIS3DH_Handler();
-    LSM303C_Handler();
+    //LSM303C_Handler();
     currentSample.AccX = Acc[0]; currentSample.AccY = Acc[1]; currentSample.AccZ = Acc[2];
     currentSample.AngX = AngRate[0]; currentSample.AngY = AngRate[1]; currentSample.AngZ = AngRate[2];
     currentSample.MagX = MagInt[0]; currentSample.MagY = MagInt[1]; currentSample.MagZ = MagInt[2];
@@ -160,7 +160,7 @@ static void MainThread(void const *argument)
     USBD_Start(&USBD_Device);
 
     memset(mq, 0, sizeof(mq));
-    MagStatus = (LSM303C_StatusTypedef)LSM303C_Configure();
+    //MagStatus = (LSM303C_StatusTypedef)LSM303C_Configure();
     AccStatus = (LIS3DH_StatusTypedef)LIS3DH_Configure();
     GyroStatus = (L3GD20_StatusTypedef)L3GD20_Configure();
     MagStatus = MAG_OK;
