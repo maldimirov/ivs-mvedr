@@ -157,7 +157,8 @@ static void MainThread(void const *argument)
     USBD_MSC_RegisterStorage(&USBD_Device, &USBD_DISK_fops);
     USBD_Start(&USBD_Device);
 
-    memset(mq, 0, sizeof(mq));
+    //memset(mq, 0, sizeof(mq));
+    BSP_SPI1_Init_2_Lines();
     MagStatus = (LSM303C_StatusTypedef)LSM303C_Configure();
     AccStatus = (LIS3DH_StatusTypedef)LIS3DH_Configure();
     GyroStatus = (L3GD20_StatusTypedef)L3GD20_Configure();
@@ -186,9 +187,9 @@ static void MainThread(void const *argument)
     f_lseek(&nmeafile, f_size(&nmeafile));
 
         // Wait for GPS to get fix
-    while(!GpsStat.Fix)
+    //while(!GpsStat.Fix)
     {
-        if (DetectPPS())
+        //if (DetectPPS())
         {
             GpsStat.Req = true;
         }

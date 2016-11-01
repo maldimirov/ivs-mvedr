@@ -19,7 +19,7 @@ uint8_t L3GD20_Configure(void)
 
   L3GD20_InitTypedef L3GD20_InitStructure;
   L3GD20_FilterConfigTypedef L3GD20_FilterStructure;
-
+  
   if(L3GD20_ReadID() == I_AM_L3GD20) {
     // Configure Mems L3GD20
     L3GD20_InitStructure.Power_Mode = L3GD20_MODE_ACTIVE;
@@ -284,15 +284,10 @@ void L3GD20_Write(uint8_t* pBuffer, uint8_t WriteAddr, uint16_t NumByteToWrite)
   BSP_GYRO_CS_LOW();
 
   // Send the Address of the indexed register
-  BSP_SPI1_WriteRead(WriteAddr);
+  HAL_SPI_Transmit(&hspi1, &WriteAddr, 1, SpiTimeout);
 
   // Send the data that will be written into the device (MSB First)
-  while(NumByteToWrite >= 0x01)
-  {
-    BSP_SPI1_WriteRead(*pBuffer);
-    NumByteToWrite--;
-    pBuffer++;
-  }
+  HAL_SPI_Transmit(&hspi1, pBuffer, NumByteToWrite, SpiTimeout);
 
   // Set chip select High at the end of the transmission
   BSP_GYRO_CS_HIGH();
@@ -317,16 +312,10 @@ void L3GD20_Read(uint8_t* pBuffer, uint8_t ReadAddr, uint16_t NumByteToRead)
   BSP_GYRO_CS_LOW();
 
   // Send the Address of the indexed register
-  BSP_SPI1_WriteRead(ReadAddr);
+  HAL_SPI_Transmit(&hspi1, &ReadAddr, 1, SpiTimeout);
 
   // Receive the data that will be read from the device (MSB First)
-  while(NumByteToRead > 0x00)
-  {
-    // Send dummy byte (0x00) to generate the SPI clock to GYRO (Slave device)
-    *pBuffer = BSP_SPI1_WriteRead(L3GD20_DUMMY_BYTE);
-    NumByteToRead--;
-    pBuffer++;
-  }
+  HAL_SPI_Receive(&hspi1, pBuffer, NumByteToRead, SpiTimeout);
 
   // Set chip select High at the end of the transmission
   BSP_GYRO_CS_HIGH();

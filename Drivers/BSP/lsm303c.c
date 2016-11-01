@@ -110,8 +110,7 @@ void LSM303C_Write(uint8_t* pBuffer, uint8_t WriteAddr, uint16_t NumByteToWrite)
     WriteAddr |= (uint8_t)LSM303C_MULTIPLEBYTE_CMD;
   }
 
-  hspi1.Init.Direction = SPI_DIRECTION_1LINE;
-  HAL_SPI_Init(&hspi1);
+  BSP_SPI1_Init_1_Line();
 
   // Set chip select Low at the start of the transmission
   BSP_MAG_CS_LOW();
@@ -125,8 +124,7 @@ void LSM303C_Write(uint8_t* pBuffer, uint8_t WriteAddr, uint16_t NumByteToWrite)
   // Set chip select High at the end of the transmission
   BSP_MAG_CS_HIGH();
 
-  hspi1.Init.Direction = SPI_DIRECTION_2LINES;
-  HAL_SPI_Init(&hspi1);
+  BSP_SPI1_Init_2_Lines();
 }
 
 void LSM303C_Read(uint8_t* pBuffer, uint8_t ReadAddr, uint16_t NumByteToRead)
@@ -137,8 +135,7 @@ void LSM303C_Read(uint8_t* pBuffer, uint8_t ReadAddr, uint16_t NumByteToRead)
     ReadAddr |= (uint8_t)LSM303C_READWRITE_CMD;
   }
 
-  hspi1.Init.Direction = SPI_DIRECTION_1LINE;
-  HAL_SPI_Init(&hspi1);
+  BSP_SPI1_Init_1_Line();
 
   // Set chip select Low at the start of the transmission
   BSP_MAG_CS_LOW();
@@ -152,6 +149,5 @@ void LSM303C_Read(uint8_t* pBuffer, uint8_t ReadAddr, uint16_t NumByteToRead)
   // Set chip select High at the end of the transmission
   BSP_MAG_CS_HIGH();
 
-  hspi1.Init.Direction = SPI_DIRECTION_2LINES;
-  HAL_SPI_Init(&hspi1);
+  BSP_SPI1_Init_2_Lines();
 }
