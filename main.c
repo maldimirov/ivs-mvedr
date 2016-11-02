@@ -159,7 +159,7 @@ static void MainThread(void const *argument)
 
     //memset(mq, 0, sizeof(mq));
     BSP_SPI1_Init_2_Lines();
-    MagStatus = (LSM303C_StatusTypedef)LSM303C_Configure();
+//    MagStatus = (LSM303C_StatusTypedef)LSM303C_Configure();
     AccStatus = (LIS3DH_StatusTypedef)LIS3DH_Configure();
     GyroStatus = (L3GD20_StatusTypedef)L3GD20_Configure();
     if ((GyroStatus == GYRO_OK) && (AccStatus == ACC_OK)) AccStat = 1;
@@ -170,10 +170,13 @@ static void MainThread(void const *argument)
 
     tp.AccX = 0;
     tp.AngX = 0;
+    tp.MagX = 0;
     tp.AccY = 0;
     tp.AngY = 0;
+    tp.MagY = 0;
     tp.AccZ = 0;
     tp.AngZ = 0;
+    tp.MagZ = 0;
     dsec = 0;
 
         // Open INS log file
