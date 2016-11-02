@@ -43,11 +43,13 @@ void dputc(char ch)
 
 void InertialSampleTask()
 {
-    if ((GyroStatus != GYRO_OK) || (AccStatus != ACC_OK)) return;
+    if ((GyroStatus != GYRO_OK) || (AccStatus != ACC_OK)|| (MagStatus != MAG_OK)) return;
     L3GD20_Handler();
     LIS3DH_Handler();
+    //LSM303C_Handler();
     ms.AccX = Acc[0]; ms.AccY = Acc[1]; ms.AccZ = Acc[2];
     ms.AngX = AngRate[0]; ms.AngY = AngRate[1]; ms.AngZ = AngRate[2];
+    ms.MagX = MagInt[0]; ms.MagY = MagInt[1]; ms.MagZ = MagInt[2];
     MyTick = 1;
 }
 
@@ -159,10 +161,10 @@ static void MainThread(void const *argument)
 
     //memset(mq, 0, sizeof(mq));
     BSP_SPI1_Init_2_Lines();
-//    MagStatus = (LSM303C_StatusTypedef)LSM303C_Configure();
+    MagStatus = (LSM303C_StatusTypedef)LSM303C_Configure();
     AccStatus = (LIS3DH_StatusTypedef)LIS3DH_Configure();
     GyroStatus = (L3GD20_StatusTypedef)L3GD20_Configure();
-    if ((GyroStatus == GYRO_OK) && (AccStatus == ACC_OK)) AccStat = 1;
+    if ((GyroStatus == GYRO_OK) && (AccStatus == ACC_OK) && MagStatus == MAG_OK) AccStat = 1;
     GSM_Init();
     USB_Handler();
 
@@ -217,10 +219,13 @@ static void MainThread(void const *argument)
                     f_write(&accfile, &tp, sizeof(mot), &bw);
                     tp.AccX = 0;
                     tp.AngX = 0;
+                    tp.MagX = 0;
                     tp.AccY = 0;
                     tp.AngY = 0;
+                    tp.MagY = 0;
                     tp.AccZ = 0;
                     tp.AngZ = 0;
+                    tp.MagZ = 0;
                 }
                 f_write(&accfile, &ms, sizeof(mot), &bw);
             }
@@ -239,10 +244,13 @@ static void MainThread(void const *argument)
             GpsStat.Rdy = false;
             tp.AccX = GPS_FLAG;
             tp.AngX = GPS_FLAG;
+            tp.MagX = GPS_FLAG;
             tp.AccY = GPS_FLAG;
             tp.AngY = GPS_FLAG;
+            tp.MagY = GPS_FLAG;
             tp.AccZ = GPS_FLAG;
             tp.AngZ = GPS_FLAG;
+            tp.MagZ = GPS_FLAG;
         }
 
         GPS_Handler();
