@@ -46,7 +46,7 @@ void InertialSampleTask()
     if ((GyroStatus != GYRO_OK) || (AccStatus != ACC_OK)|| (MagStatus != MAG_OK)) return;
     L3GD20_Handler();
     LIS3DH_Handler();
-    //LSM303C_Handler();
+    LSM303C_Handler();
     ms.AccX = Acc[0]; ms.AccY = Acc[1]; ms.AccZ = Acc[2];
     ms.AngX = AngRate[0]; ms.AngY = AngRate[1]; ms.AngZ = AngRate[2];
     ms.MagX = MagInt[0]; ms.MagY = MagInt[1]; ms.MagZ = MagInt[2];
@@ -168,8 +168,6 @@ static void MainThread(void const *argument)
     GSM_Init();
     USB_Handler();
 
-    //HAL_Delay(log_timeout);
-
     tp.AccX = 0;
     tp.AngX = 0;
     tp.MagX = 0;
@@ -205,6 +203,8 @@ static void MainThread(void const *argument)
 
         nmea[0] = '\0';
     HAL_TIM_Base_Start_IT(&t1);
+
+    HAL_Delay(log_timeout);
 
     while (1)
     {
