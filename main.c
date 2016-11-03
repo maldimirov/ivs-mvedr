@@ -190,9 +190,9 @@ static void MainThread(void const *argument)
     f_lseek(&nmeafile, f_size(&nmeafile));
 
         // Wait for GPS to get fix
-    //while(!GpsStat.Fix)
+    while(!GpsStat.Fix)
     {
-        //if (DetectPPS())
+        if (DetectPPS())
         {
             GpsStat.Req = true;
         }
@@ -204,7 +204,7 @@ static void MainThread(void const *argument)
         nmea[0] = '\0';
     HAL_TIM_Base_Start_IT(&t1);
 
-    HAL_Delay(log_timeout);
+    //HAL_Delay(log_timeout);
 
     while (1)
     {
