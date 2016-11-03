@@ -8,16 +8,48 @@ int32_t MagInt[3] = {0, 0, 0};
 
 void LSM303C_Handler(void)
 {
+  //Set the SPI in 3 wire mode for the get data communication
+  BSP_SPI1_Init_1_Line();
+
   if (LSM303C_GetDataStatus() & 0x08) {
       LSM303C_ReadXYZMag();
   }
+
+  //Reset the SPI in the default 4 wire mode
+  BSP_SPI1_Init_2_Lines();
 }
 
 void LSM303C_ReadXYZMag()
 {
-  MagInt[0] += 1;
-  MagInt[1] += 1;
-  MagInt[2] += 1;
+  uint8_t tmpbuffer[6] = {0};
+  int16_t RawData[3] = {0};
+  uint8_t tmpreg = 0;
+  int32_t sensitivity = 1;
+  int i =0;
+
+  //L3GD20_Read(&tmpreg, LSM303C_CTRL_REG4_M, 1);
+
+  LSM303C_Read(tmpbuffer, LSM303C_OUT_X_L_M, 6);
+
+  // check in the control register 4 the data alignment (Big Endian or Little Endian)
+  //if(!(tmpreg & LSM303C_M_BLE_MSB)) {
+//  if(false){
+//    for(i = 0; i < 3; i++)
+//    {
+//     RawData[i]=(int16_t)(((uint16_t)tmpbuffer[2*i+1] << 8) + tmpbuffer[2*i]);
+//    }
+//  } else {
+    for(i = 0; i < 3; i++)
+    {
+      RawData[i]=(int16_t)(((uint16_t)tmpbuffer[2*i] << 8) + tmpbuffer[2*i+1]);
+    }
+  //}
+
+  // divide by sensitivity
+  for(i = 0; i < 3; i++)
+  {
+    MagInt[i] = (uint32_t)RawData[i];
+  }
 }
 
 uint8_t LSM303C_GetDataStatus(void)
@@ -59,6 +91,9 @@ uint8_t LSM303C_Configure(void)
   //Confgiure values for LSM303C_CTRL_REG5_M
   LSM303C_InitStruct.BlockDataUpdate = LSM303C_M_BDU_CONTINUOUS; //Reg5
 
+  //Set the SPI in 3 wire mode for the entire init session
+  BSP_SPI1_Init_1_Line();
+
   //Init before readID, beacuse the init operation sets the proper I2C and SPI
   //communication paramters
   LSM303C_Init(&LSM303C_InitStruct);
@@ -66,6 +101,9 @@ uint8_t LSM303C_Configure(void)
   if(LSM303C_ReadID() == I_AM_LSM303C_M) {
     retVal = MAG_OK;
   }
+
+  //Reset the SPI in the default 4 wire mode
+  BSP_SPI1_Init_2_Lines();
 
   return retVal;
 }
@@ -131,8 +169,6 @@ void LSM303C_Write(uint8_t* pBuffer, uint8_t WriteAddr, uint16_t NumByteToWrite)
     WriteAddr |= (uint8_t)LSM303C_MULTIPLEBYTE_CMD;
   }
 
-  BSP_SPI1_Init_1_Line();
-
   // Set chip select Low at the start of the transmission
   BSP_MAG_CS_LOW();
 
@@ -144,8 +180,6 @@ void LSM303C_Write(uint8_t* pBuffer, uint8_t WriteAddr, uint16_t NumByteToWrite)
 
   // Set chip select High at the end of the transmission
   BSP_MAG_CS_HIGH();
-
-  BSP_SPI1_Init_2_Lines();
 }
 
 void LSM303C_Read(uint8_t* pBuffer, uint8_t ReadAddr, uint16_t NumByteToRead)
@@ -155,8 +189,6 @@ void LSM303C_Read(uint8_t* pBuffer, uint8_t ReadAddr, uint16_t NumByteToRead)
   } else {
     ReadAddr |= (uint8_t)LSM303C_READWRITE_CMD;
   }
-
-  BSP_SPI1_Init_1_Line();
 
   // Set chip select Low at the start of the transmission
   BSP_MAG_CS_LOW();
@@ -169,6 +201,4 @@ void LSM303C_Read(uint8_t* pBuffer, uint8_t ReadAddr, uint16_t NumByteToRead)
 
   // Set chip select High at the end of the transmission
   BSP_MAG_CS_HIGH();
-
-  BSP_SPI1_Init_2_Lines();
 }
