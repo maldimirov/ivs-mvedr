@@ -36,27 +36,29 @@ uint8_t LIS3DH_Configure(void)
   LIS3DH_InitTypedef LIS3DH_InitStruct;
   LIS3DH_FilterConfigTypedef LIS3DH_FilterStruct;
 
+
+  // Configure Mems LIS3DH
+  LIS3DH_InitStruct.PowerMode = LIS3DH_MODE_NORMAL;
+  LIS3DH_InitStruct.OutputDataRate = LIS3DH_ODR_1250_HZ;
+  LIS3DH_InitStruct.AxesEnable = LIS3DH_AXES_ENABLE;
+  LIS3DH_InitStruct.HighResolution = LIS3DH_HR_ENABLE;
+  LIS3DH_InitStruct.BlockDataUpdate = LIS3DH_BlockUpdate_Continuous;
+  LIS3DH_InitStruct.Endianness = LIS3DH_BLE_LSB;
+  LIS3DH_InitStruct.FullScale = LIS3DH_FULLSCALE_4G;
+  LIS3DH_InitStruct.SpiWireMode = LIS3DH_SIM_4_WIRE;
+  LIS3DH_Init(&LIS3DH_InitStruct);
+
+  LIS3DH_FilterStruct.HPF_ModeSelection = LIS3DH_HPM_NORMAL_MODE;
+  LIS3DH_FilterStruct.HPF_CutOffFrequency = LIS3DH_HPFCF_0;
+  LIS3DH_FilterStruct.HPF_AOI1 = LIS3DH_HPF_AOI1_DISABLE;
+  LIS3DH_FilterStruct.HPF_AOI2 = LIS3DH_HPF_AOI2_DISABLE;
+  LIS3DH_FilterConfig(&LIS3DH_FilterStruct);
+
+  LIS3DH_FilterCmd(LIS3DH_HIGHPASSFILTER_DISABLE);
+
+  //./LIS3DH_AccIT1Enable(LIS3DH_IT1_DRY1);
+
   if(LIS3DH_ReadID() == I_AM_LIS3DH) {
-    // Configure Mems LIS3DH
-    LIS3DH_InitStruct.PowerMode = LIS3DH_MODE_NORMAL;
-    LIS3DH_InitStruct.OutputDataRate = LIS3DH_ODR_1250_HZ;
-    LIS3DH_InitStruct.AxesEnable = LIS3DH_AXES_ENABLE;
-    LIS3DH_InitStruct.HighResolution = LIS3DH_HR_ENABLE;
-    LIS3DH_InitStruct.BlockDataUpdate = LIS3DH_BlockUpdate_Continuous;
-    LIS3DH_InitStruct.Endianness = LIS3DH_BLE_LSB;
-    LIS3DH_InitStruct.FullScale = LIS3DH_FULLSCALE_4G;
-    LIS3DH_Init(&LIS3DH_InitStruct);
-
-    LIS3DH_FilterStruct.HPF_ModeSelection = LIS3DH_HPM_NORMAL_MODE;
-    LIS3DH_FilterStruct.HPF_CutOffFrequency = LIS3DH_HPFCF_0;
-    LIS3DH_FilterStruct.HPF_AOI1 = LIS3DH_HPF_AOI1_DISABLE;
-    LIS3DH_FilterStruct.HPF_AOI2 = LIS3DH_HPF_AOI2_DISABLE;
-    LIS3DH_FilterConfig(&LIS3DH_FilterStruct);
-
-    LIS3DH_FilterCmd(LIS3DH_HIGHPASSFILTER_DISABLE);
-
-    //./LIS3DH_AccIT1Enable(LIS3DH_IT1_DRY1);
-
     retVal = ACC_OK;
   }
 
@@ -80,7 +82,8 @@ void LIS3DH_Init(LIS3DH_InitTypedef *LIS3DH_InitStruct)
                       LIS3DH_InitStruct->AxesEnable);
 
   ctrl4 |= (uint8_t) (LIS3DH_InitStruct->BlockDataUpdate | LIS3DH_InitStruct->Endianness | \
-                      LIS3DH_InitStruct->FullScale | LIS3DH_InitStruct->HighResolution);
+                      LIS3DH_InitStruct->FullScale | LIS3DH_InitStruct->HighResolution | \
+                      LIS3DH_InitStruct->SpiWireMode);
 
   // Write value to MEMS CTRL_REG1 regsister
   LIS3DH_Write(&ctrl1, LIS3DH_CTRL_REG1_ADDR, 1);

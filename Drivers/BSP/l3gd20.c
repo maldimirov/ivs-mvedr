@@ -19,26 +19,28 @@ uint8_t L3GD20_Configure(void)
 
   L3GD20_InitTypedef L3GD20_InitStructure;
   L3GD20_FilterConfigTypedef L3GD20_FilterStructure;
-  
+
+
+  // Configure Mems L3GD20
+  L3GD20_InitStructure.Power_Mode = L3GD20_MODE_ACTIVE;
+  L3GD20_InitStructure.Output_DataRate = L3GD20_OUTPUT_DATARATE_4;
+  L3GD20_InitStructure.Axes_Enable = L3GD20_AXES_ENABLE;
+  L3GD20_InitStructure.Band_Width = L3GD20_BANDWIDTH_1;
+  L3GD20_InitStructure.BlockData_Update = L3GD20_BlockDataUpdate_Continous;
+  L3GD20_InitStructure.Endianness = L3GD20_BLE_LSB;
+  L3GD20_InitStructure.Full_Scale = L3GD20_FULLSCALE_500;
+  L3GD20_InitStructure.SpiWireMode = L3GD20_SIM_4_WIRE;
+  L3GD20_Init(&L3GD20_InitStructure);
+
+  L3GD20_FilterStructure.HighPassFilter_Mode_Selection = L3GD20_HPM_NORMAL_MODE_RES;
+  L3GD20_FilterStructure.HighPassFilter_CutOff_Frequency = L3GD20_HPFCF_0;
+  L3GD20_FilterConfig(&L3GD20_FilterStructure);
+
+  L3GD20_FilterCmd(L3GD20_HIGHPASSFILTER_DISABLE);
+
+  //L3GD20_INT2InterruptCmd(L3GD20_INT2INTERRUPT_ENABLE);
+
   if(L3GD20_ReadID() == I_AM_L3GD20) {
-    // Configure Mems L3GD20
-    L3GD20_InitStructure.Power_Mode = L3GD20_MODE_ACTIVE;
-    L3GD20_InitStructure.Output_DataRate = L3GD20_OUTPUT_DATARATE_4;
-    L3GD20_InitStructure.Axes_Enable = L3GD20_AXES_ENABLE;
-    L3GD20_InitStructure.Band_Width = L3GD20_BANDWIDTH_1;
-    L3GD20_InitStructure.BlockData_Update = L3GD20_BlockDataUpdate_Continous;
-    L3GD20_InitStructure.Endianness = L3GD20_BLE_LSB;
-    L3GD20_InitStructure.Full_Scale = L3GD20_FULLSCALE_500;
-    L3GD20_Init(&L3GD20_InitStructure);
-
-    L3GD20_FilterStructure.HighPassFilter_Mode_Selection = L3GD20_HPM_NORMAL_MODE_RES;
-    L3GD20_FilterStructure.HighPassFilter_CutOff_Frequency = L3GD20_HPFCF_0;
-    L3GD20_FilterConfig(&L3GD20_FilterStructure);
-
-    L3GD20_FilterCmd(L3GD20_HIGHPASSFILTER_DISABLE);
-
-    //L3GD20_INT2InterruptCmd(L3GD20_INT2INTERRUPT_ENABLE);
-
     retVal = GYRO_OK;
   }
 
@@ -56,7 +58,7 @@ void L3GD20_Init(L3GD20_InitTypedef *L3GD20_InitStruct)
                       L3GD20_InitStruct->Axes_Enable | L3GD20_InitStruct->Band_Width);
 
   ctrl4 |= (uint8_t) (L3GD20_InitStruct->BlockData_Update | L3GD20_InitStruct->Endianness | \
-                      L3GD20_InitStruct->Full_Scale);
+                      L3GD20_InitStruct->Full_Scale | L3GD20_InitStruct->SpiWireMode);
 
   // Write value to MEMS CTRL_REG1 regsister
   L3GD20_Write(&ctrl1, L3GD20_CTRL_REG1_ADDR, 1);
