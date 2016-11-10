@@ -21,7 +21,7 @@ char txline[LINE_BUFFER_SIZE];
 char rxline[LINE_BUFFER_SIZE];
 
 volatile char AccStat;
-volatile char MyTick;
+volatile char InsTick;
 volatile char Tunnel;
 volatile char UsbStat;
 
@@ -30,9 +30,9 @@ extern FATFS SDFatFs;      // File system object for SD card logical drive
 extern TIM_HandleTypeDef t1;
 
 //static uint32_t mq_in;
-static mot mq[IQ_LEN];
+//static InsSample mq[IQ_LEN];
 //static osTimerId        InertialTimerId;
-static mot ms, tp;
+static InsSample currentSample, flagSample;
 
 void dputc(char ch)
 {
@@ -46,11 +46,11 @@ void InertialSampleTask()
     if ((GyroStatus != GYRO_OK) || (AccStatus != ACC_OK)|| (MagStatus != MAG_OK)) return;
     L3GD20_Handler();
     LIS3DH_Handler();
-    LSM303C_Handler();
-    ms.AccX = Acc[0]; ms.AccY = Acc[1]; ms.AccZ = Acc[2];
-    ms.AngX = AngRate[0]; ms.AngY = AngRate[1]; ms.AngZ = AngRate[2];
-    ms.MagX = MagInt[0]; ms.MagY = MagInt[1]; ms.MagZ = MagInt[2];
-    MyTick = 1;
+    //LSM303C_Handler();
+    currentSample.AccX = Acc[0]; currentSample.AccY = Acc[1]; currentSample.AccZ = Acc[2];
+    currentSample.AngX = AngRate[0]; currentSample.AngY = AngRate[1]; currentSample.AngZ = AngRate[2];
+    currentSample.MagX = MagInt[0]; currentSample.MagY = MagInt[1]; currentSample.MagZ = MagInt[2];
+    InsTick = 1;
 }
 
 //void AccLog()
@@ -68,7 +68,7 @@ void InertialSampleTask()
 //    f_lseek(&accfile, f_size(&accfile));
 //    if (osOK == osTimerStop(InertialTimerId)) {
 //        for (i = mq_in, j = 0; j < IQ_LEN; j++) {
-//          f_write(&accfile, &mq[i], sizeof(mot), &bw);
+//          f_write(&accfile, &mq[i], sizeof(InsSample), &bw);
 //          i = (i + 1) % IQ_LEN;
 //        }
 //        if (osOK == osTimerStart(InertialTimerId, log_period));
@@ -126,7 +126,7 @@ int main()
 #define ONE_SECOND_US    1000000
 static void MainThread(void const *argument)
 {
-    uint32_t bw, dsec = 0, log_speed_file = 0;
+    uint32_t bw, recordingTime = 0, log_speed_file = 0;
     char LogFilePath[16], NmeaFilePath[16];
     FIL accfile, nmeafile;
 
@@ -161,23 +161,23 @@ static void MainThread(void const *argument)
 
     //memset(mq, 0, sizeof(mq));
     BSP_SPI1_Init_2_Lines();
-    MagStatus = (LSM303C_StatusTypedef)LSM303C_Configure();
+    MagStatus = MAG_OK;//(LSM303C_StatusTypedef)LSM303C_Configure();
     AccStatus = (LIS3DH_StatusTypedef)LIS3DH_Configure();
     GyroStatus = (L3GD20_StatusTypedef)L3GD20_Configure();
-    if ((GyroStatus == GYRO_OK) && (AccStatus == ACC_OK) && MagStatus == MAG_OK) AccStat = 1;
+    if ((GyroStatus == GYRO_OK) && (AccStatus == ACC_OK) && (MagStatus == MAG_OK)) AccStat = 1;
     GSM_Init();
     USB_Handler();
 
-    tp.AccX = 0;
-    tp.AngX = 0;
-    tp.MagX = 0;
-    tp.AccY = 0;
-    tp.AngY = 0;
-    tp.MagY = 0;
-    tp.AccZ = 0;
-    tp.AngZ = 0;
-    tp.MagZ = 0;
-    dsec = 0;
+    flagSample.AccX = 0;
+    flagSample.AngX = 0;
+    flagSample.MagX = 0;
+    flagSample.AccY = 0;
+    flagSample.AngY = 0;
+    flagSample.MagY = 0;
+    flagSample.AccZ = 0;
+    flagSample.AngZ = 0;
+    flagSample.MagZ = 0;
+    recordingTime = 0;
 
         // Open INS log file
     f_open(&accfile, LogFilePath, FA_WRITE);
@@ -188,6 +188,8 @@ static void MainThread(void const *argument)
         // Open GPS log file
     f_open(&nmeafile, NmeaFilePath, FA_WRITE);
     f_lseek(&nmeafile, f_size(&nmeafile));
+
+    HAL_Delay(log_timeout);
 
         // Wait for GPS to get fix
     while(!GpsStat.Fix)
@@ -204,30 +206,28 @@ static void MainThread(void const *argument)
         nmea[0] = '\0';
     HAL_TIM_Base_Start_IT(&t1);
 
-    //HAL_Delay(log_timeout);
-
     while (1)
     {
-        if (MyTick)
+        if (InsTick)
         {
-            MyTick = 0;
-            if ((UsbStat == 0) && (log_period*(ONE_SECOND_US / log_speed) > dsec))
+            InsTick = 0;
+            if ((UsbStat == 0) && (log_period*(ONE_SECOND_US / log_speed) > recordingTime))
             {
-                dsec++;
-                if (tp.AccX == 0x3FFFFFFF)
+                recordingTime++;
+                if (flagSample.AccX == 0x3FFFFFFF)
                 {
-                    f_write(&accfile, &tp, sizeof(mot), &bw);
-                    tp.AccX = 0;
-                    tp.AngX = 0;
-                    tp.MagX = 0;
-                    tp.AccY = 0;
-                    tp.AngY = 0;
-                    tp.MagY = 0;
-                    tp.AccZ = 0;
-                    tp.AngZ = 0;
-                    tp.MagZ = 0;
+                    f_write(&accfile, &flagSample, sizeof(InsSample), &bw);
+                    flagSample.AccX = 0;
+                    flagSample.AngX = 0;
+                    flagSample.MagX = 0;
+                    flagSample.AccY = 0;
+                    flagSample.AngY = 0;
+                    flagSample.MagY = 0;
+                    flagSample.AccZ = 0;
+                    flagSample.AngZ = 0;
+                    flagSample.MagZ = 0;
                 }
-                f_write(&accfile, &ms, sizeof(mot), &bw);
+                f_write(&accfile, &currentSample, sizeof(InsSample), &bw);
             }
             else
             {
@@ -242,15 +242,15 @@ static void MainThread(void const *argument)
         {
             GpsStat.Req = true;
             GpsStat.Rdy = false;
-            tp.AccX = GPS_FLAG;
-            tp.AngX = GPS_FLAG;
-            tp.MagX = GPS_FLAG;
-            tp.AccY = GPS_FLAG;
-            tp.AngY = GPS_FLAG;
-            tp.MagY = GPS_FLAG;
-            tp.AccZ = GPS_FLAG;
-            tp.AngZ = GPS_FLAG;
-            tp.MagZ = GPS_FLAG;
+            flagSample.AccX = GPS_FLAG;
+            flagSample.AngX = GPS_FLAG;
+            flagSample.MagX = GPS_FLAG;
+            flagSample.AccY = GPS_FLAG;
+            flagSample.AngY = GPS_FLAG;
+            flagSample.MagY = GPS_FLAG;
+            flagSample.AccZ = GPS_FLAG;
+            flagSample.AngZ = GPS_FLAG;
+            flagSample.MagZ = GPS_FLAG;
         }
 
         GPS_Handler();
