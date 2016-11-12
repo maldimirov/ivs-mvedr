@@ -29,9 +29,6 @@ extern char SDPath[4];     // SD card logical drive path
 extern FATFS SDFatFs;      // File system object for SD card logical drive
 extern TIM_HandleTypeDef t1;
 
-//static uint32_t mq_in;
-//static InsSample mq[IQ_LEN];
-//static osTimerId        InertialTimerId;
 static InsSample currentSample, flagSample;
 
 void dputc(char ch)
@@ -44,37 +41,14 @@ void dputc(char ch)
 void InertialSampleTask()
 {
     if ((GyroStatus != GYRO_OK) || (AccStatus != ACC_OK)|| (MagStatus != MAG_OK)) return;
-    L3GD20_Handler();
-    LIS3DH_Handler();
-    //LSM303C_Handler();
+    //L3GD20_Handler();
+    //LIS3DH_Handler();
+    LSM303C_Handler();
     currentSample.AccX = Acc[0]; currentSample.AccY = Acc[1]; currentSample.AccZ = Acc[2];
     currentSample.AngX = AngRate[0]; currentSample.AngY = AngRate[1]; currentSample.AngZ = AngRate[2];
     currentSample.MagX = MagInt[0]; currentSample.MagY = MagInt[1]; currentSample.MagZ = MagInt[2];
     InsTick = 1;
 }
-
-//void AccLog()
-//{
-//  char LogFilePath[16];
-//  uint32_t i, j, bw;
-//  FIL accfile;
-//
-//  if (UsbStat) return;
-//
-//  sprintf(LogFilePath, "a%07X.txt\0", acccnt);
-//
-//    if (FR_OK != f_open(&accfile, LogFilePath, FA_WRITE))
-//        f_open(&accfile, LogFilePath, FA_CREATE_NEW | FA_WRITE);
-//    f_lseek(&accfile, f_size(&accfile));
-//    if (osOK == osTimerStop(InertialTimerId)) {
-//        for (i = mq_in, j = 0; j < IQ_LEN; j++) {
-//          f_write(&accfile, &mq[i], sizeof(InsSample), &bw);
-//          i = (i + 1) % IQ_LEN;
-//        }
-//        if (osOK == osTimerStart(InertialTimerId, log_period));
-//    }
-//    f_close(&accfile);
-//}
 
 void IncCntFile()
 {
@@ -107,7 +81,6 @@ int main()
     AccStat = 0;
     UsbStat = 0;
     Tunnel = 0;
-    //mq_in = 0;
 
     // Init file system on SD-card
     FATFS_LinkDriver(&SD_Driver, SDPath);
@@ -159,11 +132,10 @@ static void MainThread(void const *argument)
     USBD_MSC_RegisterStorage(&USBD_Device, &USBD_DISK_fops);
     USBD_Start(&USBD_Device);
 
-    //memset(mq, 0, sizeof(mq));
-    BSP_SPI1_Init_2_Lines();
-    MagStatus = MAG_OK;//(LSM303C_StatusTypedef)LSM303C_Configure();
-    AccStatus = (LIS3DH_StatusTypedef)LIS3DH_Configure();
-    GyroStatus = (L3GD20_StatusTypedef)L3GD20_Configure();
+    BSP_SPI1_Init_1_Line();
+    MagStatus = (LSM303C_StatusTypedef)LSM303C_Configure();
+    AccStatus = ACC_OK;//(LIS3DH_StatusTypedef)LIS3DH_Configure();
+    GyroStatus = GYRO_OK;//(L3GD20_StatusTypedef)L3GD20_Configure();
     if ((GyroStatus == GYRO_OK) && (AccStatus == ACC_OK) && (MagStatus == MAG_OK)) AccStat = 1;
     GSM_Init();
     USB_Handler();
