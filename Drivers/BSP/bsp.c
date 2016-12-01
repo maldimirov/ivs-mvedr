@@ -189,7 +189,7 @@ void BSP_GSM_Init(void)
   GPIO_InitStruct.Pin = BSP_DSR3_PIN;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(BSP_DSR3_GPIO_PORT, &GPIO_InitStruct);
+  //HAL_GPIO_Init(BSP_DSR3_GPIO_PORT, &GPIO_InitStruct);
 
   // Configure GPIO pin : PC3/RI
   //GPIO_InitStruct.Pin = BSP_RI_PIN;
