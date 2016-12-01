@@ -169,6 +169,8 @@ extern IWDG_HandleTypeDef       iwdg1;
 
 void      BSP_Config          (void);
 void BSP_System_Init(void);
+void BSP_SPI1_Init_2_Lines();
+void BSP_SPI1_Init_1_Line();
 
 void      SystemClock_Config  (void);
 void    BSP_Config      (void);

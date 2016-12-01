@@ -3,7 +3,7 @@
 #define __L3GD20_H
 
 // Read/Write command
-#define L3GD20_READWRITE_CMD          ((uint8_t)0x80) 
+#define L3GD20_READWRITE_CMD          ((uint8_t)0x80)
 
 // Multiple byte read/write command
 #define L3GD20_MULTIPLEBYTE_CMD       ((uint8_t)0x40)
@@ -47,49 +47,49 @@
 #define L3GD20_MODE_POWERDOWN       ((uint8_t)0x00)
 #define L3GD20_MODE_ACTIVE          ((uint8_t)0x08)
 
-// @brief Output data rate selection 
+// @brief Output data rate selection
 #define L3GD20_OUTPUT_DATARATE_1    ((uint8_t)0x00) //95Hz
 #define L3GD20_OUTPUT_DATARATE_2    ((uint8_t)0x40) //190Hz
 #define L3GD20_OUTPUT_DATARATE_3    ((uint8_t)0x80) //380Hz
 #define L3GD20_OUTPUT_DATARATE_4    ((uint8_t)0xC0) //760Hz
 
-// @brief Axes selection 
+// @brief Axes selection
 #define L3GD20_X_ENABLE             ((uint8_t)0x02)
 #define L3GD20_Y_ENABLE             ((uint8_t)0x01)
 #define L3GD20_Z_ENABLE             ((uint8_t)0x04)
 #define L3GD20_AXES_ENABLE          ((uint8_t)0x07)
 #define L3GD20_AXES_DISABLE         ((uint8_t)0x00)
 
-// @brief Band width selection 
+// @brief Band width selection
 #define L3GD20_BANDWIDTH_1          ((uint8_t)0x00) //12.5  12.5  20   30
 #define L3GD20_BANDWIDTH_2          ((uint8_t)0x10) // 25    25   25   35
 #define L3GD20_BANDWIDTH_3          ((uint8_t)0x20) // 25    50   50   50
 #define L3GD20_BANDWIDTH_4          ((uint8_t)0x30) // 25    70   100  100
 
-// @brief Full scale selection 
+// @brief Full scale selection
 #define L3GD20_FULLSCALE_250        ((uint8_t)0x00) //+-250 dps
 #define L3GD20_FULLSCALE_500        ((uint8_t)0x10) //+-500 dps
-#define L3GD20_FULLSCALE_2000       ((uint8_t)0x20) //+-2000 dps 
+#define L3GD20_FULLSCALE_2000       ((uint8_t)0x20) //+-2000 dps
 #define L3GD20_FULLSCALE_SELECTION  ((uint8_t)0x30) //
-  
-// @brief Full scale sensitivity 
+
+// @brief Full scale sensitivity
 #define L3GD20_SENSITIVITY_250DPS   875    // gyroscope sensitivity with 250 dps full scale [mDPS/LSB]
 #define L3GD20_SENSITIVITY_500DPS   1750   // gyroscope sensitivity with 500 dps full scale [mDPS/LSB]
 #define L3GD20_SENSITIVITY_2000DPS  7000   // gyroscope sensitivity with 2000 dps full scale [mDPS/LSB]
 
-// @brief Block data update  
+// @brief Block data update
 #define L3GD20_BlockDataUpdate_Continous  ((uint8_t)0x00)
 #define L3GD20_BlockDataUpdate_Single     ((uint8_t)0x80)
-  
+
 // @brief Endian data selection
 #define L3GD20_BLE_LSB              ((uint8_t)0x00)
 #define L3GD20_BLE_MSB              ((uint8_t)0x40)
-  
-// @brief High pass filter status 
+
+// @brief High pass filter status
 #define L3GD20_HIGHPASSFILTER_DISABLE     ((uint8_t)0x00)
 #define L3GD20_HIGHPASSFILTER_ENABLE      ((uint8_t)0x10)
 
-// @brief INT1 interrupt status 
+// @brief INT1 interrupt status
 #define L3GD20_INT1INTERRUPT_DISABLE      ((uint8_t)0x00)
 #define L3GD20_INT1INTERRUPT_ENABLE       ((uint8_t)0x80)
 
@@ -100,12 +100,12 @@
 // @brief INT1 interrupt active edge
 #define L3GD20_INT1INTERRUPT_LOW_EDGE     ((uint8_t)0x20)
 #define L3GD20_INT1INTERRUPT_HIGH_EDGE    ((uint8_t)0x00)
-  
-// @brief Boot mode selection 
+
+// @brief Boot mode selection
 #define L3GD20_BOOT_NORMALMODE            ((uint8_t)0x00)
 #define L3GD20_BOOT_REBOOTMEMORY          ((uint8_t)0x80)
- 
-// @brief High pass filter mode 
+
+// @brief High pass filter mode
 #define L3GD20_HPM_NORMAL_MODE_RES        ((uint8_t)0x00)
 #define L3GD20_HPM_REF_SIGNAL             ((uint8_t)0x10)
 #define L3GD20_HPM_NORMAL_MODE            ((uint8_t)0x20)
@@ -123,6 +123,10 @@
 #define L3GD20_HPFCF_8    0x08
 #define L3GD20_HPFCF_9    0x09
 
+// @brief SPI wire mode
+#define L3GD20_SIM_4_WIRE               ((uint8_t)0x00) //SPI 4-wire mode
+#define L3GD20_SIM_3_WIRE               ((uint8_t)0x01) //SPI 3-wire mode
+
 typedef enum {
   GYRO_OK = 0,
   GYRO_ERROR,
@@ -136,6 +140,7 @@ typedef struct {
   uint8_t BlockData_Update;   // Block Data Update
   uint8_t Endianness;         // Endian Data selection
   uint8_t Full_Scale;         // Full Scale selection
+  uint8_t SpiWireMode;        // SPI wire mode selection
 } L3GD20_InitTypedef;
 
 // GYRO High Pass Filter struct
@@ -149,7 +154,7 @@ typedef struct {
   uint8_t Latch_Request;                      // Latch interrupt request into CLICK_SRC register
   uint8_t Interrupt_Axes;                     // X, Y, Z Axes Interrupts
   uint8_t Interrupt_ActiveEdge;               //  Interrupt Active edge
-} L3GD20_InterruptConfigTypedef;  
+} L3GD20_InterruptConfigTypedef;
 
 extern L3GD20_StatusTypedef GyroStatus;
 extern int32_t AngRate[3];

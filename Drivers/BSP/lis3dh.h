@@ -3,7 +3,7 @@
 #define __LIS3DH_H
 
 // Read/Write command
-#define LIS3DH_READWRITE_CMD          ((uint8_t)0x80) 
+#define LIS3DH_READWRITE_CMD          ((uint8_t)0x80)
 
 // Multiple byte read/write command
 #define LIS3DH_MULTIPLEBYTE_CMD       ((uint8_t)0x40)
@@ -49,7 +49,7 @@
 #define LIS3DH_MODE_NORMAL            ((uint8_t)0x00)
 #define LIS3DH_MODE_LOWPOWER          ((uint8_t)0x08)
 
-// @brief Output data rate selection 
+// @brief Output data rate selection
 #define LIS3DH_ODR_1_HZ               ((uint8_t)0x10)   // Output Data Rate = 1 Hz
 #define LIS3DH_ODR_10_HZ              ((uint8_t)0x20)   // Output Data Rate = 10 Hz
 #define LIS3DH_ODR_25_HZ              ((uint8_t)0x30)   // Output Data Rate = 25 Hz
@@ -68,7 +68,7 @@
 #define LIS3DH_AXES_DISABLE           ((uint8_t)0x00)
 
 
-// @brief Single/continuous block data update 
+// @brief Single/continuous block data update
 #define LIS3DH_BlockUpdate_Continuous ((uint8_t)0x00)   // Continuous Update
 #define LIS3DH_BlockUpdate_Single     ((uint8_t)0x80)   // Single Update: output registers not updated until MSB and LSB reading
 
@@ -91,7 +91,7 @@
 #define LIS3DH_BOOT_NORMALMODE        ((uint8_t)0x00)
 #define LIS3DH_BOOT_REBOOTMEMORY      ((uint8_t)0x80)
 
-// @brief High pass filter mode 
+// @brief High pass filter mode
 #define LIS3DH_HPM_NORMAL_MODE_RES    ((uint8_t)0x00)
 #define LIS3DH_HPM_REF_SIGNAL         ((uint8_t)0x40)
 #define LIS3DH_HPM_NORMAL_MODE        ((uint8_t)0x80)
@@ -107,7 +107,7 @@
 #define LIS3DH_SENSITIVITY_8G         (uint8_t)4  // sensitivity with 8 g full scale [mg/LSB]
 #define LIS3DH_SENSITIVITY_16G        (uint8_t)12 // sensitivity with 12 g full scale [mg/LSB]
 
-// @brief High pass filter status 
+// @brief High pass filter status
 #define LIS3DH_HIGHPASSFILTER_DISABLE   ((uint8_t)0x00)
 #define LIS3DH_HIGHPASSFILTER_ENABLE    ((uint8_t)0x08)
 
@@ -118,7 +118,7 @@
 // @brief High pass filter AOI1 status
 #define LIS3DH_HPF_AOI1_DISABLE         ((uint8_t)0x00)
 #define LIS3DH_HPF_AOI1_ENABLE          ((uint8_t)0x01)
-  
+
 // @brief  High pass filter AOI2 status
 #define LIS3DH_HPF_AOI2_DISABLE         ((uint8_t)0x00)
 #define LIS3DH_HPF_AOI2_ENABLE          ((uint8_t)0x02)
@@ -136,6 +136,10 @@
 #define LIS3DH_FIFO_DISABLE             ((uint8_t)0x00)   // Disable FIFO buffer
 #define LIS3DH_FIFO_ENABLE              ((uint8_t)0x40)   // Enable FIFO buffer
 
+// @brief SPI wire mode
+#define LIS3DH_SIM_4_WIRE               ((uint8_t)0x00) //SPI 4-wire mode
+#define LIS3DH_SIM_3_WIRE               ((uint8_t)0x01) //SPI 3-wire mode
+
 typedef enum {
   ACC_OK = 0,
   ACC_ERROR,
@@ -150,6 +154,7 @@ typedef struct {
   uint8_t BlockDataUpdate;    // Block data update
   uint8_t Endianness;         // Endian data selection
   uint8_t FullScale;          // Full scale selection
+  uint8_t SpiWireMode;        // SPI wire mode selection
 } LIS3DH_InitTypedef;
 
 // High pass filter struct

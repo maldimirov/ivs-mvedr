@@ -189,7 +189,7 @@ void BSP_GSM_Init(void)
   GPIO_InitStruct.Pin = BSP_DSR3_PIN;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(BSP_DSR3_GPIO_PORT, &GPIO_InitStruct);
+  //HAL_GPIO_Init(BSP_DSR3_GPIO_PORT, &GPIO_InitStruct);
 
   // Configure GPIO pin : PC3/RI
   //GPIO_InitStruct.Pin = BSP_RI_PIN;
@@ -407,12 +407,30 @@ void HAL_SPI_MspDeInit(SPI_HandleTypeDef* hspi)
   }
 }
 
-void BSP_SPI1_Init(void)
+void BSP_SPI1_Init_2_Lines(void)
 {
   hspi1.Instance = SPI1;
 
   hspi1.Init.Mode = SPI_MODE_MASTER;
   hspi1.Init.Direction = SPI_DIRECTION_2LINES;
+  hspi1.Init.DataSize = SPI_DATASIZE_8BIT;
+  hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
+  hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
+  hspi1.Init.NSS = SPI_NSS_SOFT;
+  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_16;
+  hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
+  hspi1.Init.TIMode = SPI_TIMODE_DISABLED;
+  hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLED;
+
+  HAL_SPI_Init(&hspi1);
+}
+
+void BSP_SPI1_Init_1_Line(void)
+{
+  hspi1.Instance = SPI1;
+
+  hspi1.Init.Mode = SPI_MODE_MASTER;
+  hspi1.Init.Direction = SPI_DIRECTION_1LINE;
   hspi1.Init.DataSize = SPI_DATASIZE_8BIT;
   hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
@@ -457,8 +475,6 @@ void BSP_AccInit(void)
   HAL_GPIO_Init(BSP_ACC_CS_GPIO_PORT, &GPIO_InitStruct);
 
   BSP_ACC_CS_HIGH();     // Deselect Accelerometer
-
-  BSP_SPI1_Init();
 }
 
 void BSP_MagInit(void)
@@ -476,8 +492,6 @@ void BSP_MagInit(void)
   HAL_GPIO_Init(BSP_MAG_CS_GPIO_PORT, &GPIO_InitStruct);
 
   BSP_MAG_CS_HIGH();     // Deselect Magnetometer
-
-  BSP_SPI1_Init();
 }
 
 void BSP_GyroInit(void)
@@ -510,6 +524,4 @@ void BSP_GyroInit(void)
   // Enable and set INT2/DRDY EXTI Interrupt to the lowest priority
   HAL_NVIC_SetPriority(BSP_GYRO_INT2_EXTI_IRQn, 0x07, 0);
   //HAL_NVIC_EnableIRQ(BSP_GYRO_INT2_EXTI_IRQn);
-
-  BSP_SPI1_Init();
 }
