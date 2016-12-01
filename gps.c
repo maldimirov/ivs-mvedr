@@ -88,7 +88,6 @@ void GPS_Handler(void)
         printf("AT+UGRMC?\r");
         else
         {
-            //printf("AT+UGRMC?\r");
             printf("AT+UGGGA?\r");
         }
 
