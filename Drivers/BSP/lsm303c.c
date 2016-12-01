@@ -24,31 +24,30 @@ void LSM303C_ReadXYZMag()
   uint8_t tmpbuffer[6] = {0};
   int16_t RawData[3] = {0};
   uint8_t tmpreg = 0;
-  int32_t sensitivity = 1;
+  int32_t sensitivity = 58;
   int i =0;
 
-  //L3GD20_Read(&tmpreg, LSM303C_CTRL_REG4_M, 1);
+  LSM303C_Read(&tmpreg, LSM303C_CTRL_REG4_M, 1);
 
   LSM303C_Read(tmpbuffer, LSM303C_OUT_X_L_M, 6);
 
   // check in the control register 4 the data alignment (Big Endian or Little Endian)
-  //if(!(tmpreg & LSM303C_M_BLE_MSB)) {
-//  if(false){
-//    for(i = 0; i < 3; i++)
-//    {
-//     RawData[i]=(int16_t)(((uint16_t)tmpbuffer[2*i+1] << 8) + tmpbuffer[2*i]);
-//    }
-//  } else {
+  if(!(tmpreg & LSM303C_M_BLE_MSB)) {
+    for(i = 0; i < 3; i++)
+    {
+     RawData[i]=(int16_t)(((uint16_t)tmpbuffer[2*i+1] << 8) + tmpbuffer[2*i]);
+    }
+  } else {
     for(i = 0; i < 3; i++)
     {
       RawData[i]=(int16_t)(((uint16_t)tmpbuffer[2*i] << 8) + tmpbuffer[2*i+1]);
     }
-  //}
+  }
 
   // divide by sensitivity
   for(i = 0; i < 3; i++)
   {
-    MagInt[i] = (uint32_t)RawData[i];
+    MagInt[i] = (uint32_t)RawData[i] * sensitivity;
   }
 }
 
@@ -58,7 +57,6 @@ uint8_t LSM303C_GetDataStatus(void)
 
   // Read STATUS_REG register
   LSM303C_Read(&tmpreg, LSM303C_STATUS_REG_M, 1);
-
   return tmpreg;
 }
 
@@ -91,9 +89,6 @@ uint8_t LSM303C_Configure(void)
   //Confgiure values for LSM303C_CTRL_REG5_M
   LSM303C_InitStruct.BlockDataUpdate = LSM303C_M_BDU_CONTINUOUS; //Reg5
 
-  //Set the SPI in 3 wire mode for the entire init session
-  BSP_SPI1_Init_1_Line();
-
   //Init before readID, beacuse the init operation sets the proper I2C and SPI
   //communication paramters
   LSM303C_Init(&LSM303C_InitStruct);
@@ -101,9 +96,6 @@ uint8_t LSM303C_Configure(void)
   if(LSM303C_ReadID() == I_AM_LSM303C_M) {
     retVal = MAG_OK;
   }
-
-  //Reset the SPI in the default 4 wire mode
-  BSP_SPI1_Init_2_Lines();
 
   return retVal;
 }
@@ -136,11 +128,11 @@ void LSM303C_Init(LSM303C_InitTypedef *LSM303C_InitStruct)
     ctrl5 |= (uint8_t) (LSM303C_InitStruct->BlockDataUpdate);
 
     // Write value to MEMS CTRL_REG1 register
+    LSM303C_Write(&ctrl3, LSM303C_CTRL_REG3_M, 1);
+    // Write value to MEMS CTRL_REG1 register
     LSM303C_Write(&ctrl1, LSM303C_CTRL_REG1_M, 1);
     // Write value to MEMS CTRL_REG1 register
     LSM303C_Write(&ctrl2, LSM303C_CTRL_REG2_M, 1);
-    // Write value to MEMS CTRL_REG1 register
-    LSM303C_Write(&ctrl3, LSM303C_CTRL_REG3_M, 1);
     // Write value to MEMS CTRL_REG4 register
     LSM303C_Write(&ctrl4, LSM303C_CTRL_REG4_M, 1);
     // Write value to MEMS CTRL_REG4 register
@@ -157,7 +149,6 @@ uint8_t LSM303C_ReadID(void)
   // Return the ID
   return (uint8_t)tmp;
 }
-
 
 void LSM303C_Write(uint8_t* pBuffer, uint8_t WriteAddr, uint16_t NumByteToWrite)
 {
@@ -176,7 +167,12 @@ void LSM303C_Write(uint8_t* pBuffer, uint8_t WriteAddr, uint16_t NumByteToWrite)
   HAL_SPI_Transmit(&hspi1, &WriteAddr, 1, SpiTimeout);
 
   // Send the data that will be written into the device (MSB First)
-  HAL_SPI_Transmit(&hspi1, pBuffer, NumByteToWrite, SpiTimeout);
+  while(NumByteToWrite >= 0x01)
+  {
+    HAL_SPI_Transmit(&hspi1, pBuffer, 1, SpiTimeout);
+    NumByteToWrite--;
+    pBuffer++;
+  }
 
   // Set chip select High at the end of the transmission
   BSP_MAG_CS_HIGH();
@@ -184,6 +180,7 @@ void LSM303C_Write(uint8_t* pBuffer, uint8_t WriteAddr, uint16_t NumByteToWrite)
 
 void LSM303C_Read(uint8_t* pBuffer, uint8_t ReadAddr, uint16_t NumByteToRead)
 {
+  uint8_t dummy = LSM303C_DUMMY_BYTE;
   if(NumByteToRead > 0x01) {
     ReadAddr |= (uint8_t)(LSM303C_READWRITE_CMD | LSM303C_MULTIPLEBYTE_CMD);
   } else {
@@ -197,7 +194,13 @@ void LSM303C_Read(uint8_t* pBuffer, uint8_t ReadAddr, uint16_t NumByteToRead)
   HAL_SPI_Transmit(&hspi1, &ReadAddr, 1, SpiTimeout);
 
   // Receive the data that will be read from the device (MSB First)
-  HAL_SPI_Receive(&hspi1, pBuffer, NumByteToRead, SpiTimeout);
+  while(NumByteToRead > 0x00)
+  {
+    HAL_SPI_TransmitReceive(&hspi1, &dummy, pBuffer, 1, SpiTimeout);
+
+    NumByteToRead--;
+    pBuffer++;
+  }
 
   // Set chip select High at the end of the transmission
   BSP_MAG_CS_HIGH();
